@@ -1,0 +1,14 @@
+# ignore general files.
+.DS_store
+
+# ignore test files.
+out
+test.sh
+
+# ignore log files.
+super-linter.log
+
+# ignore folders generated via CI/CD.
+/depot
+/bin/[0-9][0-9]-*.sh
+/.github/templates/[0-9][0-9]-*
