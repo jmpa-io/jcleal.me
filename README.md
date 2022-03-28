@@ -1,21 +1,20 @@
 <!-- markdownlint-disable MD041 MD010 -->
-[![root-template](https://github.com/jmpa-io/root-template/actions/workflows/cicd.yml/badge.svg)](https://github.com/jmpa-io/root-template/actions/workflows/cicd.yml)
-[![root-template](https://github.com/jmpa-io/root-template/actions/workflows/README.yml/badge.svg)](https://github.com/jmpa-io/root-template/actions/workflows/README.yml)
+[![jcleal.me](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml)
+[![jcleal.me](https://github.com/jmpa-io/jcleal.me/actions/workflows/README.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/README.yml)
 
-# `root-template`
+# `jcleal.me`
 
 ```diff
-+ 🌱 The root template used by all other repositories in this org.
++ My resume/ blog website.
 ```
 
-## How do I use this template?
+## Scripts
 
-1. Using a <kbd>terminal</kbd>, download the child repository locally.
+script|description
+---|---
+[bin/compile.sh](bin/compile.sh) | Compile the static website using docker + hugo.
+[bin/generate-resume.sh](bin/generate-resume.sh) | Converts the raw resume markdown to a single pdf file.
+[bin/invalidate-cloudfront.sh](bin/invalidate-cloudfront.sh) | Invalidate files in the CloudFront cache, to make it quicker to update the deployed website.
+[bin/local.sh](bin/local.sh) | Run this repository inside a docker container.
+[bin/sync.sh](bin/sync.sh) | Upload content to website.
 
-2. From the root of that child repository, run:
-```bash
-git remote add template https://github.com/jmpa-io/root-template.git
-git fetch template
-git merge template/main --allow-unrelated-histories
-# then fix any merge conflicts as required & 'git push' when ready.
-```
