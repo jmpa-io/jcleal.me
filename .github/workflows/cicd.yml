@@ -32,13 +32,13 @@ jobs:
           aws-region: ap-southeast-2
 
       - name: Generate resume.
-        run: ./bin/25-generate-resume.sh
+        run: ./bin/generate-resume.sh
 
       - name: Compile static website.
-        run: ./bin/29-compile.sh
+        run: ./bin/compile.sh
 
       - name: Sync to S3.
-        run: ./bin/30-sync.sh
+        run: ./bin/sync.sh
 
   post-to-slack:
     needs: [lint, sync]
