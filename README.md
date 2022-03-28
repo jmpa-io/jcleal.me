@@ -5,7 +5,7 @@
 # `jcleal.me`
 
 ```diff
-+ My resume/ blog website.
++ 🌐 My resume/ blog website.
 ```
 
 ## Scripts
@@ -18,3 +18,12 @@ script|description
 [bin/local.sh](bin/local.sh) | Run this repository inside a docker container.
 [bin/sync.sh](bin/sync.sh) | Upload content to website.
 
+
+## TODOs
+
+* [x] Deploy website (via ci/cd).
+* [x] Add resume to site.
+* [x] Add ci/cd step to generate pdf from resume.md using https://pandoc.org/.
+* [ ] Add some blog content (eg. a blog post on how this website is managed / deployed).
+* [ ] Look into creating a custom theme.
+* [ ] Add some javascript charts which demo how to do sorting (eg. bubble sort).
