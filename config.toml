@@ -1,0 +1,54 @@
+# basic config
+baseURL = "https://jcleal.me/"
+languageCode = "en-us"
+title="Jordan Cleal"
+theme = "hugo-ink"
+paginate = 3
+
+# https://xyproto.github.io/splash/docs/all.html
+pygmentsstyle = "dracula"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+
+googleAnalytics = "G-MN1FSQLJQP"
+
+[markup]
+  # https://jdhao.github.io/2019/12/29/hugo_html_not_shown/
+  defaultMarkdownHandler = "blackfriday"
+
+[params]
+    subtitle = "A DevOps Engineer focused on Go, Bash, & AWS."
+    featherIconsCDN = true
+    avatar = "https://jcleal.me/my-face.png"
+    mode = "dark"
+    customCSS = "css/custom.css"
+    customDarkCSS = "css/custom.dark.css"
+
+# navigation
+[[menu.main]]
+name = "About"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "Resume"
+url = "/resume"
+weight = 2
+
+[[menu.main]]
+name = "Blog"
+url = "/posts"
+weight = 3
+
+[[menu.main]]
+name = "Blog Tags"
+url = "/tags"
+weight = 4
+
+[[menu.main]]
+name = "Contact"
+url = "/contact"
+weight = 5
+
+[taxonomies]
+   tag = "tags"

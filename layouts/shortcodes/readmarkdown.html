@@ -1,0 +1,4 @@
+<!-- https://gohugo.io/templates/shortcode-templates/ -->
+<!-- https://discourse.gohugo.io/t/include-an-md-file/1702/7 -->
+{{ $file := .Get 0 | readFile }}
+{{ $file | markdownify }}
