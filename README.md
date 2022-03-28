@@ -2,6 +2,10 @@
 [![jcleal.me](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml)
 [![jcleal.me](https://github.com/jmpa-io/jcleal.me/actions/workflows/README.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/README.yml)
 
+<p align="center">
+  <img src="img/logo.png"/>
+</p>
+
 # `jcleal.me`
 
 ```diff
