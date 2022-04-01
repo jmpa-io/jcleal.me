@@ -13,9 +13,9 @@ jobs:
       github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
 
   deploy:
-    uses: jmpa-io/depot/.github/workflows/deploy.yml@main
+    uses: jmpa-io/depot/.github/workflows/deploy-website.yml@main
     with:
-      template: template
+      templates: bucket
     secrets:
       github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
