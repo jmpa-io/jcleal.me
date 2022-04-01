@@ -22,7 +22,7 @@ fi
 path="public"
 [[ -d "$path" ]] \
   || die "missing $path"
-rm -rf "$path/*" \
+rm -rf "$path" \
   || die "failed to clear $path"
 
 # compile website.
