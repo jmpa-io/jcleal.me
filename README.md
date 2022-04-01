@@ -18,9 +18,7 @@ script|description
 ---|---
 [bin/compile.sh](bin/compile.sh) | Compile the static website using docker + hugo.
 [bin/generate-resume.sh](bin/generate-resume.sh) | Converts the raw resume markdown to a single pdf file.
-[bin/invalidate-cloudfront.sh](bin/invalidate-cloudfront.sh) | Invalidate files in the CloudFront cache, to make it quicker to update the deployed website.
 [bin/local.sh](bin/local.sh) | Run this repository inside a docker container.
-[bin/sync.sh](bin/sync.sh) | Upload content to website.
 
 
 ## TODOs
