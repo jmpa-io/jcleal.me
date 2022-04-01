@@ -51,4 +51,4 @@ url = "/contact"
 weight = 5
 
 [taxonomies]
-   tag = "tags"
+  tag = "tags"
