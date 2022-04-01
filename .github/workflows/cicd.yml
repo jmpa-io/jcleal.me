@@ -46,6 +46,9 @@ jobs:
       - name: Sync to S3.
         run: echo bin/sync.sh
 
+      - name: test
+        uses: jmpa-io/depot/.github/workflows/test.yml@main
+
   post-to-slack:
     needs: [lint, sync]
     if: always()
