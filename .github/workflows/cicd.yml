@@ -40,7 +40,7 @@ jobs:
         run: bin/compile.sh
 
       - name: Sync to S3.
-        run: bin/sync.sh
+        run: echo bin/sync.sh
 
   post-to-slack:
     needs: [lint, sync]
