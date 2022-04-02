@@ -26,13 +26,11 @@ jobs:
       - name: Generate resume.
         run: bin/generate-resume.sh
 
-      - name: Upload website artifact.
+      - name: Upload artifact.
         uses: actions/upload-artifact@v3
         with:
           name: website
-          path: |
-            public/*
-            Resume.pdf
+          path: public/*
           if-no-files-found: error
 
   deploy:
