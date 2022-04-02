@@ -55,7 +55,7 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET }}
 
   post-to-slack:
-    needs: [lint, upload]
+    needs: [lint, upload-website]
     if: always()
     uses: jmpa-io/depot/.github/workflows/post-to-slack.yml@main
     secrets:
