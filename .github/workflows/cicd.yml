@@ -12,7 +12,7 @@ jobs:
     secrets:
       github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
 
-  build:
+  build-website:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout.
@@ -20,17 +20,20 @@ jobs:
         with:
           submodules: true
 
-      - name: Generate resume.
-        run: bin/generate-resume.sh
-
       - name: Compile website.
         run: bin/compile.sh
+
+      - name: Generate resume.
+        run: bin/generate-resume.sh
 
       - name: Upload website artifact.
         uses: actions/upload-artifact@v3
         with:
           name: website
           path: |
+            public/*
+            Resume.pdf
+          if-no-files-found: error
 
   deploy:
     uses: jmpa-io/depot/.github/workflows/deploy.yml@main
@@ -41,8 +44,8 @@ jobs:
       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       aws-secret-access-key: ${{ secrets.AWS_SECRET }}
 
-  upload:
-    needs: [build, deploy]
+  upload-website:
+    needs: [build-website, deploy]
     uses: jmpa-io/depot/.github/workflows/upload-website.yml@main
     with:
       artifact: website
