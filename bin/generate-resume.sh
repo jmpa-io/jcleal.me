@@ -39,7 +39,13 @@ file="$dir/Resume.pdf"
 docker run --rm \
   -w /app \
   -v "$PWD:/app" \
-  "$repo" --metadata-file ./resume/metadata.yml ./resume/data.md -o "$file" \
+  --entrypoint pandoc \
+  "$repo" \
+    -f markdown \
+    -t latex \
+    --metadata-file ./resume/metadata.yml \
+    ./resume/data.md \
+    -o "$file" \
   || die "failed to create $file using pandoc"
 
 # chown file.
