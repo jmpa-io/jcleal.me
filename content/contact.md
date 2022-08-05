@@ -7,9 +7,9 @@ type: "page"
 
 ## Email
 
-* <mr.jordan.cleal+contact@gmail.com>
+* <mr.jordan.cleal+contact@gmail.com>.
 
 ## Social
 
-* [GitHub](https://github.com/jcleal)
-* [LinkedIn](https://www.linkedin.com/in/jordancleal)
+* [GitHub](https://github.com/jcleal).
+* [LinkedIn](https://www.linkedin.com/in/jordancleal).
