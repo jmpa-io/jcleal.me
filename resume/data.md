@@ -34,6 +34,8 @@ A passionate DevOps Engineer seeking to broaden their knowledge and experience i
 
 **API Styles**: REST, GraphQL.
 
+**CI/CD**: Buildkite, GitHub Actions; dabbled in Jenkins.
+
 **Vendor Management**: GitHub, Buildkite, AWS, Sumo Logic, New Relic, Datadog.
 
 **Development approaches**: Infrastructure-as-code, command line over UI, prototyping in Bash before writing in Go.
