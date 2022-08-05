@@ -9,7 +9,7 @@
 # `jcleal.me`
 
 ```diff
-+ 🌐 My resume/ blog website.
++ 🌐 My resume website.
 ```
 
 ## Scripts
