@@ -56,6 +56,12 @@ Melbourne | December 2021 - Current
 
 * Assisted in the deprecation of Jaeger across the business, saving the business ~35k per month in AWS costs.
 
+* Created an internal Buildkite plugin for teams to scan and upload results from a SonarQube scan to an internally managed SonarQube instance, saving teams the time and effort in writing this functionality into the own repositories.
+
+* Assisted in the design and creation of a Buildkite plugin to upload documentation to an internal Backstage.io service, saving teams the time and effort in writing this functionality into their own repositories.
+
+* Created a tool to automatically add a warning annotation when certain conditions are not met when running a build on a Linux Buildkite Agent, resulting in an uptick of the number of adoptions of the internal Backstage.io service.
+
 * Ran multiple day-long sessions for various Junior DevOps engineers, focused on writing Bash scripts, Go testing, CI/CD + Buildkite in general, and building Slack Apps, resulting in two nominations for the passion award by attendees.
 
 #### DevOps Engineer, Observability team @ [MYOB](https://myob.com.au).
