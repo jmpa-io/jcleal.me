@@ -1,4 +1,4 @@
-A Melbourne based DevOps Engineer focused on solving problems using Go + Bash, and deploying to AWS.
+I'm a DevOps Engineer based in the United Kingdom (previously Melbourne, Australia) focused on solving problems using Go + Bash, and deploying to AWS.
 
 Some key areas of interest for me are:
 
@@ -15,4 +15,4 @@ If you're interested in seeing how this website has been created, managed, or de
 
 ---
 
-If you're interested in hiring, check out my [resume](https://jcleal.me/resume), or [feel free to reach out directly](https://jcleal.me/contact).
+If you're interested in hiring me, check out my [resume](https://jcleal.me/resume), or [feel free to reach out directly](https://jcleal.me/contact).
