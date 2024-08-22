@@ -4,7 +4,7 @@
 
 [+61 434 557 224](tel:+61434557224)
 
-[jcleal.me](https://jcleal.me) | [LinkedIn](https://linkedin.com/in/jordancleal) | [GitHub](https://github.com/jcleal)
+[jcleal.me](https://jcleal.me) | [LinkedIn](https://linkedin.com/in/jordan-cleal) | [GitHub](https://github.com/jcleal)
 
 ### Summary.
 
@@ -42,9 +42,29 @@ A passionate DevOps Engineer seeking to broaden their knowledge and experience i
 
 ### Professional Experience.
 
+#### Senior DevOps Engineer, CI/CD team @ [MYOB](https://myob.com.au)
+
+Melbourne | March 2023 - April 2024
+
+* Assisted in the overall technical direction of the CI/CD team (3 DevOps Engineers, 1 Protege), including mentoring each member individually & upskilling their development practices.
+
+* Assisted in the design, architecture, documentation, and creation of a new centrally managed CI/CD platform (previously the CI/CD team was running a distributed one).
+
+* Assisted the CI/CD team with creating & releasing a beta to beta customers of the centrally managed CI/CD platform.
+
+* Presented the design & architecture of the new centrally managed CI/CD platform to the TAG group within MYOB (a group of technical leaders & architects across MYOB).
+
+* Created, managed, & shared with customers a roadmap breaking down the major & minor milestones for the future of the centrally managed CI/CD platform.
+
+* Proposed, and implemented, an alternative for how authentication to an AWS account would work for centrally managed Buildkite agents.
+
+* Proposed, and implemented, an observability strategy for collecting and sending observable data to Sumo Logic, using Open Telemetry collectors, for both centrally managed & existing distributed Buildkite agents.
+
+* Created a document for the CI/CD team outlining what is expected from them, at a technical level.
+
 #### Senior DevOps Engineer, Observability team @ [MYOB](https://myob.com.au).
 
-Melbourne | December 2021 - Current
+Melbourne | December 2021 - March 2023
 
 * Spearheaded the creation of an all-in-one document for a centralized observability platform backed by a single observability vendor: gathering requirements from ~20 teams across the business, evaluating vendor offerings, driving conversations with key stakeholders, and providing tools to help drive decisions. This document, along with the team, was a core component in the acceptance of the proposed multi-million dollar direction by the business.
 
@@ -53,7 +73,7 @@ Melbourne | December 2021 - Current
 * Implemented an internal monitoring system for the centalized observability platform, allowing the team to have visibility into the overall performance of the system, through dashboards and alerts in AWS AMP + AMG.
 
 * Optimized the CI/CD pipeline for the centalized observability platform, reducing time-to-production from ~90 minutes to ~40 minutes though a multitude of optimizations (dynamically generated pipeline, different tiers of agents aka. instance types, splittings jobs across multiple agents).
-
+https://www.linkedin.com/
 * Assisted in the deprecation of Jaeger across the business, saving the business ~35k per month in AWS costs.
 
 * Created an internal Buildkite plugin for teams to scan and upload results from a SonarQube scan to an internally managed SonarQube instance, saving teams the time and effort in writing this functionality into the own repositories.
@@ -62,7 +82,7 @@ Melbourne | December 2021 - Current
 
 * Created a tool to automatically add a warning annotation when certain conditions are not met when running a build on a Linux Buildkite Agent, resulting in an uptick of the number of adoptions of the internal Backstage.io service.
 
-* Ran multiple day-long sessions for various Junior DevOps engineers, focused on writing Bash scripts, Go testing, CI/CD + Buildkite in general, and building Slack Apps, resulting in two nominations for the passion award by attendees.
+* Ran multiple day-long sessions for various junior DevOps engineers, focused on writing Bash scripts, Go testing, CI/CD + Buildkite in general, and building Slack Apps, resulting in two nominations for the passion award by attendees.
 
 #### DevOps Engineer, Observability team @ [MYOB](https://myob.com.au).
 
