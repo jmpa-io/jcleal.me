@@ -2,15 +2,39 @@
 name: CI/CD
 on:
   push:
+    paths:
+    - '.github/workflows/cicd.yml'
+    - 'bin/*'
+    - 'cf/**'
+    - 'cmd/**'
+    - 'templates/**'
+    - '**Dockerfile'
+    - 'Makefile*'
   workflow_dispatch:
   repository_dispatch:
-    types: [trigger]
+    types: [update-cicd]
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
 
 jobs:
   lint:
-    uses: jmpa-io/depot/.github/workflows/lint.yml@main
+    uses: jmpa-io/pipelines/.github/workflows/10-lint.yml@main
     secrets:
-      github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
+      ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+
+  test:
+    uses: jmpa-io/pipelines/.github/workflows/20-test.yml@main
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
+      ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
 
   deploy:
     uses: jmpa-io/depot/.github/workflows/deploy.yml@main
@@ -55,9 +79,9 @@ jobs:
       aws-secret-access-key: ${{ secrets.AWS_SECRET }}
 
   post-to-slack:
-    needs: [lint, upload-website]
+    needs: [lint, test, deploy, build-website, upload-website]
     if: always()
-    uses: jmpa-io/depot/.github/workflows/post-to-slack.yml@main
+    uses: jmpa-io/pipelines/.github/workflows/99-post-to-slack.yml@main
     secrets:
-      github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
-      slack-webhook: ${{ secrets.SLACK_GITHUB_WEBHOOK_URL }}
+      WEBHOOK: ${{ secrets.SLACK_GITHUB_NOTIFICATIONS_WEBHOOK }}
+

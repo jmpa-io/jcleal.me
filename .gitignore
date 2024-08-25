@@ -1,9 +1,17 @@
 # ignore general files.
-.DS_store
+.DS_Store
+.vscode/
+
+# ignore generated files.
+/out
+package.yml
+coverage.*
+dist/
+*.zip
+*.pem
 
 # ignore test files.
-out
-test.sh
+/test.sh
 
 # ignore log files.
 super-linter.log
@@ -21,3 +29,6 @@ Resume.pdf
 
 # ... but not.
 !public/will-be-deleted
+=======
+# ignore compiled binaries in root.
+/main
