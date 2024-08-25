@@ -7,4 +7,4 @@ mainfont: FiraCode-Regular
     <button type="submit">Download PDF</button>
 </form>
 
-{{% readmarkdown "resume/data.md" %}}
+{{% readmarkdown "content/resume/data.md" %}}
