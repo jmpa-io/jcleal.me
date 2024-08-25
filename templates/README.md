@@ -20,4 +20,3 @@
 * [ ] Look into creating a custom theme.
 * [ ] Add some javascript charts which demo how to do sorting (eg. bubble sort).
 
-%HOW_TO_USE_TEMPLATE%
