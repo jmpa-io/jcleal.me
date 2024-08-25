@@ -13,13 +13,13 @@
 ```
 
 ## Scripts
-
+```
 script|description
 ---|---
 [bin/compile.sh](bin/compile.sh) | Compile the static website using docker + hugo.
 [bin/generate-resume.sh](bin/generate-resume.sh) | Converts the raw resume markdown to a single pdf file.
 [bin/local.sh](bin/local.sh) | Run this repository inside a docker container.
-
+```
 
 ## TODOs
 
@@ -29,3 +29,4 @@ script|description
 * [ ] Add some blog content (eg. a blog post on how this website is managed / deployed).
 * [ ] Look into creating a custom theme.
 * [ ] Add some javascript charts which demo how to do sorting (eg. bubble sort).
+
