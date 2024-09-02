@@ -1,3 +1,4 @@
+
 # Default PROJECT, if not given by another Makefile.
 ifndef PROJECT
 PROJECT=jcleal.me
@@ -9,7 +10,6 @@ SERVICES =
 
 # Targets.
 # TODO: fill these out with Make targets.
-
 
 ---: ## ---
 
