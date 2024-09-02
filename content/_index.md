@@ -15,4 +15,4 @@ If you're interested in seeing how this website has been created, managed, or de
 
 ---
 
-If you're interested in hiring me, check out my [resume](https://jcleal.me/resume), or [feel free to reach out directly](https://jcleal.me/contact).
+If you're interested in hiring me, check out my [resume](https://jcleal.me/resume), or [feel free to reach out directly via my contact details here](https://jcleal.me/contact).
