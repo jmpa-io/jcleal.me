@@ -9,26 +9,10 @@ coverage.*
 dist/
 *.zip
 *.pem
+traces.txt
 
 # ignore test files.
 /test.sh
 
-# ignore log files.
-super-linter.log
-
-# ignore folders generated via CI/CD.
-/depot
-/bin/[0-9][0-9]-*.sh
-/cf/[0-9][0-9]-*.yml
-/.github/templates/[0-9][0-9]-*
-
-#  local generated files.
-public/*
-resources/
-Resume.pdf
-
-# ... but not.
-!public/will-be-deleted
-=======
 # ignore compiled binaries in root.
 /main
