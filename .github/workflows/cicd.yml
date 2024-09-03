@@ -59,7 +59,7 @@ jobs:
 
   upload-website:
     needs: [deploy, build-website]
-    uses: jmpa-io/pipelines/.github/workflows/50-upload-artifact-to-s3.yml@main
+    uses: jmpa-io/pipelines/.github/workflows/50-upload-artifacts-to-s3.yml@main
     with:
       artifact: jcleal.me
     secrets:
