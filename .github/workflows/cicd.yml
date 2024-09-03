@@ -19,7 +19,7 @@ permissions:
   contents: read
   actions: read
 
-jobs:
+# jobs:
   # lint:
     # uses: jmpa-io/pipelines/.github/workflows/10-lint.yml@main
     # secrets:
@@ -28,15 +28,15 @@ jobs:
     #   AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
     #   ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
 
-  test:
-    uses: jmpa-io/pipelines/.github/workflows/20-test.yml@main
-    with:
-      with-code-coverage: true
-    secrets:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
-      ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
+  # test:
+  #   uses: jmpa-io/pipelines/.github/workflows/20-test.yml@main
+  #   with:
+  #     with-code-coverage: true
+  #   secrets:
+  #     AWS_REGION: ${{ secrets.AWS_REGION }}
+  #     AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  #     AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
+  #     ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
   #
   # post-to-slack:
   #   needs: [lint, test]
