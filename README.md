@@ -1,32 +1,26 @@
 <!-- markdownlint-disable MD041 MD010 -->
-[![jcleal.me](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml)
-[![jcleal.me](https://github.com/jmpa-io/jcleal.me/actions/workflows/README.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/README.yml)
+[![templates](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/README.yml/badge.svg)](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/README.yml)
+[![templates](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/cicd.yml/badge.svg)](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/cicd.yml)
+[![templates](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/dependabot-automerge.yml/badge.svg)](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/dependabot-automerge.yml)
 
 <p align="center">
-  <img src="img/logo.png"/>
+  <img src="docs/logo.png">
 </p>
 
-# `jcleal.me`
+# `templates`
 
 ```diff
-+ 🌐 My resume website.
++ 📚 A collection of GENERIC templates likely used across the other repositories
++ in in this org.
 ```
 
-## Scripts
-```
-script|description
----|---
-[bin/compile.sh](bin/compile.sh) | Compile the static website using docker + hugo.
-[bin/generate-resume.sh](bin/generate-resume.sh) | Converts the raw resume markdown to a single pdf file.
-[bin/local.sh](bin/local.sh) | Run this repository inside a docker container.
-```
+## `Scripts`
 
-## TODOs
+👉 Here is a list of scripts in this repository:
 
-* [x] Deploy website (via ci/cd).
-* [x] Add resume to site.
-* [x] Add ci/cd step to generate pdf from resume.md using https://pandoc.org/.
-* [ ] Add some blog content (eg. a blog post on how this website is managed / deployed).
-* [ ] Look into creating a custom theme.
-* [ ] Add some javascript charts which demo how to do sorting (eg. bubble sort).
+Script|Description
+:---|:---
+[bin/README.sh](bin/README.sh) | Generates a README.md, using a README.md template.
+[bin/test.sh](bin/test.sh) | This is a test script, and should be ignored. This line should also be included.
+
 
