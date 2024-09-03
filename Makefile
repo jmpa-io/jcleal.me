@@ -4,12 +4,53 @@ ifndef PROJECT
 PROJECT=jcleal.me
 endif
 
-# Services.
-SERVICES =
-# TODO: fill these out with services to deploy.
+# Vars.
+HUGO_IMAGE ?= klakegg/hugo:0.78.2-alpine
+RESUME_METADATA ?= content/resume/metadata.yml
+RESUME_CONTENT ?= content/resume/data.md
 
 # Targets.
-# TODO: fill these out with Make targets.
+generate-website: ## Generates everything related to the 'jcleal.me' website.
+generate-website: \
+	compile-website \
+	generate-resume
+
+compile-website: ## Compiles the 'jcleal.me' website.
+compile-website: dist/public
+	@test -z "$(CI)" || echo "##[group]Compiling website."
+	docker run --rm \
+		-w /app \
+		-v "$(PWD):/app" \
+		-v "$(PWD)/public" \
+		-v "$(PWD)/resources" \
+		$(HUGO_IMAGE) \
+		--log --destination $<
+	@test -z "$(CI)" || echo "##[endgroup]"
+
+generate-resume: ## Generates 'Resume.pdf', using pandoc.
+generate-resume: $(RESUME_METADATA) $(RESUME_CONTENT)
+generate-resume: cmd/pandoc image-pandoc
+generate-resume: dist/public
+	@test -z "$(CI)" || echo "##[group]Generating Resume.pdf."
+	docker run --rm \
+	-w /app \
+	-v "$(PWD):/app" \
+	$(REPO)/pandoc \
+		-f markdown \
+		-t latex \
+		--metadata-file $(RESUME_METADATA) \
+		$(RESUME_CONTENT) \
+		-o $</resume.pdf
+	@test -z "$(CI)" || echo "##[endgroup]"
+
+serve: ## Serves this website locally, mounted inside a Docker container.
+serve: dist/public
+	@docker run --rm -it \
+  		-w /app \
+  		-v "$(PWD):/app" \
+  		-p "1313:1313" \
+		$(HUGO_IMAGE) \
+		server
 
 ---: ## ---
 
