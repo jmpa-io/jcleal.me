@@ -21,9 +21,12 @@ permissions:
 
 jobs:
   run:
-    - name: hmm
-      run: |
-        echo "hello world"
+    runs-on: ubuntu-latest
+    steps:
+      - name: hmm
+        run: |
+          echo "hello world"
+
   # lint:
     # uses: jmpa-io/pipelines/.github/workflows/10-lint.yml@main
     # secrets:
