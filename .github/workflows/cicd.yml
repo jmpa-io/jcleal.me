@@ -28,25 +28,8 @@ jobs:
       AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
       ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
 
-  test:
-    uses: jmpa-io/pipelines/.github/workflows/20-test.yml@main
-    with:
-      with-code-coverage: true
-    secrets:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
-      ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
-
-  deploy:
-    uses: jmpa-io/pipelines/.github/workflows/40-deploy.yml@main
-    secrets:
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
-      AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
-      ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
-
   build-website:
+    needs: [lint]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout.
@@ -55,10 +38,10 @@ jobs:
           submodules: true
 
       - name: Compile website.
-        run: bin/compile.sh
+        run: make compile
 
       - name: Generate resume.
-        run: bin/generate-resume.sh
+        run: make generate-resume
 
       - name: Upload artifact.
         uses: actions/upload-artifact@v4.4.0
@@ -67,6 +50,15 @@ jobs:
           path: public/*
           if-no-files-found: error
           retention-days: 7
+
+  deploy:
+    needs: [build-website]
+    uses: jmpa-io/pipelines/.github/workflows/40-deploy.yml@main
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
+      ADMIN_GITHUB_TOKEN: ${{ secrets.ADMIN_GITHUB_TOKEN }}
 
   upload-website:
     needs: [deploy, build-website]

@@ -182,10 +182,10 @@ PROMOTE_FROM_ECR = $(PROMOTE_FROM_AWS_ACCOUNT_ID).dkr.ecr.$(PROMOTE_AWS_REGION).
 # ---
 
 # The paths to any given Git submodules found in this repository.
-SUBMODULES := $(shell git config --file $(shell while [ ! -d .git ]; do cd ..; done; pwd)/.gitmodules --get-regexp path | awk '{ print $$2 }')
+GIT_SUBMODULES := $(shell git config --file $(shell while [ ! -d .git ]; do cd ..; done; pwd)/.gitmodules --get-regexp path | awk '{ print $$2 }')
 
 # A filter for ignoring Git submodules when using 'find' commands in this Makefile.
-FILTER_IGNORE_SUBMODULES = $(foreach module,$(SUBMODULES),-not \( -path "./$(module)" -o -path "./$(module)/*" \))
+FILTER_IGNORE_SUBMODULES = $(foreach module,$(GIT_SUBMODULES),-not \( -path "./$(module)" -o -path "./$(module)/*" \))
 
 # ---
 
