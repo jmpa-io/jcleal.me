@@ -37,17 +37,14 @@ jobs:
         with:
           submodules: true
 
-      - name: Compile website.
-        run: make compile
-
-      - name: Generate resume.
-        run: make generate-resume
+      - name: Generate website.
+        run: make generate-website
 
       - name: Upload artifact.
-        uses: actions/upload-artifact@v4.4.0
+        uses: actions/upload-artifact@v4
         with:
-          name: website
-          path: public/*
+          name: jcleal.me
+          path: dist/public
           if-no-files-found: error
           retention-days: 7
 
@@ -62,13 +59,13 @@ jobs:
 
   upload-website:
     needs: [deploy, build-website]
-    uses: jmpa-io/depot/.github/workflows/upload-website.yml@main
+    uses: jmpa-io/pipelines/.github/workflows/50-upload-artifact-to-s3.yml@main
     with:
-      artifact: website
+      artifact: jcleal.me
     secrets:
-      github-token: ${{ secrets.ADMIN_GITHUB_TOKEN }}
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
 
   post-to-slack:
     needs: [lint, test, deploy, build-website, upload-website]
