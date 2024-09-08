@@ -4,18 +4,65 @@ ifndef PROJECT
 PROJECT=jcleal.me
 endif
 
-# Vars.
+# The docker image used for 'hugo', since we don't have anything to add to it.
 HUGO_IMAGE ?= klakegg/hugo:0.78.2-alpine
+
+# The path to the resume metadata file.
 RESUME_METADATA ?= content/resume/metadata.yml
+
+# The path to the resume content.
 RESUME_CONTENT ?= content/resume/data.md
 
+# ---
+
+# The param prefix is the beginning of a path in AWS SSM Parameter Store that
+# points to config for this website.
+ifeq ($(ENVIRONMENT),prod)
+PARAM_PREFIX ?= $(REPO)
+else
+PARAM_PREFIX ?= $(ENVIRONMENT).$(REPO)
+endif
+
+# The hosted zone id in Route53.
+HOSTED_ZONE_ID ?= $(shell aws ssm get-parameter --name /$(PARAM_PREFIX)/hosted-zone/id --query 'Parameter.Value' --output text)
+
+# The bucket to upload the website to.
+UPLOAD_BUCKET ?= $(shell aws ssm get-parameter --name /$(PARAM_PREFIX)/bucket --query 'Parameter.Value' --output text)
+
+# The arn to the cert stored in ACM.
+# NOTE: This is using '$(REPO)' because this cert is only deployed to production.
+CERT_ARN ?= $(shell AWS_REGION=us-east-1 aws ssm get-parameter --name /certs/$(REPO)/arn --query 'Parameter.Value' --output text)
+
+# ---
+
+# Services.
+# Deployed manually: cert
+SERVICE_GROUP_1 = website
+SERVICE_GROUP_2 = upload
+
 # Targets.
+cert: ## Deploys the 'cert' stack.
+cert: AWS_REGION=us-east-1
+cert: ADDITIONAL_PARAMETER_OVERRIDES="HostedZoneId=$(HOSTED_ZONE_ID)"
+cert: deploy-cert
+
+website: ## Deploys the 'website' stack.
+website: ADDITIONAL_PARAMETER_OVERRIDES="AcmCertificateArn=$(CERT_ARN) "
+website: ADDITIONAL_PARAMETER_OVERRIDES+="HostedZoneId=$(HOSTED_ZONE_ID) "
+website: deploy-website
+
+upload: ## Uploads generated website content to AWS S3. Be careful with this command!
+upload: generate-website
+	@aws s3 sync --delete dist/public/ s3://$(UPLOAD_BUCKET)/
+
+# ---
+
 generate-website: ## Generates everything related to the 'jcleal.me' website.
 generate-website: \
 	compile-website \
 	generate-resume
 
-compile-website: ## Compiles the 'jcleal.me' website.
+compile-website: ## Compiles the 'jcleal.me' website, using hugo.
 compile-website: dist/public
 	@test -z "$(CI)" || echo "##[group]Compiling website."
 	docker run --rm \
@@ -51,6 +98,8 @@ serve: dist/public
   		-p "1313:1313" \
 		$(HUGO_IMAGE) \
 		server
+
+PHONY += generate-website serve
 
 ---: ## ---
 
