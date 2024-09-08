@@ -2,7 +2,7 @@
 
 <mr.jordan.cleal+resume@gmail.com>
 
-[+61 434 557 224](tel:+61434557224)
+AUS [+61 434 557 224](tel:+61434557224) | UK [+44 7480 971787](tel:+447480971787)
 
 [jcleal.me](https://jcleal.me) | [LinkedIn](https://linkedin.com/in/jordan-cleal) | [GitHub](https://github.com/jcleal)
 
@@ -26,11 +26,11 @@ A passionate DevOps Engineer seeking to broaden their knowledge and experience i
 
 ### Skills.
 
-**Programming / Scripting Languages**: Go, Bash; dabbled in JavaScript, Typescript, C++, C#, PowerShell.
+**Programming / Scripting Languages**: Go, Bash; dabbled in JavaScript, TypeScript, C++, C#, PowerShell.
 
 **Frameworks & Tools**: git, docker, docker-compose, awscli, sam (AWS SAM), make.
 
-**Cloud Vendors**: AWS - CloudFormation, Route53, CloudFront, API Gateway, S3 (Storage + Hosting), EC2, SSM (Automations + Parameter Store), Lambda, CloudWatch, MSK, Kinesis Data Firehose, DynamoDB, AMP + AMG; dabbled with Kinesis, SNS + SQS, EKS, Open Search + Kibana, Glue + Athena + QuickSight.
+**Cloud Vendors**: AWS - CloudFormation, Route53, CloudFront, API Gateway, S3 (Storage + Hosting), EC2, SSM (Automations + Parameter Store), Lambda, CloudWatch, MSK, Kinesis Data Firehose, DynamoDB, AMP + AMG; dabbled with Kinesis, SNS + SQS, EKS, OpenSearch + Kibana, Glue + Athena + QuickSight.
 
 **API Styles**: REST, GraphQL.
 
@@ -38,29 +38,33 @@ A passionate DevOps Engineer seeking to broaden their knowledge and experience i
 
 **Vendor Management**: GitHub, Buildkite, AWS, Sumo Logic, New Relic, Datadog.
 
-**Development approaches**: Infrastructure-as-code, command line over UI, prototyping in Bash before writing in Go.
+**Development approaches**: Infrastructure-as-code, command line over UI, prototyping in Bash before writing in Go (if applicable), data-driven decisions.
 
 ### Professional Experience.
 
-#### Senior DevOps Engineer, CI/CD team @ [MYOB](https://myob.com.au)
+#### Senior DevOps Engineer, CI/CD team @ [MYOB](https://myob.com.au).
 
 Melbourne | March 2023 - April 2024
 
-* Assisted in the overall technical direction of the CI/CD team (3 DevOps Engineers, 1 Protege), including mentoring each member individually & upskilling their development practices.
+* Guided the CI/CD team (3 DevOps Engineers, 1 Protege), improving team skills and practices, leading to a more cohesive and efficient development processes and confidence in abilities from team members.
 
 * Assisted in the design, architecture, documentation, and creation of a new centrally managed CI/CD platform (previously the CI/CD team was running a distributed one).
 
-* Assisted the CI/CD team with creating & releasing a beta to beta customers of the centrally managed CI/CD platform.
+* Played a key role in gathering valuable feedback from beta customers of the new centrally managed CI/CD platform and faciliting iterative improvements.
 
-* Presented the design & architecture of the new centrally managed CI/CD platform to the TAG group within MYOB (a group of technical leaders & architects across MYOB).
+* Presented the design & architecture of the new centrally managed CI/CD platform to the TAG group within MYOB (a group of senior technical leaders & architects across MYOB) to confirm the technical direction of the platform with key stakeholders, as these changes affect each team at MYOB.
+
+* Discussed new centrally managed CI/CD platform with Buildkite themselves.
 
 * Created, managed, & shared with customers a roadmap breaking down the major & minor milestones for the future of the centrally managed CI/CD platform.
 
-* Proposed, and implemented, an alternative for how authentication to an AWS account would work for centrally managed Buildkite agents.
+* Proposed, and implemented, an alternative for how authentication to an AWS account would work for centrally managed Buildkite agents. This resulted in a simplification to how Buildkite agents authenticate, and what a customer (a team at MYOB) needs to do to run their pipelines with these new Buildkite agents securely.
 
-* Proposed, and implemented, an observability strategy for collecting and sending observable data to Sumo Logic, using Open Telemetry collectors, for both centrally managed & existing distributed Buildkite agents.
+* Proposed, and implemented, an observability strategy for collecting and sending observable data to Sumo Logic, using Open Telemetry collectors, for both centrally managed & existing distributed Buildkite agents. From this, crucial metrics about what is happening on the Buildkite agents are now able to be observed easily by all members of the team.
 
-* Created a document for the CI/CD team outlining what is expected from them, at a technical level.
+* Created a document for the CI/CD team outlining what is expected from them, at a technical level. This directed them to what they could focus on, instead of being overwhelmed by all the technologies in our industry.
+
+* Upskilled 3 joining members to the CI/CD team (1 Senior DevOps Engineer, 2 DevOps Engineers) through intensive whiteboarding sessions discussing the new centrally managed CI/CD platform in their own words. This allowed them to quickly onboard, and empowered them to voice their perspectives and experiences to help improve the overall design of the new centrally managed CI/CD platform.
 
 #### Senior DevOps Engineer, Observability team @ [MYOB](https://myob.com.au).
 
@@ -70,10 +74,10 @@ Melbourne | December 2021 - March 2023
 
 * Assisted in the design, architecture, documentation, and creation of a centralized observability platform for logs, metrics, and traces. This platform is built using Open Telemetry collectors hosted in AWS Fargate, uses AWS MSK for a queue between ingress and egress microservices, and sends the received observability data to Sumo Logic.
 
-* Implemented an internal monitoring system for the centalized observability platform, allowing the team to have visibility into the overall performance of the system, through dashboards and alerts in AWS AMP + AMG.
+* Implemented an internal monitoring system for the centralized observability platform, allowing the team to have visibility into the overall performance of the system, through dashboards and alerts in AWS AMP + AMG.
 
-* Optimized the CI/CD pipeline for the centalized observability platform, reducing time-to-production from ~90 minutes to ~40 minutes though a multitude of optimizations (dynamically generated pipeline, different tiers of agents aka. instance types, splittings jobs across multiple agents).
-https://www.linkedin.com/
+* Optimized the CI/CD pipeline for the centralized observability platform, reducing time-to-production from ~90 minutes to ~40 minutes though a multitude of optimizations (dynamically generated pipeline, different tiers of agents aka. instance types, splittings jobs across multiple agents).
+
 * Assisted in the deprecation of Jaeger across the business, saving the business ~35k per month in AWS costs.
 
 * Created an internal Buildkite plugin for teams to scan and upload results from a SonarQube scan to an internally managed SonarQube instance, saving teams the time and effort in writing this functionality into the own repositories.
@@ -82,7 +86,7 @@ https://www.linkedin.com/
 
 * Created a tool to automatically add a warning annotation when certain conditions are not met when running a build on a Linux Buildkite Agent, resulting in an uptick of the number of adoptions of the internal Backstage.io service.
 
-* Ran multiple day-long sessions for various junior DevOps engineers, focused on writing Bash scripts, Go testing, CI/CD + Buildkite in general, and building Slack Apps, resulting in two nominations for the passion award by attendees.
+* Ran multiple day-long sessions for various Junior DevOps engineers, focused on writing Bash scripts, Go testing, CI/CD + Buildkite in general, and building Slack Apps, resulting in two nominations for the passion award by attendees.
 
 #### DevOps Engineer, Observability team @ [MYOB](https://myob.com.au).
 
@@ -90,13 +94,13 @@ Melbourne | September 2019 - December 2021
 
 * Managed Sumo Logic, New Relic, Datadog at an organizational level.
 
-* Introduced various automations to uplift team practices, which contributed to a reductions in the overall number of orphaned pull requests & branches per GitHub repository, a decrease in the number of failing builds in Buildkite, reduced lead times, automated departures for people leaving the business, and a reduction in the overall cost of the teams AWS accounts.
+* Introduced various automations to uplift team practices, which contributed to a reduction in the overall number of orphaned pull requests & branches per GitHub repository, a decrease in the number of failing builds in Buildkite, reduced lead times, automated departures for people leaving the business, and a reduction in the overall cost of the teams AWS accounts.
 
 * Contributed to the uplift of the centralized logging platform to allow for ingestion of PCI data, resulting in the decommission of Splunk, saving over USD $200K for the business.
 
 * Designed and implemented a custom Slack app to streamline the existing incident management process, resulting in quicker response times for the incident management team, and a centralized way for teams to see incidents across the business.
 
-* Lead the user management of New Relic, reducing overall full user count from 350+ full users to > 200 full users, resulting in the business not being overcharged for users outside the contractual paid seats.
+* Led the user management of New Relic, reducing overall full user count from 350+ full users to > 200 full users, resulting in the business not being overcharged for users outside the contractual paid seats.
 
 * Uplifted the centralized logging platform to support the Sumo Logic Credits Model, resulting in a reduction of the overall credits used, and allowing teams to utilize the vendor more for the same cost.
 
@@ -134,7 +138,7 @@ Melbourne | October 2017 - September 2019
 
 * Rotated into multiple teams across the business to learn about core concepts like Agile practices, programming at an enterprise level, DevOps, CI/CD, and automation in-general.
 
-* Promoted early out of the graduate program, being the first to be promoted for the 2017 graduate program intake.
+* Promoted early from the graduate program, being the first to be promoted for the 2017 graduate program intake.
 
 ### Education.
 
