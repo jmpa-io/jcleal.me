@@ -35,15 +35,12 @@ pull-config:
 	@echo $(HOSTED_ZONE_ID)
 	@echo $(UPLOAD_BUCKET)
 	@echo $(CERT_ARN)
-	aws ssm describe-parameters | jq '.Parameters[].Name'
-	aws ssm get-parameter --name /dev.jcleal.me/bucket
-	aws ssm get-parameter --name /$(PARAM_PREFIX)/bucket
-
+	aws ssm --region us-east-1 describe-parameters | jq '.Parameters[].Name'
 # ---
 
 # Services.
 # Deployed manually: cert
-SERVICE_GROUP_1 = pull-config website
+SERVICE_GROUP_1 = website
 SERVICE_GROUP_2 = upload
 
 # Targets.
