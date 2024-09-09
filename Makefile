@@ -36,6 +36,9 @@ pull-config:
 	@echo $(UPLOAD_BUCKET)
 	@echo $(CERT_ARN)
 	aws ssm describe-parameters | jq '.Parameters[].Name'
+	aws ssm get-parameter --name /dev.jcleal.me/bucket
+	aws ssm get-parameter --name /$(PARAM_PREFIX)/bucket
+
 # ---
 
 # Services.
