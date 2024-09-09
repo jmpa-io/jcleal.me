@@ -30,6 +30,12 @@ UPLOAD_BUCKET ?= $(shell aws ssm get-parameter --name /$(PARAM_PREFIX)/bucket --
 # NOTE: This is using '$(REPO)' because this cert is only deployed to production.
 CERT_ARN ?= $(shell AWS_REGION=us-east-1 aws ssm get-parameter --name /certs/$(REPO)/arn --query 'Parameter.Value' --output text)
 
+pull-config: # Pulls the config pulled from AWS when deploying.
+pull-config:
+	@echo $(HOSTED_ZONE_ID)
+	@echo $(UPLOAD_BUCKET)
+	@echo $(CERT_ARN)
+
 # ---
 
 # Services.
@@ -72,11 +78,11 @@ compile-website: dist/public
 		--log --destination $<
 	@test -z "$(CI)" || echo "##[endgroup]"
 
-generate-resume: ## Generates 'Resume.pdf', using pandoc.
+generate-resume: ## Generates 'resume.pdf', using pandoc.
 generate-resume: $(RESUME_METADATA) $(RESUME_CONTENT)
 generate-resume: cmd/pandoc image-pandoc
 generate-resume: dist/public
-	@test -z "$(CI)" || echo "##[group]Generating Resume.pdf."
+	@test -z "$(CI)" || echo "##[group]Generating resume.pdf."
 	docker run --rm \
 	-w /app \
 	-v "$(PWD):/app" \
