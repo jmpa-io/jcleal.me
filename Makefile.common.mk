@@ -83,6 +83,12 @@ REPO = $(shell basename $(shell git rev-parse --show-toplevel))
 # The GitHub organization associated with this repository.
 ORG ?= jmpa-io
 
+# The user id of the user running this Makefile.
+USER_ID ?= $(shell id -u)
+
+# The group id of the user running this Makefile.
+GROUP_ID ?= $(shell id -g)
+
 # ---
 
 # A list of supported operating systems for building binaries.
@@ -562,6 +568,8 @@ print-docker-version:
 define build_image
 	@test -z "$(CI)" || echo "##[group]Building $(2)."
 	docker build \
+		--build-arg UID=$(USER_ID) \
+		--build-arg GID=$(GROUP_ID) \
 		$(patsubst %,-t $(2):%,$(TAGS)) \
 		-f $(1) .
 	@test -z "$(CI)" || echo "##[endgroup]"
