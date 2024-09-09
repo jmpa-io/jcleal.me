@@ -4,9 +4,6 @@ ifndef PROJECT
 PROJECT=jcleal.me
 endif
 
-# The docker image used for 'hugo', since we don't have anything to add to it.
-HUGO_IMAGE ?= klakegg/hugo:0.78.2-alpine
-
 # The path to the resume metadata file.
 RESUME_METADATA ?= content/resume/metadata.yml
 
@@ -43,7 +40,7 @@ SERVICE_GROUP_2 = upload
 # Targets.
 cert: ## Deploys the 'cert' stack.
 cert: AWS_REGION=us-east-1
-cert: ADDITIONAL_PARAMETER_OVERRIDES="HostedZoneId=$(HOSTED_ZONE_ID)"
+cert: ADDITIONAL_PARAMETER_OVERRIDES="HostedZoneId=$(HOSTED_ZONE_ID) "
 cert: deploy-cert
 
 website: ## Deploys the 'website' stack.
@@ -63,6 +60,7 @@ generate-website: \
 	generate-resume
 
 compile-website: ## Compiles the 'jcleal.me' website, using hugo.
+compile-website: cmd/hugo image-hugo
 compile-website: dist/public
 	@test -z "$(CI)" || echo "##[group]Compiling website."
 	docker run --rm \
@@ -70,7 +68,7 @@ compile-website: dist/public
 		-v "$(PWD):/app" \
 		-v "$(PWD)/public" \
 		-v "$(PWD)/resources" \
-		$(HUGO_IMAGE) \
+		$(REPO)/hugo \
 		--log --destination $<
 	@test -z "$(CI)" || echo "##[endgroup]"
 
@@ -91,12 +89,13 @@ generate-resume: dist/public
 	@test -z "$(CI)" || echo "##[endgroup]"
 
 serve: ## Serves this website locally, mounted inside a Docker container.
+serve: cmd/hugo image-hugo
 serve: dist/public
 	@docker run --rm -it \
-  		-w /app \
+		-w /app \
   		-v "$(PWD):/app" \
   		-p "1313:1313" \
-		$(HUGO_IMAGE) \
+		$(REPO)/hugo \
 		server
 
 PHONY += generate-website serve
