@@ -28,7 +28,7 @@ UPLOAD_BUCKET ?= $(shell aws ssm get-parameter --name /$(PARAM_PREFIX)/bucket --
 
 # The arn to the cert stored in ACM.
 # NOTE: This is using '$(REPO)' because this cert is only deployed to production.
-CERT_ARN ?= $(shell AWS_REGION=us-east-1 aws ssm get-parameter --name /certs/$(REPO)/arn --query 'Parameter.Value' --output text)
+CERT_ARN ?= $(shell aws ssm get-parameter --region us-east-1 --name /certs/$(REPO)/arn --query 'Parameter.Value' --output text)
 
 pull-config: # Pulls the config pulled from AWS when deploying.
 pull-config:
