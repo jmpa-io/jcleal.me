@@ -55,7 +55,7 @@ website: deploy-website
 
 upload: ## Uploads generated website content to AWS S3. Be careful with this command!
 upload:
-	@aws s3 sync --delete dist/public/ s3://$(UPLOAD_BUCKET)/
+	aws s3 sync --delete dist/public/ s3://$(UPLOAD_BUCKET)/
 
 # ---
 
