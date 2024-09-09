@@ -35,6 +35,9 @@ pull-config:
 	@echo $(HOSTED_ZONE_ID)
 	@echo $(UPLOAD_BUCKET)
 	@echo $(CERT_ARN)
+	@echo $(REPO)
+	aws ssm --region us-east-1 get-parameter --name /certs/jcleal.me/arn
+	aws ssm --region us-east-1 get-parameter --name /certs/$(REPO)/arn
 	aws ssm --region us-east-1 describe-parameters | jq '.Parameters[].Name'
 	echo "look here!!"
 # ---
