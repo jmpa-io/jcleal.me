@@ -78,7 +78,7 @@ COMMIT ?= $(shell git describe --tags --always)
 
 # The name of this repository, derived from the 'git root directory'.
 # NOTE: This affects how identifiable resources deployed are.
-REPO = $(shell basename $(shell git rev-parse --show-toplevel))
+REPO ?= $(shell basename $(shell git rev-parse --show-toplevel))
 
 # The GitHub organization associated with this repository.
 ORG ?= jmpa-io
