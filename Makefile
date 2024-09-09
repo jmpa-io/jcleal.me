@@ -40,7 +40,7 @@ pull-config:
 
 # Services.
 # Deployed manually: cert
-SERVICE_GROUP_1 = pull-config website
+SERVICE_GROUP_1 = website
 SERVICE_GROUP_2 = upload
 
 # Targets.
