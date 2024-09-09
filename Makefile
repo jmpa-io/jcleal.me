@@ -35,6 +35,7 @@ pull-config:
 	@echo $(HOSTED_ZONE_ID)
 	@echo $(UPLOAD_BUCKET)
 	@echo $(CERT_ARN)
+	@aws sts get-caller-identity
 
 # ---
 
