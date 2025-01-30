@@ -1,0 +1,22 @@
+---
+version: 2
+updates:
+
+  # GitHub Action dependencies (.github/workflows/*.yml).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "github-actions"]
+
+  # Docker dependencies (Dockerfile).
+  - package-ecosystem: docker
+    directories:
+      - cmd/hugo/
+      - cmd/pandoc/
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels: ["dependencies", "docker"]
+
