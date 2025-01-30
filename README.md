@@ -11,7 +11,6 @@
 
 <a href="LICENSE" target="_blank"><img src="https://img.shields.io/github/license/jmpa-io/jcleal.me.svg" alt="GitHub License"></a>
 [![CI/CD](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml)
-[![Codecov](https://codecov.io/github/jmpa-io/jcleal.me/graph/badge.svg)](https://codecov.io/github/jmpa-io/jcleal.me)
 
 ## Getting started
 
