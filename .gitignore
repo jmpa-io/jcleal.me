@@ -16,10 +16,3 @@ traces.txt
 
 # ignore compiled binaries in root.
 /main
-
-# ignore hugo specific files and folders.
-/public/*
-/resources/*
-!/public/.gitkeep
-!/resources/.gitkeep
-
