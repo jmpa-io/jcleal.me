@@ -20,6 +20,7 @@ make
 ```
 And you'll be a given a list of all the available commands in this repository.
 
+#
 
 For example, if you'd like to compile & generate the website with `hugo`, run:
 ```bash
