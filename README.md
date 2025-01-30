@@ -1,26 +1,37 @@
 <!-- markdownlint-disable MD041 MD010 -->
-[![templates](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/README.yml/badge.svg)](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/README.yml)
-[![templates](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/cicd.yml/badge.svg)](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/cicd.yml)
-[![templates](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/dependabot-automerge.yml/badge.svg)](https://github.com/jmpa-io/templates/actions/workflows/.github/workflows/dependabot-automerge.yml)
-
 <p align="center">
-  <img src="docs/logo.png">
+    <img src="docs/logo.png">
 </p>
 
-# `templates`
+## `jcleal.me`
 
 ```diff
-+ 📚 A collection of GENERIC templates likely used across the other repositories
-+ in in this org.
++ 🌐 My resume website.
 ```
 
-## `Scripts`
+<a href="LICENSE" target="_blank"><img src="https://img.shields.io/github/license/jmpa-io/jcleal.me.svg" alt="GitHub License"></a>
+[![CI/CD](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/cicd.yml)
+[![Codecov](https://codecov.io/github/jmpa-io/jcleal.me/graph/badge.svg)](https://codecov.io/github/jmpa-io/jcleal.me)
 
-👉 Here is a list of scripts in this repository:
+## Getting started
 
-Script|Description
-:---|:---
-[bin/README.sh](bin/README.sh) | Generates a README.md, using a README.md template.
-[bin/test.sh](bin/test.sh) | This is a test script, and should be ignored. This line should also be included.
+Using a <kbd>terminal</kbd>, run:
+```bash
+make
+```
+And you'll be a given a list of all the available commands in this repository.
 
 
+For example, if you'd like to compile & generate the website with `hugo`, run:
+```bash
+make generate-website
+```
+
+## Running locally?
+
+1. Using a <kbd>terminal</kbd>, run:
+```bash
+make serve
+```
+
+2. Using your browser, navigate to `localhost:1313`.
