@@ -26,6 +26,8 @@ For example, if you'd like to compile & generate the website with `hugo`, run:
 ```bash
 make generate-website
 ```
+See the [./Makefile](./Makefile) if you're interested in seeing the commands specific to this repository without cloning. You could also dive into the [./Makefile.common.mk](./Makefile.common.mk) but it's quite large.
+
 
 ## Running locally?
 
