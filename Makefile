@@ -101,7 +101,7 @@ serve: dist/public
   		-v "$(PWD):/app" \
   		-p "1313:1313" \
 		$(REPO)/hugo \
-		server
+		server --disableFastRender
 
 PHONY += generate-website serve
 

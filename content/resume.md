@@ -1,7 +1,6 @@
 ---
 title: ""
 type: "page"
-# mainfont: FiraCode-Regular
 ---
 
 <form method="get" action="https://jcleal.me/resume.pdf">
