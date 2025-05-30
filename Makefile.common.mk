@@ -88,6 +88,12 @@ REPO = $(shell basename $(shell git rev-parse --show-toplevel))
 # The GitHub organization associated with this repository.
 ORG ?= jmpa-io
 
+# The id of the user.
+UID := $(shell id -u)
+
+# The id of the group.
+GID := $(shell id -g)
+
 # ---
 
 # A list of supported operating systems for building binaries.
@@ -113,12 +119,6 @@ endif
 
 # The CPU architecture to target when building binaries.
 BUILDING_ARCH ?= $(ARCH)
-
-# The id of the user.
-UID := $(shell id -u)
-
-# The id of the group.
-GID := $(shell id -g)
 
 # ---
 
