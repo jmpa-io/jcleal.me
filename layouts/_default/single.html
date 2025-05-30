@@ -19,6 +19,7 @@
         {{ end }}
         <div class="matter">
           <h1 class="title">{{ .Title }}</h1>
+          <div class="title-description">{{ .Description }}</div>
         </div>
       </div>
       {{ end }}
@@ -32,7 +33,7 @@
         {{ if gt .Params.tags 0 }}
         <ul class="flat">
           {{ range .Params.tags }}
-          <li><a href="{{ " /tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
+          <li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">{{ . }}</a></li>
           {{ end }}
         </ul>
         {{ end }}

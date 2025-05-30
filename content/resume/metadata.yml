@@ -1,9 +1,0 @@
----
-# https://pandoc.org/MANUAL.html#variables-for-latex
-geometry: margin=15mm
-title-meta: Jordan Cleal
-author: Jordan Cleal
-fontsize: 8pt
-papersize: a4
-urlcolor: blue
-colorlinks: yes

@@ -114,6 +114,12 @@ endif
 # The CPU architecture to target when building binaries.
 BUILDING_ARCH ?= $(ARCH)
 
+# The id of the user.
+UID := $(shell id -u)
+
+# The id of the group.
+GID := $(shell id -g)
+
 # ---
 
 # All '.*sh' files in the repository (excluding submodules).
@@ -657,6 +663,8 @@ define build_image
 	@test -z "$(CI)" || echo "##[group]Building $(2)."
 	docker build \
 		$(patsubst %,-t $(2):%,$(TAGS)) \
+		--build-arg UID=$(UID) \
+		--build-arg GID=$(GID) \
 		-f $(1) .
 	@test -z "$(CI)" || echo "##[endgroup]"
 endef

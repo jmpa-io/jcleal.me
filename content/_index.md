@@ -1,6 +1,6 @@
 Hi! I'm Jordan. 👋🏼
 
-I'm a **DevOps Engineer** based in the **United Kingdom** (previously **Melbourne, Australia**) focused on solving problems using Go, Bash, and deploying to AWS.
+I'm a **DevOps Engineer** based in the **United Kingdom** (previously **Melbourne, Australia**) focused on solving problems using `Go`, `Bash`, and deploying to `AWS`.
 
 Some key areas of interest for me are:
 
