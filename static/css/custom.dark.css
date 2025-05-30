@@ -1,3 +1,18 @@
+
+html.dark .rest {
+  font-weight: bold;
+  background-color: #3700ff;
+}
+
 html.dark blockquote {
   border-color: #3700ff;
+}
+
+html.dark .centered-img {
+  border: 2px solid white;
+}
+
+.post .tags ul.flat a:hover {
+  background: cyan;
+  border: 1px solid white;
 }

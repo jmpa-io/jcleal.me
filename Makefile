@@ -5,10 +5,10 @@ PROJECT=jcleal.me
 endif
 
 # The path to the resume metadata file.
-RESUME_METADATA ?= content/resume/metadata.yml
+RESUME_METADATA ?= resume/metadata.yml
 
 # The path to the resume content.
-RESUME_CONTENT ?= content/resume/data.md
+RESUME_CONTENT ?= resume/data.md
 
 # ---
 
@@ -101,7 +101,7 @@ serve: dist/public
   		-v "$(PWD):/app" \
   		-p "1313:1313" \
 		$(REPO)/hugo \
-		server
+		server --disableFastRender
 
 PHONY += generate-website serve
 
