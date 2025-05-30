@@ -7,5 +7,5 @@ type: "page"
     <button type="submit">PDF version</button>
 </form>
 
-{{% readmarkdown "content/resume/data.md" %}}
+{{% readmarkdown "resume/data.md" %}}
 
