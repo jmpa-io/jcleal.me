@@ -1,11 +1,12 @@
 Hi! I'm Jordan. 👋🏼
 
-I'm a **DevOps Engineer** based in the **United Kingdom** (previously **Melbourne, Australia**) focused on solving problems using `Go`, `Bash`, and deploying to `AWS`.
+I'm a **DevOps Engineer** based in the **Geelong, Australia** (previously **Melbourne, Australia** & **Edinburgh, Scotland**) focused on solving problems using `Go`, `Bash`, and deploying to `AWS` using `Cloudformation`.
 
 Some key areas of interest for me are:
 
 * Anything to do with automation, especially cron jobs.
 * Anything to do with CI/CD practices.
+* Anything to do with Observability.
 * Mentoring.
 * [Open Telemetry](https://opentelemetry.io/).
 * Bots (eg. [Slack bots](https://api.slack.com/bot-users)).
