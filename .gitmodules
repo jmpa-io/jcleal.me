@@ -1,3 +1,6 @@
 [submodule "themes/hugo-ink"]
 	path = themes/hugo-ink
 	url = https://github.com/knadh/hugo-ink
+[submodule ".claude/config"]
+	path = .claude/config
+	url = git@github.com:jmpa-io/claude-config.git
