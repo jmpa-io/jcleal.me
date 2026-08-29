@@ -5,6 +5,10 @@
   margin-top: 10px;
 }
 
+.header {
+  overflow: hidden;
+}
+
 .header .avatar img {
   width: 80px;
   height: 80px;
@@ -46,4 +50,13 @@ blockquote {
 
 .intro-text {
   font-size: 1.05rem;
+}
+
+.header nav ul.flat {
+  display: flex;
+  align-items: center;
+}
+.header nav ul.flat li:last-child {
+  margin-left: auto;
+  margin-right: 0;
 }
