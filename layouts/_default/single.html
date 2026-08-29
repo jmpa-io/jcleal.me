@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html {{- if (eq .Site.Params.mode "dark") -}}class="dark"{{ end }}>
 {{ partial "header.html" . }}
 
 <body>
   <div class="container wrapper">
     {{ partial "head.html" . }}
-
     <div class="post">
-      {{ if isset .Params "title" }}
+      {{- if and (isset .Params "title") (ne .Type "page") }}
       <div class="post-header">
         {{ if ne .Date.Year 1 }}
         <div class="meta">
@@ -22,11 +21,12 @@
           <div class="title-description">{{ .Description }}</div>
         </div>
       </div>
-      {{ end }}
-
       <div class="markdown">
         {{ .Content }}
       </div>
+      {{- else -}}
+{{ .Content }}
+      {{- end }}
 
       <div class="tags">
         {{ if ne .Type "page" }}

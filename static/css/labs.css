@@ -1,0 +1,123 @@
+/* Labs section — matches jcleal.me dark theme */
+
+
+.labs-content {
+  margin-top: 2em;
+}
+
+/* ── Lab landing cards ── */
+.labs-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25em;
+  margin-top: 1.5em;
+}
+.labs-card {
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+  border: 1px solid #333;
+  padding: 1.4em;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: border-color 0.15s;
+}
+.labs-card:hover { border-color: #9375fd; border-bottom: 1px solid #9375fd; }
+html.dark .labs-card { background: #0a0a0a; }
+.labs-card-icon { font-size: 1.8em; flex-shrink: 0; }
+.labs-card-body { display: flex; flex-direction: column; gap: 0.4em; }
+.labs-card-body strong { font-size: 1em; color: #ddd; }
+.labs-card-body span { font-size: 0.84em; color: #888; line-height: 1.6; }
+.labs-card-body em { font-size: 0.82em; color: #9375fd; font-style: normal; margin-top: 0.4em; }
+
+/* ── Workshop layout — sidebar + content ── */
+.ws-wrap {
+  display: flex;
+  gap: 0;
+  min-height: 60vh;
+  margin-top: 1.5em;
+}
+.ws-sidebar {
+  width: 200px;
+  min-width: 200px;
+  border-right: 1px solid #333;
+  padding-right: 1.5em;
+  margin-right: 2em;
+  flex-shrink: 0;
+}
+.ws-sidebar h4 {
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #555;
+  margin: 0 0 0.75em;
+}
+.ws-sidebar a {
+  display: block;
+  padding: 0.4em 0;
+  font-size: 0.88em;
+  color: #888;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  padding-left: 0.75em;
+  transition: color 0.1s;
+}
+html.dark .ws-sidebar a { color: #888; }
+.ws-sidebar a:hover { color: #ddd; border-bottom: none; }
+html.dark .ws-sidebar a:hover { color: #ddd; }
+.ws-sidebar a.active { color: #9375fd; border-left-color: #9375fd; }
+html.dark .ws-sidebar a.active { color: #9375fd; }
+.ws-sidebar-back {
+  display: block;
+  font-size: 0.82em;
+  color: #555;
+  margin-bottom: 1em;
+  padding-left: 0;
+  border-left: none !important;
+  text-decoration: none;
+}
+.ws-sidebar-back:hover { color: #9375fd; border-bottom: none; }
+
+.ws-main { flex: 1; min-width: 0; }
+
+/* ── PDF bar ── */
+.ws-pdf-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 2.5em;
+  padding: 1em 1.2em;
+  border: 1px solid #333;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: #888;
+}
+.ws-pdf-btn {
+  white-space: nowrap;
+  color: #9375fd;
+  border: 1px solid #9375fd;
+  padding: 0.4em 1em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+.ws-pdf-btn:hover { background: rgba(147,117,253,0.1); border-bottom: none; }
+
+/* ── Prev/next nav ── */
+.ws-nav-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2.5em;
+  padding-top: 1.5em;
+  border-top: 1px solid #333;
+  font-size: 0.85em;
+}
+.ws-nav-footer a { color: #888; text-decoration: none; }
+.ws-nav-footer a:hover { color: #9375fd; border-bottom: none; }
+
+@media (max-width: 640px) {
+  .ws-wrap { flex-direction: column; }
+  .ws-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #333; padding-right: 0; margin-right: 0; padding-bottom: 1em; margin-bottom: 1em; }
+}
