@@ -1,4 +1,4 @@
-FROM klakegg/hugo:0.78.2-alpine
+FROM klakegg/hugo:0.111.3-alpine
 
 # setup user.
 ARG UID=1000
