@@ -1,139 +1,244 @@
 ---
-title: 1. Basics.
-images: [/img/docker-101/logo.png]
+title: 1. Concepts & Building.
 ---
 
-## Images and containers
+## Containers vs VMs
 
-Before running anything, it helps to understand the two core concepts Docker is built on:
+| | Virtual Machine | Container |
+|---|---|---|
+| Kernel | Full OS per VM | Shares host OS kernel |
+| Isolation | Hypervisor emulates hardware | Kernel namespaces + cgroups |
+| Boot time | Seconds to minutes | Milliseconds |
+| Disk | GBs per image | MBs per image |
 
-- An **image** is a read-only template — a snapshot of a filesystem, application, and its dependencies. Images are what you download from Docker Hub or build yourself. Think of an image as a recipe.
-- A **container** is a running instance of an image. You can run many containers from the same image, each isolated from the others. Think of a container as the meal you made from the recipe.
+Containers use Linux **namespaces** (PID, net, mnt, uts, ipc) to give each container its own view of the world, and **cgroups** to cap CPU and memory usage.
 
 ---
 
-## Your first container: `hello-world`
+## Images vs containers
 
-The fastest way to confirm Docker is working is to run the official `hello-world` image:
+- An **image** is a read-only blueprint - layers stacked on top of each other. Images are what you download from a registry or build yourself. Think of it as a recipe.
+- A **container** is a running instance of an image. It adds a thin writable layer on top. Think of it as the meal made from the recipe.
 
 ```bash
-docker run hello-world
-```
+# Pull an image (download layers)
+docker pull nginx:alpine
 
-Docker will:
-1. Check whether the `hello-world` image exists locally
-2. Pull it from Docker Hub if it does not
-3. Create a container from the image and run it
-4. Print a message confirming everything is working, then exit
+# Run a container from that image
+docker run --name web nginx:alpine
 
-You will see output like `Hello from Docker!` along with a brief explanation of what just happened.
-
----
-
-## Running an interactive shell
-
-You can run a container and drop straight into a shell inside it. This is useful for exploring an environment or running one-off commands without installing anything on your host machine:
-
-```bash
-docker run -it ubuntu bash
-```
-
-- `-i` keeps stdin open so you can type commands
-- `-t` allocates a pseudo-TTY so the shell prompt renders correctly
-- `ubuntu` is the image name
-- `bash` is the command to run inside the container
-
-You are now inside an Ubuntu container. Try `ls`, `cat /etc/os-release`, or `apt list --installed`. Type `exit` to leave.
-
----
-
-## Listing containers
-
-To see containers that are currently running:
-
-```bash
+# List running containers
 docker ps
+
+# The image is unchanged - the container has its own writable layer
 ```
 
-To see all containers — including stopped ones:
-
-```bash
-docker ps -a
-```
-
-The output shows each container's ID, the image it came from, when it was created, its status, and its name (auto-generated if you did not provide one with `--name`).
+One image can run many containers simultaneously. Stopping a container does not delete its writable layer. Deleting a container discards that writable layer permanently.
 
 ---
 
-## Listing images
+## Image layers
 
-To see all images downloaded to your machine:
+Every Dockerfile instruction that changes the filesystem creates a new layer. Metadata instructions (`ENV`, `CMD`, `EXPOSE`) create zero-byte layers.
 
-```bash
-docker images
+```dockerfile
+FROM ubuntu:22.04           # base layer
+RUN apt-get update \
+ && apt-get install -y curl # new layer: packages added
+COPY app/ /app              # new layer: your files
+RUN chmod +x /app/run.sh    # new layer: permission change
+CMD ["/app/run.sh"]         # metadata only (no layer)
 ```
 
-This shows the repository, tag, image ID, creation date, and size of each image.
+**Gotcha:** `RUN apt-get update` on one line and `RUN apt-get install` on another creates a stale cache problem. Always combine them with `&&`.
 
 ---
 
-## Stopping and removing containers
+## Why layer order matters
 
-To stop a running container (use the container ID or name from `docker ps`):
-
-```bash
-docker stop <container-id>
+```dockerfile
+# Slow - cache busted on any file change
+FROM node:20-alpine
+COPY . .           # copies everything
+RUN npm install    # re-runs on ANY file change
 ```
 
-To remove a stopped container:
-
-```bash
-docker rm <container-id>
+```dockerfile
+# Fast - cache-friendly
+FROM node:20-alpine
+COPY package*.json ./   # only deps metadata
+RUN npm install         # cached until pkg.json changes
+COPY . .                # source changes don't bust npm cache
 ```
 
-To stop and remove in one command:
+**Rule:** put things that change least often at the top. Dependencies before source code. Config before data.
 
 ```bash
-docker rm -f <container-id>
-```
-
-To remove all stopped containers at once:
-
-```bash
-docker container prune
-```
-
----
-
-## Removing images
-
-To remove an image (it must not be in use by any container, even a stopped one):
-
-```bash
-docker rmi <image-id>
-```
-
-To remove all images that are not referenced by any container:
-
-```bash
-docker image prune -a
+# Inspect layers after building
+docker history my-app:latest
+docker image inspect my-app:latest | jq '.[0].RootFS.Layers'
 ```
 
 ---
 
-## Key commands
+## Dockerfile core instructions
 
-| Command | What it does |
-|---|---|
-| `docker run <image>` | Create and start a container from an image |
-| `docker run -it <image> bash` | Start a container with an interactive shell |
-| `docker run --rm <image>` | Start a container and remove it automatically when it exits |
-| `docker ps` | List running containers |
-| `docker ps -a` | List all containers including stopped |
-| `docker images` | List downloaded images |
-| `docker stop <id>` | Stop a running container |
-| `docker rm <id>` | Remove a stopped container |
-| `docker rm -f <id>` | Force-stop and remove a container |
-| `docker rmi <id>` | Remove an image |
-| `docker container prune` | Remove all stopped containers |
-| `docker image prune -a` | Remove all unused images |
+```dockerfile
+# Base image - always pin a specific tag in production
+FROM node:20-alpine
+
+# Working directory inside the container
+WORKDIR /app
+
+# Build-time variable (not in final image)
+ARG NODE_ENV=production
+
+# Runtime environment variable (baked into image)
+ENV PORT=3000
+
+# Copy files from host → image
+COPY package*.json ./
+
+# Run a command during build
+RUN npm install --omit=dev
+
+COPY . .
+
+# Document the port (informational - doesn't publish it)
+EXPOSE 3000
+
+# Default executable - exec form, no shell wrapping
+ENTRYPOINT ["node"]
+
+# Default arguments - overridable at runtime
+CMD ["server.js"]
+```
+
+---
+
+## CMD vs ENTRYPOINT
+
+```dockerfile
+# Pattern 1: fixed command
+CMD ["node", "server.js"]
+
+# Pattern 2: entrypoint + overridable args
+ENTRYPOINT ["node"]
+CMD ["server.js"]       # override: docker run myimage other.js
+
+# Pattern 3: shell script entrypoint (handles signals correctly)
+COPY docker-entrypoint.sh /
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["node", "server.js"]
+```
+
+Always use **exec form** `["executable", "arg"]` - shell form `CMD node server.js` wraps in `/bin/sh -c`, which swallows SIGTERM and means your app never gets a graceful shutdown signal.
+
+---
+
+## .dockerignore
+
+Prevents files from being sent to the Docker build context. Faster builds, smaller images, no accidental secrets.
+
+```text
+node_modules/       # huge - container builds its own
+.git/               # version history not needed in image
+.env                # secrets must never be baked in
+.env.*
+dist/               # build output (rebuilt inside container)
+coverage/
+*.log
+.DS_Store
+README.md
+.github/
+```
+
+**Security:** a missing `.dockerignore` is the most common way secrets end up baked into images. Check `docker history` if you are unsure.
+
+---
+
+## docker build
+
+```bash
+# Basic build
+docker build -t my-app:latest .
+
+# Build with a specific tag
+docker build -t my-app:1.2.3 .
+
+# Pass build args
+docker build --build-arg NODE_ENV=staging -t my-app:staging .
+
+# Build from a specific Dockerfile
+docker build -f Dockerfile.dev -t my-app:dev .
+
+# No cache (useful when deps change under you)
+docker build --no-cache -t my-app:fresh .
+
+# Multi-platform (for M1 Macs building for Linux amd64)
+docker buildx build --platform linux/amd64 -t my-app:latest .
+```
+
+---
+
+## Multi-stage builds
+
+Separate the build environment from the runtime environment. The builder stage can be huge - only the final stage ships.
+
+```dockerfile
+FROM golang:1.22 AS builder
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o server .
+
+# Final stage - scratch has no shell, no libc, nothing
+FROM scratch
+
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /app/server /server
+
+ENTRYPOINT ["/server"]
+```
+
+golang builder (~800MB) → `scratch` final image is just the binary (~5MB). No CVEs from the toolchain, no shell, minimal attack surface.
+
+---
+
+## Try it - build a multi-stage image
+
+```bash
+# Create a minimal Go HTTP server
+mkdir /tmp/scratch-demo && cd /tmp/scratch-demo
+cat > main.go << 'EOF'
+package main
+
+import (
+    "fmt"
+    "log"
+    "net/http"
+)
+
+func main() {
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        fmt.Fprintln(w, "hello from scratch")
+    })
+    log.Fatal(http.ListenAndServe(":8080", nil))
+}
+EOF
+go mod init example.com/scratch-demo
+
+# Build and check the size
+docker build -t scratch-demo .
+docker images scratch-demo
+
+# Run it
+docker run -d --name scratch-demo -p 8080:8080 scratch-demo
+curl http://localhost:8080
+
+# Clean up
+docker rm -f scratch-demo
+```
