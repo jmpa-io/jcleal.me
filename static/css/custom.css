@@ -192,8 +192,8 @@ html.dark .jc-palette-btn.active { border-color: #eee; }
   color: #fff !important;
   font-size: 0.65em;
   line-height: 1;
-  padding: 2px 6px;
-  border-radius: 3px;
+  padding: 5px 12px;
+  border-radius: 4px;
   opacity: 1 !important;
 }
 html.dark .post-header .meta .date { background: transparent !important; }
