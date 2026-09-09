@@ -5,39 +5,8 @@
 <body class="labs">
   <div class="container wrapper">
     {{ partial "head.html" . }}
-    <div class="post">
-      <div class="post-header">
-        <div class="matter">
-          <h1 class="title">{{ .Title }}</h1>
-        </div>
-      </div>
-      <div class="markdown">
-        <div class="ws-wrap">
-          <aside class="ws-sidebar">
-            {{ $section := .Site.GetPage "section" .Section }}
-            {{ with $section }}
-              <a href="{{ .RelPermalink }}" class="ws-sidebar-back">0. Overview</a>
-              <h4>{{ .Title }}</h4>
-              {{ range .Data.Pages }}
-                <a href="{{ .RelPermalink }}" {{ if eq .RelPermalink $.RelPermalink }}class="active"{{ end }}>{{ .Title }}</a>
-              {{ end }}
-            {{ end }}
-          </aside>
-          <div class="ws-main">
-            {{ .Content }}
-            <div class="ws-pdf-bar">
-              <span>Download the full workshop as a PDF — free.</span>
-              <a class="ws-pdf-btn" href="/pdf/bash-101.pdf" download>Download PDF ↓</a>
-            </div>
-            <div class="ws-nav-footer">
-              {{ with .NextInSection }}<a href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ else }}<span></span>{{ end }}
-              {{ with .PrevInSection }}<a href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
+  {{ partial "ws-layout.html" (dict "ctx" . "pdfPath" "/pdf/bash-101.pdf") }}
   {{ partial "footer.html" . }}
 </body>
 </html>

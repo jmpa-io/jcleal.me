@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+{{ partial "header.html" . }}
+<body>
+	<div class="container wrapper">
+		{{ partial "head.html" . }}
+
+		<div class="post">
+			<div class="post-header">
+				<div class="matter">
+					<h1 class="title">{{ .Title }}</h1>
+				</div>
+			</div>
+
+			<div class="markdown">
+				{{ if eq .File.BaseFileName "resume" }}
+				<div class="resume-heading-row">
+					<h1 id="jordan-cleal">Jordan Cleal.</h1>
+					<a class="pdf-download-btn" href="/resume.pdf">Download PDF</a>
+				</div>
+				{{ end }}
+				{{ .Content }}
+			</div>
+		</div>
+	</div>
+	{{ partial "footer.html" . }}
+</body>
+</html>

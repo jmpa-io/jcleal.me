@@ -1,0 +1,167 @@
+/* Workshop pages */
+
+/* Full-width content area — sits outside the narrow .container.wrapper */
+.ws-page {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 0 4em 0;
+  box-sizing: border-box;
+}
+
+/* ── Lab landing (workshops index) ── */
+.labs-content {
+  margin-top: 2em;
+}
+
+/* ── Workshop cards ── */
+.labs-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25em;
+  margin-top: 1.5em;
+}
+.labs-card {
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+  border: 1px solid #333;
+  padding: 1.4em;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: border-color 0.15s;
+}
+html:not(.dark) .labs-card { border-color: #ddd; background: #fafafa; }
+html:not(.dark) .labs-card:hover { border-color: #9375fd; border-bottom: 1px solid #9375fd; }
+html.dark .labs-card { background: #0a0a0a; }
+.labs-card:hover { border-color: #9375fd; border-bottom: 1px solid #9375fd; }
+.labs-card-icon { font-size: 1.8em; flex-shrink: 0; }
+.labs-card-body { display: flex; flex-direction: column; gap: 0.4em; }
+.labs-card-body strong { font-size: 1em; }
+html.dark .labs-card-body strong { color: #ddd; }
+html:not(.dark) .labs-card-body strong { color: #111; }
+.labs-card-body span { font-size: 0.84em; color: #888; line-height: 1.6; }
+html:not(.dark) .labs-card-body span { color: #555; }
+.labs-card-body em { font-size: 0.82em; color: #9375fd; font-style: normal; margin-top: 0.4em; }
+
+/* ── Workshop layout — sidebar + content ── */
+.ws-wrap {
+  display: flex;
+  gap: 0;
+  min-height: 60vh;
+  margin-top: 1.5em;
+}
+.ws-sidebar {
+  width: 200px;
+  min-width: 200px;
+  border-right: 1px solid #333;
+  padding-right: 1.5em;
+  margin-right: 2em;
+  flex-shrink: 0;
+}
+html:not(.dark) .ws-sidebar { border-right-color: #ddd; }
+.ws-sidebar h4 {
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #555;
+  margin: 0 0 0.75em;
+}
+html:not(.dark) .ws-sidebar h4 { color: #999; }
+.ws-sidebar a {
+  display: block;
+  padding: 0.4em 0 0.4em 0.75em;
+  font-size: 0.88em;
+  color: #888;
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color 0.1s;
+}
+html:not(.dark) .ws-sidebar a { color: #666; }
+.ws-sidebar a:hover { color: #ddd; border-bottom: none; }
+html:not(.dark) .ws-sidebar a:hover { color: #111; }
+.ws-sidebar a.active { color: #9375fd; border-left-color: #9375fd; }
+
+.ws-main { flex: 1; min-width: 0; }
+
+/* ── PDF bar ── */
+.ws-pdf-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 2.5em;
+  padding: 1em 1.2em;
+  border: 1px solid #333;
+  border-radius: 3px;
+  font-size: 0.85em;
+  color: #888;
+}
+html:not(.dark) .ws-pdf-bar { border-color: #ddd; color: #555; }
+.ws-pdf-btn {
+  white-space: nowrap;
+  color: #9375fd;
+  border: 1px solid #9375fd;
+  padding: 0.4em 1em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+.ws-pdf-btn:hover { background: rgba(147,117,253,0.1); border-bottom: none; }
+
+/* ── Prev/next nav ── */
+.ws-nav-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2.5em;
+  padding-top: 1.5em;
+  border-top: 1px solid #333;
+  font-size: 0.85em;
+}
+html:not(.dark) .ws-nav-footer { border-top-color: #ddd; }
+.ws-nav-footer a { color: #888; text-decoration: none; }
+html:not(.dark) .ws-nav-footer a { color: #666; }
+.ws-nav-footer a:hover { color: #9375fd; border-bottom: none; }
+.ws-top-btn {
+  color: #9375fd !important;
+  border: 1px solid #9375fd;
+  padding: 0.25em 0.8em;
+  border-radius: 3px;
+  font-size: 0.85em;
+  transition: background 0.1s;
+}
+.ws-top-btn:hover { background: rgba(147,117,253,0.1); color: #9375fd !important; border-bottom: none !important; }
+
+/* At 900px the theme adds body padding:20px — remove ws-page side padding to avoid double-gutters */
+@media (max-width: 900px) {
+  .ws-page { padding-left: 0; padding-right: 0; }
+}
+
+/* Tablet: collapse sidebar above content */
+@media (max-width: 760px) {
+  .ws-wrap { flex-direction: column; }
+  .ws-sidebar {
+    width: 100%;
+    min-width: 0;
+    border-right: none;
+    border-bottom: 1px solid #333;
+    padding-right: 0;
+    margin-right: 0;
+    padding-bottom: 1em;
+    margin-bottom: 1.5em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25em 1em;
+    align-items: baseline;
+  }
+  html:not(.dark) .ws-sidebar { border-bottom-color: #ddd; }
+  .ws-sidebar h4 { width: 100%; margin-bottom: 0.25em; }
+  .ws-sidebar a { padding: 0.2em 0.5em; border-left: none; border: 1px solid transparent; border-radius: 3px; }
+  .ws-sidebar a.active { border-color: #9375fd; }
+  /* PDF bar: hide label text, keep button only */
+  .ws-pdf-bar span { display: none; }
+  /* Nav footer: stack vertically */
+  .ws-nav-footer { flex-wrap: wrap; gap: 0.75em; }
+  .ws-nav-footer a, .ws-top-btn { flex: 0 0 auto; }
+}

@@ -1,6 +1,6 @@
 Hi! I'm Jordan. 👋🏼
 
-I'm a **DevOps Engineer** based in the **Geelong, Australia** (previously **Melbourne, Australia** & **Edinburgh, Scotland**) focused on solving problems using `Go`, `Bash`, and deploying to `AWS` using `Cloudformation`.
+I'm a **DevOps Engineer** based in **Melbourne, Australia** (previously **Geelong, Australia** & **Edinburgh, Scotland**) focused on solving problems using `Go`, `Bash`, and deploying to `AWS` using `Cloudformation`.
 
 Some key areas of interest for me are:
 

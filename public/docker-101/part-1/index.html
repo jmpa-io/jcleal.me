@@ -1,0 +1,147 @@
+<!doctype html><htmlclass="dark"><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>1. Concepts & Building. - Jordan Cleal</title><meta name=viewport content="width=device-width,initial-scale=1"><meta itemprop=name content="1. Concepts & Building."><meta itemprop=description content="Containers vs VMs     Virtual Machine Container     Kernel Full OS per VM Shares host OS kernel   Isolation Hypervisor emulates hardware Kernel namespaces + cgroups   Boot time Seconds to minutes Milliseconds   Disk GBs per image MBs per image    Containers use Linux namespaces (PID, net, mnt, uts, ipc) to give each container its own view of the world, and cgroups to cap CPU and memory usage."><meta itemprop=wordCount content="865"><meta itemprop=keywords content><meta property="og:title" content="1. Concepts & Building."><meta property="og:description" content="Containers vs VMs     Virtual Machine Container     Kernel Full OS per VM Shares host OS kernel   Isolation Hypervisor emulates hardware Kernel namespaces + cgroups   Boot time Seconds to minutes Milliseconds   Disk GBs per image MBs per image    Containers use Linux namespaces (PID, net, mnt, uts, ipc) to give each container its own view of the world, and cgroups to cap CPU and memory usage."><meta property="og:type" content="article"><meta property="og:url" content="https://jcleal.me/docker-101/part-1/"><meta name=twitter:card content="summary"><meta name=twitter:title content="1. Concepts & Building."><meta name=twitter:description content="Containers vs VMs     Virtual Machine Container     Kernel Full OS per VM Shares host OS kernel   Isolation Hypervisor emulates hardware Kernel namespaces + cgroups   Boot time Seconds to minutes Milliseconds   Disk GBs per image MBs per image    Containers use Linux namespaces (PID, net, mnt, uts, ipc) to give each container its own view of the world, and cgroups to cap CPU and memory usage."><link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css><link rel=stylesheet type=text/css media=screen href=https://jcleal.me/css/normalize.css><link rel=stylesheet type=text/css media=screen href=https://jcleal.me/css/main.css><link rel=stylesheet type=text/css href=https://jcleal.me/css/custom.css><link id=dark-scheme rel=stylesheet type=text/css href=https://jcleal.me/css/dark.css><link id=dark-scheme rel=stylesheet type=text/css href=https://jcleal.me/css/custom.dark.css><script src=https://jcleal.me/js/feather.min.js></script><script src=https://jcleal.me/js/main.js></script></head><link rel=stylesheet href=/css/labs.css><body class=labs><div class="container wrapper"><div class=header><div class=avatar><a href=https://jcleal.me/><img src=https://jcleal.me/my-face.png alt="Jordan Cleal"></a></div><h1 class=site-title><a href=https://jcleal.me/>Jordan Cleal</a></h1><div class=site-description><p>A DevOps Engineer focused on Go, Bash, & AWS.</p><nav class="nav social"><ul class=flat><li><a href=# class=scheme-toggle id=scheme-toggle></a></li></ul></nav></div><nav class=nav><ul class=flat><li><a href=/>About</a></li><li><a href=/resume>Resume</a></li><li><a href=/workshops>Workshops</a></li><li><a href=/posts>Blog</a></li><li><a href=/tags>Blog Tags</a></li><li><a href=/contact>Contact</a></li></ul></nav></div></div><div class=ws-page><div class=ws-wrap><aside class=ws-sidebar><h4>Docker 101</h4><a href=/docker-101/>0. Overview</a>
+<a href=/docker-101/part-1/ class=active>1. Concepts & Building.</a>
+<a href=/docker-101/part-2/>2. Running & Storage.</a>
+<a href=/docker-101/part-3/>3. Debugging & Registry.</a>
+<a href=/docker-101/part-4/>4. Scratch Containers.</a></aside><div class=ws-main><div class=ws-pdf-bar><span>Download the full workshop as a PDF — free.</span>
+<a class=ws-pdf-btn href=/pdf/docker-101.pdf download>Download PDF ↓</a></div><h2 id=containers-vs-vms>Containers vs VMs</h2><table><thead><tr><th></th><th>Virtual Machine</th><th>Container</th></tr></thead><tbody><tr><td>Kernel</td><td>Full OS per VM</td><td>Shares host OS kernel</td></tr><tr><td>Isolation</td><td>Hypervisor emulates hardware</td><td>Kernel namespaces + cgroups</td></tr><tr><td>Boot time</td><td>Seconds to minutes</td><td>Milliseconds</td></tr><tr><td>Disk</td><td>GBs per image</td><td>MBs per image</td></tr></tbody></table><p>Containers use Linux <strong>namespaces</strong> (PID, net, mnt, uts, ipc) to give each container its own view of the world, and <strong>cgroups</strong> to cap CPU and memory usage.</p><hr><h2 id=images-vs-containers>Images vs containers</h2><ul><li>An <strong>image</strong> is a read-only blueprint — layers stacked on top of each other. Images are what you download from a registry or build yourself. Think of it as a recipe.</li><li>A <strong>container</strong> is a running instance of an image. It adds a thin writable layer on top. Think of it as the meal made from the recipe.</li></ul><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Pull an image (download layers)</span>
+docker pull nginx:alpine
+
+<span style=color:#6272a4># Run a container from that image</span>
+docker run --name web nginx:alpine
+
+<span style=color:#6272a4># List running containers</span>
+docker ps
+
+<span style=color:#6272a4># The image is unchanged — the container has its own writable layer</span>
+</code></pre></div><p>One image can run many containers simultaneously. Stopping a container does not delete its writable layer. Deleting a container discards that writable layer permanently.</p><hr><h2 id=image-layers>Image layers</h2><p>Every Dockerfile instruction that changes the filesystem creates a new layer. Metadata instructions (<code>ENV</code>, <code>CMD</code>, <code>EXPOSE</code>) create zero-byte layers.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> ubuntu:22.04           # base layer</span>
+<span style=color:#ff79c6>RUN</span> apt-get update <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span> <span style=color:#ff79c6>&amp;&amp;</span> apt-get install -y curl <span style=color:#6272a4># new layer: packages added</span>
+<span style=color:#ff79c6>COPY</span> app/ /app              <span style=color:#6272a4># new layer: your files</span>
+<span style=color:#ff79c6>RUN</span> chmod +x /app/run.sh    <span style=color:#6272a4># new layer: permission change</span>
+<span style=color:#ff79c6>CMD</span> [<span style=color:#f1fa8c>&#34;/app/run.sh&#34;</span>]         <span style=color:#6272a4># metadata only (no layer)</span>
+</code></pre></div><p><strong>Gotcha:</strong> <code>RUN apt-get update</code> on one line and <code>RUN apt-get install</code> on another creates a stale cache problem. Always combine them with <code>&&</code>.</p><hr><h2 id=why-layer-order-matters>Why layer order matters</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#6272a4># Slow — cache busted on any file change</span>
+<span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> node:20-alpine</span>
+<span style=color:#ff79c6>COPY</span> . .           <span style=color:#6272a4># copies everything</span>
+<span style=color:#ff79c6>RUN</span> npm install    <span style=color:#6272a4># re-runs on ANY file change</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#6272a4># Fast — cache-friendly</span>
+<span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> node:20-alpine</span>
+<span style=color:#ff79c6>COPY</span> package*.json ./   <span style=color:#6272a4># only deps metadata</span>
+<span style=color:#ff79c6>RUN</span> npm install         <span style=color:#6272a4># cached until pkg.json changes</span>
+<span style=color:#ff79c6>COPY</span> . .                <span style=color:#6272a4># source changes don&#39;t bust npm cache</span>
+</code></pre></div><p><strong>Rule:</strong> put things that change least often at the top. Dependencies before source code. Config before data.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Inspect layers after building</span>
+docker <span style=color:#8be9fd;font-style:italic>history</span> my-app:latest
+docker image inspect my-app:latest | jq <span style=color:#f1fa8c>&#39;.[0].RootFS.Layers&#39;</span>
+</code></pre></div><hr><h2 id=dockerfile-core-instructions>Dockerfile core instructions</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#6272a4># Base image — always pin a specific tag in production</span>
+<span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> node:20-alpine</span>
+
+<span style=color:#6272a4># Working directory inside the container</span>
+<span style=color:#ff79c6>WORKDIR</span><span style=color:#f1fa8c> /app</span>
+
+<span style=color:#6272a4># Build-time variable (not in final image)</span>
+<span style=color:#ff79c6>ARG</span> <span style=color:#8be9fd;font-style:italic>NODE_ENV</span><span style=color:#ff79c6>=</span>production
+
+<span style=color:#6272a4># Runtime environment variable (baked into image)</span>
+<span style=color:#ff79c6>ENV</span> <span style=color:#8be9fd;font-style:italic>PORT</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>3000</span>
+
+<span style=color:#6272a4># Copy files from host → image</span>
+<span style=color:#ff79c6>COPY</span> package*.json ./
+
+<span style=color:#6272a4># Run a command during build</span>
+<span style=color:#ff79c6>RUN</span> npm install --omit<span style=color:#ff79c6>=</span>dev
+
+<span style=color:#ff79c6>COPY</span> . .
+
+<span style=color:#6272a4># Document the port (informational — doesn&#39;t publish it)</span>
+<span style=color:#ff79c6>EXPOSE</span><span style=color:#f1fa8c> 3000</span>
+
+<span style=color:#6272a4># Default executable — exec form, no shell wrapping</span>
+<span style=color:#ff79c6>ENTRYPOINT</span> [<span style=color:#f1fa8c>&#34;node&#34;</span>]
+
+<span style=color:#6272a4># Default arguments — overridable at runtime</span>
+<span style=color:#ff79c6>CMD</span> [<span style=color:#f1fa8c>&#34;server.js&#34;</span>]
+</code></pre></div><hr><h2 id=cmd-vs-entrypoint>CMD vs ENTRYPOINT</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#6272a4># Pattern 1: fixed command</span>
+<span style=color:#ff79c6>CMD</span> [<span style=color:#f1fa8c>&#34;node&#34;</span>, <span style=color:#f1fa8c>&#34;server.js&#34;</span>]
+
+<span style=color:#6272a4># Pattern 2: entrypoint + overridable args</span>
+<span style=color:#ff79c6>ENTRYPOINT</span> [<span style=color:#f1fa8c>&#34;node&#34;</span>]
+<span style=color:#ff79c6>CMD</span> [<span style=color:#f1fa8c>&#34;server.js&#34;</span>]       <span style=color:#6272a4># override: docker run myimage other.js</span>
+
+<span style=color:#6272a4># Pattern 3: shell script entrypoint (handles signals correctly)</span>
+<span style=color:#ff79c6>COPY</span> docker-entrypoint.sh /
+<span style=color:#ff79c6>ENTRYPOINT</span> [<span style=color:#f1fa8c>&#34;/docker-entrypoint.sh&#34;</span>]
+<span style=color:#ff79c6>CMD</span> [<span style=color:#f1fa8c>&#34;node&#34;</span>, <span style=color:#f1fa8c>&#34;server.js&#34;</span>]
+</code></pre></div><p>Always use <strong>exec form</strong> <code>["executable", "arg"]</code> — shell form <code>CMD node server.js</code> wraps in <code>/bin/sh -c</code>, which swallows SIGTERM and means your app never gets a graceful shutdown signal.</p><hr><h2 id=dockerignore>.dockerignore</h2><p>Prevents files from being sent to the Docker build context. Faster builds, smaller images, no accidental secrets.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-text data-lang=text>node_modules/       # huge — container builds its own
+.git/               # version history not needed in image
+.env                # secrets must never be baked in
+.env.*
+dist/               # build output (rebuilt inside container)
+coverage/
+*.log
+.DS_Store
+README.md
+.github/
+</code></pre></div><p><strong>Security:</strong> a missing <code>.dockerignore</code> is the most common way secrets end up baked into images. Check <code>docker history</code> if you are unsure.</p><hr><h2 id=docker-build>docker build</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Basic build</span>
+docker build -t my-app:latest .
+
+<span style=color:#6272a4># Build with a specific tag</span>
+docker build -t my-app:1.2.3 .
+
+<span style=color:#6272a4># Pass build args</span>
+docker build --build-arg <span style=color:#8be9fd;font-style:italic>NODE_ENV</span><span style=color:#ff79c6>=</span>staging -t my-app:staging .
+
+<span style=color:#6272a4># Build from a specific Dockerfile</span>
+docker build -f Dockerfile.dev -t my-app:dev .
+
+<span style=color:#6272a4># No cache (useful when deps change under you)</span>
+docker build --no-cache -t my-app:fresh .
+
+<span style=color:#6272a4># Multi-platform (for M1 Macs building for Linux amd64)</span>
+docker buildx build --platform linux/amd64 -t my-app:latest .
+</code></pre></div><hr><h2 id=multi-stage-builds>Multi-stage builds</h2><p>Separate the build environment from the runtime environment. The builder stage can be huge — only the final stage ships.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> golang:1.22 AS builder</span>
+
+<span style=color:#ff79c6>WORKDIR</span><span style=color:#f1fa8c> /app</span>
+<span style=color:#ff79c6>COPY</span> go.mod go.sum ./
+<span style=color:#ff79c6>RUN</span> go mod download
+
+<span style=color:#ff79c6>COPY</span> . .
+<span style=color:#ff79c6>RUN</span> <span style=color:#8be9fd;font-style:italic>CGO_ENABLED</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span> <span style=color:#8be9fd;font-style:italic>GOOS</span><span style=color:#ff79c6>=</span>linux go build -ldflags<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;-s -w&#34;</span> -o server .
+
+<span style=color:#6272a4># Final stage — scratch has no shell, no libc, nothing</span>
+<span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> scratch</span>
+
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /app/server /server
+
+<span style=color:#ff79c6>ENTRYPOINT</span> [<span style=color:#f1fa8c>&#34;/server&#34;</span>]
+</code></pre></div><p>golang builder (~800MB) → <code>scratch</code> final image is just the binary (~5MB). No CVEs from the toolchain, no shell, minimal attack surface.</p><hr><h2 id=try-it--build-a-multi-stage-image>Try it — build a multi-stage image</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Create a minimal Go HTTP server</span>
+mkdir /tmp/scratch-demo <span style=color:#ff79c6>&amp;&amp;</span> <span style=color:#8be9fd;font-style:italic>cd</span> /tmp/scratch-demo
+cat &gt; main.go <span style=color:#f1fa8c>&lt;&lt; &#39;EOF&#39;
+</span><span style=color:#f1fa8c>package main
+</span><span style=color:#f1fa8c>
+</span><span style=color:#f1fa8c>import (
+</span><span style=color:#f1fa8c>    &#34;fmt&#34;
+</span><span style=color:#f1fa8c>    &#34;log&#34;
+</span><span style=color:#f1fa8c>    &#34;net/http&#34;
+</span><span style=color:#f1fa8c>)
+</span><span style=color:#f1fa8c>
+</span><span style=color:#f1fa8c>func main() {
+</span><span style=color:#f1fa8c>    http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
+</span><span style=color:#f1fa8c>        fmt.Fprintln(w, &#34;hello from scratch&#34;)
+</span><span style=color:#f1fa8c>    })
+</span><span style=color:#f1fa8c>    log.Fatal(http.ListenAndServe(&#34;:8080&#34;, nil))
+</span><span style=color:#f1fa8c>}
+</span><span style=color:#f1fa8c>EOF</span>
+go mod init example.com/scratch-demo
+
+<span style=color:#6272a4># Build and check the size</span>
+docker build -t scratch-demo .
+docker images scratch-demo
+
+<span style=color:#6272a4># Run it</span>
+docker run -d --name scratch-demo -p 8080:8080 scratch-demo
+curl http://localhost:8080
+
+<span style=color:#6272a4># Clean up</span>
+docker rm -f scratch-demo
+</code></pre></div><div class=ws-nav-footer><span></span><a href=/docker-101/part-2/>2. Running & Storage. →</a>
+<a href=# class=ws-top-btn>↑ Back to top</a></div></div></div></div><div class="footer wrapper"><nav class=nav><div>2026 <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a> | <a href=https://jmpa.io>jmpa.io</a></div></nav></div></body></html>
