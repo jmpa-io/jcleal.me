@@ -1,8 +1,6 @@
-# Jordan Cleal.
-
 <mr.jordan.cleal+resume@gmail.com>
 
-AUS [+61 434 557 224](tel:+61434557224) | UK [+44 7480 971787](tel:+447480971787)
+AUS [+61 434 557 224](tel:+61434557224)
 
 [jcleal.me](https://jcleal.me) | [LinkedIn](https://linkedin.com/in/jordan-cleal) | [GitHub](https://github.com/jcleal)
 

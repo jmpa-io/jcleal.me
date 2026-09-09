@@ -1,0 +1,95 @@
+<!doctype html><htmlclass="dark"><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>4. Scratch Containers. - Jordan Cleal</title><meta name=viewport content="width=device-width,initial-scale=1"><meta itemprop=name content="4. Scratch Containers."><meta itemprop=description content="What is FROM scratch? FROM scratch is a special Docker keyword — it means &ldquo;start with an empty filesystem.&rdquo; No shell, no libc, no package manager, no utilities.
+FROMscratch COPY my-binary /app ENTRYPOINT [&#34;/server&#34;]  The resulting image contains only what you explicitly COPY in No shell → docker exec -it ... sh fails (nothing to exec) No libc → dynamically linked binaries will segfault at startup Minimal CVE surface → security scanners have almost nothing to report   Static vs dynamic linking Most languages (C, Python, Ruby) link against glibc at runtime."><meta itemprop=wordCount content="559"><meta itemprop=keywords content><meta property="og:title" content="4. Scratch Containers."><meta property="og:description" content="What is FROM scratch? FROM scratch is a special Docker keyword — it means &ldquo;start with an empty filesystem.&rdquo; No shell, no libc, no package manager, no utilities.
+FROMscratch COPY my-binary /app ENTRYPOINT [&#34;/server&#34;]  The resulting image contains only what you explicitly COPY in No shell → docker exec -it ... sh fails (nothing to exec) No libc → dynamically linked binaries will segfault at startup Minimal CVE surface → security scanners have almost nothing to report   Static vs dynamic linking Most languages (C, Python, Ruby) link against glibc at runtime."><meta property="og:type" content="article"><meta property="og:url" content="https://jcleal.me/docker-101/part-4/"><meta name=twitter:card content="summary"><meta name=twitter:title content="4. Scratch Containers."><meta name=twitter:description content="What is FROM scratch? FROM scratch is a special Docker keyword — it means &ldquo;start with an empty filesystem.&rdquo; No shell, no libc, no package manager, no utilities.
+FROMscratch COPY my-binary /app ENTRYPOINT [&#34;/server&#34;]  The resulting image contains only what you explicitly COPY in No shell → docker exec -it ... sh fails (nothing to exec) No libc → dynamically linked binaries will segfault at startup Minimal CVE surface → security scanners have almost nothing to report   Static vs dynamic linking Most languages (C, Python, Ruby) link against glibc at runtime."><link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css><link rel=stylesheet type=text/css media=screen href=https://jcleal.me/css/normalize.css><link rel=stylesheet type=text/css media=screen href=https://jcleal.me/css/main.css><link rel=stylesheet type=text/css href=https://jcleal.me/css/custom.css><link id=dark-scheme rel=stylesheet type=text/css href=https://jcleal.me/css/dark.css><link id=dark-scheme rel=stylesheet type=text/css href=https://jcleal.me/css/custom.dark.css><script src=https://jcleal.me/js/feather.min.js></script><script src=https://jcleal.me/js/main.js></script></head><link rel=stylesheet href=/css/labs.css><body class=labs><div class="container wrapper"><div class=header><div class=avatar><a href=https://jcleal.me/><img src=https://jcleal.me/my-face.png alt="Jordan Cleal"></a></div><h1 class=site-title><a href=https://jcleal.me/>Jordan Cleal</a></h1><div class=site-description><p>A DevOps Engineer focused on Go, Bash, & AWS.</p><nav class="nav social"><ul class=flat><li><a href=# class=scheme-toggle id=scheme-toggle></a></li></ul></nav></div><nav class=nav><ul class=flat><li><a href=/>About</a></li><li><a href=/resume>Resume</a></li><li><a href=/workshops>Workshops</a></li><li><a href=/posts>Blog</a></li><li><a href=/tags>Blog Tags</a></li><li><a href=/contact>Contact</a></li></ul></nav></div></div><div class=ws-page><div class=ws-wrap><aside class=ws-sidebar><h4>Docker 101</h4><a href=/docker-101/>0. Overview</a>
+<a href=/docker-101/part-1/>1. Concepts & Building.</a>
+<a href=/docker-101/part-2/>2. Running & Storage.</a>
+<a href=/docker-101/part-3/>3. Debugging & Registry.</a>
+<a href=/docker-101/part-4/ class=active>4. Scratch Containers.</a></aside><div class=ws-main><div class=ws-pdf-bar><span>Download the full workshop as a PDF — free.</span>
+<a class=ws-pdf-btn href=/pdf/docker-101.pdf download>Download PDF ↓</a></div><h2 id=what-is-from-scratch>What is <code>FROM scratch</code>?</h2><p><code>FROM scratch</code> is a special Docker keyword — it means &ldquo;start with an empty filesystem.&rdquo; No shell, no libc, no package manager, no utilities.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> scratch</span>
+<span style=color:#ff79c6>COPY</span> my-binary /app
+<span style=color:#ff79c6>ENTRYPOINT</span> [<span style=color:#f1fa8c>&#34;/server&#34;</span>]
+</code></pre></div><ul><li>The resulting image contains <em>only</em> what you explicitly COPY in</li><li>No shell → <code>docker exec -it ... sh</code> fails (nothing to exec)</li><li>No libc → dynamically linked binaries will segfault at startup</li><li>Minimal CVE surface → security scanners have almost nothing to report</li></ul><hr><h2 id=static-vs-dynamic-linking>Static vs dynamic linking</h2><p>Most languages (C, Python, Ruby) link against glibc at runtime. If glibc is not in the image, the binary crashes immediately.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Dynamic binary — doesn&#39;t work on scratch</span>
+ldd ./my-app
+<span style=color:#6272a4># libpthread.so.0 =&gt; /lib/...</span>
+<span style=color:#6272a4># libc.so.6 =&gt; /lib/...</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Go with CGO disabled — statically linked, works on scratch</span>
+<span style=color:#8be9fd;font-style:italic>CGO_ENABLED</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span> go build -o server .
+ldd ./server
+<span style=color:#6272a4># not a dynamic executable ✓</span>
+</code></pre></div><p>Other languages that work on scratch: Rust (statically links by default), C compiled with musl.</p><hr><h2 id=the-ca-certificates-gotcha>The CA certificates gotcha</h2><p>Your scratch binary makes an HTTPS call and gets:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback>x509: certificate signed by unknown authority
+</code></pre></div><p><strong>Why:</strong> <code>/etc/ssl/certs/ca-certificates.crt</code> does not exist on a scratch image — there is nothing there.</p><p><strong>Fix:</strong> copy the cert bundle from the builder stage before it is thrown away.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> golang:1.22 AS builder</span>
+<span style=color:#ff79c6>RUN</span> <span style=color:#8be9fd;font-style:italic>CGO_ENABLED</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span> go build -o server .
+
+<span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> scratch</span>
+<span style=color:#6272a4># Without this line, any HTTPS request fails</span>
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /etc/ssl/certs/ca-certificates.crt <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>                    /etc/ssl/certs/
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /app/server /server
+<span style=color:#ff79c6>ENTRYPOINT</span> [<span style=color:#f1fa8c>&#34;/server&#34;</span>]
+</code></pre></div><hr><h2 id=other-files-you-may-need-on-scratch>Other files you may need on scratch</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> scratch</span>
+
+<span style=color:#6272a4># TLS certificate bundle (HTTPS calls)</span>
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+<span style=color:#6272a4># Timezone data (if your app formats local times)</span>
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /usr/share/zoneinfo /usr/share/zoneinfo
+
+<span style=color:#6272a4># /etc/passwd (if your app looks up the current user)</span>
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /etc/passwd /etc/passwd
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /etc/group /etc/group
+
+<span style=color:#6272a4># Your binary</span>
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /app/server /server
+<span style=color:#ff79c6>ENTRYPOINT</span> [<span style=color:#f1fa8c>&#34;/server&#34;</span>]
+</code></pre></div><hr><h2 id=full-scratch-dockerfile>Full scratch Dockerfile</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-dockerfile data-lang=dockerfile><span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> golang:1.22 AS builder</span>
+
+<span style=color:#ff79c6>WORKDIR</span><span style=color:#f1fa8c> /app</span>
+<span style=color:#ff79c6>COPY</span> . .
+
+<span style=color:#6272a4># CGO_ENABLED=0 = statically linked binary</span>
+<span style=color:#6272a4># -ldflags=&#34;-s -w&#34; strips debug symbols (smaller binary)</span>
+<span style=color:#ff79c6>RUN</span> <span style=color:#8be9fd;font-style:italic>CGO_ENABLED</span><span style=color:#ff79c6>=</span><span style=color:#bd93f9>0</span> go build -ldflags<span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;-s -w&#34;</span> -o server .
+
+<span style=color:#ff79c6>FROM</span><span style=color:#f1fa8c> scratch</span>
+
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /etc/ssl/certs/ca-certificates.crt <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>                    /etc/ssl/certs/
+<span style=color:#ff79c6>COPY</span> --from<span style=color:#ff79c6>=</span>builder /app/server /server
+
+<span style=color:#ff79c6>ENTRYPOINT</span> [<span style=color:#f1fa8c>&#34;/server&#34;</span>]
+</code></pre></div><p>~800MB build image → ~6MB scratch image. The attack surface shrinks from hundreds of packages to zero.</p><hr><h2 id=try-it--build-a-scratch-image>Try it — build a scratch image</h2><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>mkdir /tmp/scratch-demo <span style=color:#ff79c6>&amp;&amp;</span> <span style=color:#8be9fd;font-style:italic>cd</span> /tmp/scratch-demo
+
+cat &gt; main.go <span style=color:#f1fa8c>&lt;&lt; &#39;EOF&#39;
+</span><span style=color:#f1fa8c>package main
+</span><span style=color:#f1fa8c>
+</span><span style=color:#f1fa8c>import (
+</span><span style=color:#f1fa8c>    &#34;fmt&#34;
+</span><span style=color:#f1fa8c>    &#34;log&#34;
+</span><span style=color:#f1fa8c>    &#34;net/http&#34;
+</span><span style=color:#f1fa8c>)
+</span><span style=color:#f1fa8c>
+</span><span style=color:#f1fa8c>func main() {
+</span><span style=color:#f1fa8c>    http.HandleFunc(&#34;/&#34;, func(w http.ResponseWriter, r *http.Request) {
+</span><span style=color:#f1fa8c>        fmt.Fprintln(w, &#34;hello from scratch&#34;)
+</span><span style=color:#f1fa8c>    })
+</span><span style=color:#f1fa8c>    log.Fatal(http.ListenAndServe(&#34;:8080&#34;, nil))
+</span><span style=color:#f1fa8c>}
+</span><span style=color:#f1fa8c>EOF</span>
+go mod init example.com/scratch-demo
+
+<span style=color:#6272a4># Build and check the size</span>
+docker build -t scratch-demo .
+docker images scratch-demo
+
+<span style=color:#6272a4># Run it</span>
+docker run -d --name scratch-demo -p 8080:8080 scratch-demo
+curl http://localhost:8080
+
+<span style=color:#6272a4># Try to exec in (will fail — no shell)</span>
+docker <span style=color:#8be9fd;font-style:italic>exec</span> -it scratch-demo sh   <span style=color:#6272a4># OCI runtime exec failed</span>
+
+<span style=color:#6272a4># Clean up</span>
+docker rm -f scratch-demo
+</code></pre></div><hr><h2 id=key-gotchas-to-remember>Key gotchas to remember</h2><table><thead><tr><th>Problem</th><th>Cause</th><th>Fix</th></tr></thead><tbody><tr><td><code>node_modules</code> missing in dev container</td><td>Bind mount masks the container&rsquo;s <code>/app</code> directory</td><td>Add <code>-v /app/node_modules</code> anonymous volume</td></tr><tr><td>Binary crashes on scratch</td><td>Dynamically linked against glibc</td><td>Set <code>CGO_ENABLED=0</code> or use musl — check with <code>ldd</code></td></tr><tr><td>HTTPS fails on scratch</td><td>No CA cert bundle</td><td>Copy <code>ca-certificates.crt</code> from the builder stage</td></tr><tr><td>SIGTERM not received</td><td>CMD in shell form</td><td>Use exec form <code>["node", "server.js"]</code></td></tr></tbody></table><hr><h2 id=where-to-go-next>Where to go next</h2><ul><li><a href=https://docs.docker.com/compose/>Docker Compose</a> — multi-container apps locally</li><li><a href=https://kubernetes.io/docs/home/>Kubernetes</a> — container orchestration at scale</li><li><a href=https://docs.aws.amazon.com/ecs/>AWS ECS</a> — managed containers on AWS</li><li><a href=https://github.com/aquasecurity/trivy>Trivy</a> — vulnerability scanner for images</li><li><a href=https://github.com/wagoodman/dive>dive</a> — interactive layer inspector</li></ul><div class=ws-nav-footer><a href=/docker-101/part-3/>← 3. Debugging & Registry.</a>
+<a href=# class=ws-top-btn>↑ Back to top</a></div></div></div></div><div class="footer wrapper"><nav class=nav><div>2026 <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a> | <a href=https://jmpa.io>jmpa.io</a></div></nav></div></body></html>

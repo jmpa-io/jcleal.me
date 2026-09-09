@@ -1,0 +1,56 @@
+<div class="header">
+	{{ if .Site.Params.Avatar }}
+		<div class="avatar">
+			<a href="{{ .Site.BaseURL }}">
+				<img src="{{ .Site.Params.Avatar | safeURL }}" alt="{{ .Site.Title }}" />
+			</a>
+		</div>
+	{{ end }}
+	<h1 class="site-title"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+	<div class="site-description">
+		{{- if isset .Site.Params "subtitle" -}}
+		<p>{{ .Site.Params.Subtitle | markdownify }}</p>
+		{{- end -}}
+		<nav class="nav social">
+			<ul class="flat">
+				{{- range $index, $key := .Site.Params.Social -}}
+					<li><a href="{{ $key.url }}" title="{{ $key.name }}"><i data-feather="{{ $key.icon }}"></i></a></li>
+				{{- end -}}
+		    <li class="jc-palette-wrap" id="jc-palette-wrap">
+		      <a href="#" class="jc-palette-trigger" id="jc-palette-trigger" aria-label="Colour theme" title="Colour theme">
+		        <svg width="13" height="13" viewBox="0 0 13 13" id="jc-palette-trigger-dot">
+		          <circle cx="6.5" cy="6.5" r="5" fill="var(--jc-accent)"/>
+		        </svg>
+		      </a>
+		      <div class="jc-palette-popup" id="jc-palette-popup">
+		        <a href="#" class="jc-palette-btn" data-palette="ocean" aria-label="Ocean" title="Ocean">
+		          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#1a7ab0"/></svg>
+		        </a>
+		        <a href="#" class="jc-palette-btn" data-palette="forest" aria-label="Forest" title="Forest">
+		          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#2a7a30"/></svg>
+		        </a>
+		        <a href="#" class="jc-palette-btn" data-palette="sunset" aria-label="Sunset" title="Sunset">
+		          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#c04828"/></svg>
+		        </a>
+		        <a href="#" class="jc-palette-btn" data-palette="violet" aria-label="Violet" title="Violet">
+		          <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#6a30b0"/></svg>
+		        </a>
+		      </div>
+		    </li>
+		    {{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") -}}
+		    	<li><a href="#" class="scheme-toggle" id="scheme-toggle"></a></li>
+		    {{- end -}}
+			</ul>
+		</nav>
+	</div>
+
+	<nav class="nav">
+		<ul class="flat">
+			{{ range .Site.Menus.main }}
+			<li>
+				<a href="{{ .URL }}">{{ .Name }}</a>
+			</li>
+			{{ end }}
+		</ul>
+	</nav>
+</div>
