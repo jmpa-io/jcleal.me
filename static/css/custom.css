@@ -6,94 +6,87 @@
   --jc-accent: #3700ff;
   --jc-accent-hover: #3700ff;
 }
-html.ocean  { --jc-accent: #1a9de0; --jc-accent-hover: #0f80c0; }
-html.forest { --jc-accent: #28b830; --jc-accent-hover: #1e9428; }
-html.sunset { --jc-accent: #f05a28; --jc-accent-hover: #d04018; }
-html.violet { --jc-accent: #8b40e0; --jc-accent-hover: #7030c0; }
-html.yellow { --jc-accent: #b89000; --jc-accent-hover: #987800; }
-html.grey   { --jc-accent: #7080a0; --jc-accent-hover: #506080; }
-html.purple { --jc-accent: #9030d0; --jc-accent-hover: #7020b0; }
+/* ocean=blue, forest=green, sunset=orange-red, violet=indigo, yellow=amber, grey=slate, purple=magenta
+   --jc-accent  → links (base hue)
+   --jc-heading → headings/titles (deeper, more saturated)
+   --jc-btn     → tag borders, buttons (slightly lighter/shifted) */
+:root {
+  --jc-heading: #3700ff;
+  --jc-btn:     #3700ff;
+}
+html.ocean  { --jc-accent: #0e8fd8; --jc-accent-hover: #0870b8; --jc-heading: #0a6eb0; --jc-btn: #1aa8e8; }
+html.forest { --jc-accent: #1ea832; --jc-accent-hover: #168c28; --jc-heading: #157828; --jc-btn: #28c040; }
+html.sunset { --jc-accent: #e84820; --jc-accent-hover: #c83010; --jc-heading: #c03010; --jc-btn: #f86830; }
+html.violet { --jc-accent: #6030d0; --jc-accent-hover: #4820b0; --jc-heading: #4820a8; --jc-btn: #7848e8; }
+html.yellow { --jc-accent: #c09000; --jc-accent-hover: #a07800; --jc-heading: #906800; --jc-btn: #d8a810; }
+html.grey   { --jc-accent: #607090; --jc-accent-hover: #485878; --jc-heading: #404e68; --jc-btn: #7888a8; }
+html.purple { --jc-accent: #d01880; --jc-accent-hover: #b00868; --jc-heading: #a00060; --jc-btn: #e840a0; }
 
-html.dark.ocean  { --jc-accent: #40c0ff; --jc-accent-hover: #20a8e8; }
-html.dark.forest { --jc-accent: #40e048; --jc-accent-hover: #28c030; }
-html.dark.sunset { --jc-accent: #ff7848; --jc-accent-hover: #f05a28; }
-html.dark.violet { --jc-accent: #b060ff; --jc-accent-hover: #9040e0; }
-html.dark.yellow { --jc-accent: #f0c820; --jc-accent-hover: #d8b010; }
-html.dark.grey   { --jc-accent: #a0b8d0; --jc-accent-hover: #8098b8; }
-html.dark.purple { --jc-accent: #c060ff; --jc-accent-hover: #a040e8; }
+html.dark.ocean  { --jc-accent: #38b8f8; --jc-accent-hover: #1898e0; --jc-heading: #60d0ff; --jc-btn: #1898e0; }
+html.dark.forest { --jc-accent: #38d848; --jc-accent-hover: #20c030; --jc-heading: #60f070; --jc-btn: #20c030; }
+html.dark.sunset { --jc-accent: #ff6840; --jc-accent-hover: #e84820; --jc-heading: #ff9060; --jc-btn: #e84820; }
+html.dark.violet { --jc-accent: #9060f8; --jc-accent-hover: #7040e0; --jc-heading: #b080ff; --jc-btn: #7040e0; }
+html.dark.yellow { --jc-accent: #f0c820; --jc-accent-hover: #d8a810; --jc-heading: #ffe050; --jc-btn: #d8a810; }
+html.dark.grey   { --jc-accent: #90a8c8; --jc-accent-hover: #7090b0; --jc-heading: #b0c8e0; --jc-btn: #7090b0; }
+html.dark.purple { --jc-accent: #f840a8; --jc-accent-hover: #e02090; --jc-heading: #ff70c0; --jc-btn: #e02090; }
 
 /* ── global accent overrides (beats main.css #3700ff rules) ── */
+/* links → base accent */
 a { color: var(--jc-accent); }
 a:hover { border-bottom-color: var(--jc-accent-hover); border-bottom-width: 2px; }
 blockquote { border-color: var(--jc-accent); }
 :not(pre) > code { color: var(--jc-accent); }
 
-/* site title */
-.site-title a { color: var(--jc-accent); }
+/* headings / titles → deeper shifted tone */
+.site-title a { color: var(--jc-heading); }
 .site-title a:hover { border-bottom: none; }
-
-/* post list — date day number full accent, month/year slightly muted */
-.post-header .meta .date .day { color: var(--jc-accent); }
-.post-header .meta .date .rest { color: var(--jc-accent); opacity: 0.65; }
-
-/* post titles in list */
 .post .title a,
-.list .posts .post-header h1.title a { color: var(--jc-accent); }
+.list .posts .post-header h1.title a { color: var(--jc-heading); }
+.section .section-header { color: var(--jc-heading); opacity: 0.7; }
 
-/* tags — tonal variation: border full, text at 85% opacity */
+/* tags + buttons → lighter shifted tone */
 .post .tags a,
 .post-tags .tags a {
-  border-color: var(--jc-accent);
-  color: var(--jc-accent);
-  opacity: 0.85;
+  border-color: var(--jc-btn);
+  color: var(--jc-btn);
+  opacity: 0.9;
 }
 .post .tags a:hover,
 .post-tags .tags a:hover { opacity: 1; }
+.pdf-download-btn,
+.ws-pdf-btn {
+  color: var(--jc-btn) !important;
+  border-color: var(--jc-btn) !important;
+}
+.pdf-download-btn:hover,
+.ws-pdf-btn:hover {
+  background: var(--jc-btn) !important;
+  color: #fff !important;
+  border-color: var(--jc-btn) !important;
+}
+.ws-sidebar a.active { color: var(--jc-btn) !important; border-left-color: var(--jc-btn) !important; }
+.ws-top-btn { color: var(--jc-btn) !important; border-color: var(--jc-btn) !important; }
+.ws-nav-footer a:hover { color: var(--jc-btn) !important; }
+.labs-card:hover { border-color: var(--jc-btn) !important; }
+.labs-card-body em { color: var(--jc-btn) !important; }
 
-/* footer links */
+/* misc */
 .footer a:hover { color: var(--jc-accent); }
-
-/* draft label */
 .post .draft-label { color: var(--jc-accent); }
-
-/* social nav hover */
 .header nav.social a:hover { color: var(--jc-accent); }
-
-/* section header / recent posts heading */
-.section .section-header { color: var(--jc-accent); opacity: 0.55; }
 
 /* ── dark mode overrides (beats dark.css #9375fd rules) ── */
 html.dark a,
 html.dark a:hover { color: var(--jc-accent) !important; }
 html.dark blockquote { border-color: var(--jc-accent) !important; }
 html.dark .post .tags a,
-html.dark .post-tags .tags a { border-color: var(--jc-accent) !important; color: var(--jc-accent) !important; }
-html.dark .post-header .meta .date .day { color: var(--jc-accent) !important; }
+html.dark .post-tags .tags a { border-color: var(--jc-btn) !important; color: var(--jc-btn) !important; }
+html.dark .post .title a,
+html.dark .list .posts .post-header h1.title a { color: var(--jc-heading) !important; }
+html.dark .site-title a { color: var(--jc-heading) !important; }
 html.dark .footer a:hover { color: var(--jc-accent) !important; }
 html.dark ::-moz-selection { background: var(--jc-accent) !important; }
 html.dark ::selection { background: var(--jc-accent) !important; }
-
-/* pdf + workshop buttons — override hardcoded colors */
-.pdf-download-btn,
-.ws-pdf-btn {
-  color: var(--jc-accent) !important;
-  border-color: var(--jc-accent) !important;
-}
-.pdf-download-btn:hover,
-.ws-pdf-btn:hover {
-  background: var(--jc-accent) !important;
-  color: #fff !important;
-  border-color: var(--jc-accent) !important;
-}
-
-/* workshop sidebar active + top button */
-.ws-sidebar a.active { color: var(--jc-accent) !important; border-left-color: var(--jc-accent) !important; }
-.ws-top-btn { color: var(--jc-accent) !important; border-color: var(--jc-accent) !important; }
-.ws-nav-footer a:hover { color: var(--jc-accent) !important; }
-
-/* labs card hover */
-.labs-card:hover { border-color: var(--jc-accent) !important; }
-.labs-card-body em { color: var(--jc-accent) !important; }
 
 /* scheme-toggle + palette trigger — match jmpa button style */
 .header .site-description a.scheme-toggle,
@@ -174,26 +167,32 @@ html.dark .jc-palette-popup {
 .jc-palette-btn.active { border-color: #333; }
 html.dark .jc-palette-btn.active { border-color: #eee; }
 
-/* date box: keep accent-tinted background, white text */
+/* date box: compact accent-coloured pill, white text */
 .post-header .meta .date {
   background: var(--jc-accent) !important;
-  border-radius: 4px;
+  border-radius: 6px;
+  padding: 6px 10px !important;
+  width: auto !important;
+  min-width: 54px;
+  text-align: center;
 }
 .post-header .meta .date .day {
   font-family: "Arial";
-  font-size: 3em;
-  margin-top: 10px;
+  font-size: 2em;
+  margin-top: 0;
+  margin-bottom: 0 !important;
+  line-height: 1.1;
   color: #fff !important;
   background: transparent !important;
 }
 .post-header .meta .date .rest {
-  color: #fff !important;
-  opacity: 0.85;
+  color: rgba(255,255,255,0.85) !important;
   background: transparent !important;
+  font-size: 0.68em;
 }
 html.dark .post-header .meta .date { background: var(--jc-accent) !important; }
 html.dark .post-header .meta .date .day { color: #fff !important; background: transparent !important; }
-html.dark .post-header .meta .date .rest { color: #fff !important; background: transparent !important; }
+html.dark .post-header .meta .date .rest { color: rgba(255,255,255,0.85) !important; background: transparent !important; }
 
 .header {
   overflow: visible;
