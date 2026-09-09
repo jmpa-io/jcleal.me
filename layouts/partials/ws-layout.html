@@ -1,0 +1,38 @@
+{{ $ctx := .ctx }}
+{{ $pdfPath := .pdfPath }}
+
+{{ $isOverview := $ctx.IsSection }}
+{{ $section := $ctx }}
+{{ if not $isOverview }}
+  {{ $section = $ctx.Site.GetPage "section" $ctx.Section }}
+{{ end }}
+
+<div class="ws-page">
+  <div class="ws-wrap">
+    <aside class="ws-sidebar">
+      {{ with $section }}
+        <h4>{{ .Title }}</h4>
+        <a href="{{ .RelPermalink }}"{{ if $isOverview }} class="active"{{ end }}>0. Overview</a>
+        {{ range .Data.Pages }}
+          <a href="{{ .RelPermalink }}"{{ if eq .RelPermalink $ctx.RelPermalink }} class="active"{{ end }}>{{ .Title }}</a>
+        {{ end }}
+      {{ end }}
+    </aside>
+    <div class="ws-main">
+      {{ if $pdfPath }}
+      <div class="ws-pdf-bar">
+        <span>Download the full workshop as a PDF - free.</span>
+        <a class="ws-pdf-btn" href="{{ $pdfPath }}" download>Download PDF ↓</a>
+      </div>
+      {{ end }}
+      {{ $ctx.Content }}
+      {{ if not $isOverview }}
+      <div class="ws-nav-footer">
+        {{ with $ctx.NextInSection }}<a href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ else }}<span></span>{{ end }}
+        {{ with $ctx.PrevInSection }}<a href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}
+        <a href="#" class="ws-top-btn">↑ Back to top</a>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+</div>

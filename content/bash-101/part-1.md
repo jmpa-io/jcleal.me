@@ -1,119 +1,277 @@
 ---
-title: 1. Basics.
-images: [/img/bash-101/logo.png]
+title: 1. Why Bash & Safe Scripts.
 ---
 
-## What is a shell?
+## Why Bash
 
-A shell is a program that takes the commands you type and passes them to the operating system to execute. When you open a terminal and type `ls` or `cd`, the shell is the interpreter turning those words into system calls.
+Bash is the universal glue of automation. It is on every Linux system, runs in every CI pipeline, and is the default shell in almost every Docker image. You cannot avoid it - so you should understand it.
 
-Bash stands for **Bourne Again Shell** — it is an enhanced version of the original Unix `sh` shell. Most Linux systems use it as the default, and it is the most widely used scripting shell in the world. Even if you use `zsh` or `fish` day to day, you will encounter Bash scripts everywhere.
+**Bash is a good fit for:**
 
----
+- Wrapping CLI tools (`git`, `docker`, `aws`, `kubectl`)
+- CI pipeline steps
+- Bootstrap and setup scripts
+- File manipulation, renaming, moving
+- Anything that is mostly gluing commands together
 
-## Your first output: `echo`
+**Reach for Python or Go instead when you have:**
 
-`echo` prints text to the terminal. It is the simplest way to verify something is working.
+- Complex data structures
+- HTTP requests or JSON parsing
+- Scripts over ~200 lines
+- Anything that needs proper error types
+- Anything another team has to maintain
 
-```bash
-echo "Hello, world"
-```
-
-You can echo variables, command output, or just plain strings. It is the Bash equivalent of a print statement.
-
----
-
-## Variables
-
-Variables in Bash do not need a type declaration — you just assign a value. No spaces around the `=`.
-
-```bash
-name="Jordan"
-echo "Hello, $name"
-```
-
-Use `$` to reference the variable. Wrap the variable name in curly braces when the intent might be ambiguous:
-
-```bash
-greeting="Good morning"
-echo "${greeting}, everyone"
-```
-
-Variables are untyped — everything is a string unless you treat it as a number.
+The rule: if you are fighting Bash to express an idea, it is telling you to use something else.
 
 ---
 
-## Reading user input with `read`
-
-`read` pauses execution and waits for the user to type something, then stores the input in a variable.
+## The script that breaks CI at 2am
 
 ```bash
-echo "What is your name?"
-read user_name
-echo "Hello, $user_name"
+#!/bin/bash
+# deploy.sh - the one that looked fine for 6 months
+
+ENV=$1
+aws s3 sync ./dist s3://my-bucket-$ENV
+aws cloudfront create-invalidation --distribution-id $CF_ID --paths "/*"
+echo "Done"
 ```
 
-You can also prompt inline using `-p`:
+What happens when `ENV` is empty? When `aws s3 sync` fails? When `$CF_ID` is unset?
 
-```bash
-read -p "Enter your name: " user_name
-echo "Welcome, $user_name"
-```
+This script silently succeeds even when the deploy failed. It exits 0. CI shows green. Production is broken.
+
+Every one of these problems has the same fix - and it is mostly one line at the top.
 
 ---
 
-## Arithmetic with `$(( ))`
-
-Bash handles integer arithmetic with the `$(( ))` syntax:
+## Start every script with these three things
 
 ```bash
-a=10
-b=3
-echo "Sum: $((a + b))"
-echo "Product: $((a * b))"
-echo "Remainder: $((a % b))"
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Your script here
 ```
 
-This only works with integers. For floating-point arithmetic you would use `bc` or `awk`, but for most scripting tasks integers are enough.
+- **`set -e`** - exit immediately on any command that returns non-zero. No more "the deploy failed but the script printed Done".
+- **`set -u`** - treat unset variables as errors. `$UNDEFINED` becomes a fatal error, not an empty string.
+- **`set -o pipefail`** - a pipeline fails if *any* command in it fails. Without this, `false | true` exits 0.
+
+These three flags together turn Bash from "silently wrong" to "loudly correct". Almost every Bash incident comes from one of these being absent.
 
 ---
 
-## Conditional logic with `if`
-
-`if` tests a condition and executes a block of code only when the condition is true.
+## `#!/usr/bin/env bash` not `#!/bin/bash`
 
 ```bash
-score=85
+#!/bin/bash
+# Hardcoded path - works on Linux,
+# breaks on macOS with Homebrew bash,
+# breaks in Docker images where bash lives somewhere else
+```
 
-if [ "$score" -ge 90 ]; then
-  echo "Distinction"
-elif [ "$score" -ge 75 ]; then
-  echo "Credit"
-else
-  echo "Pass"
+```bash
+#!/usr/bin/env bash
+# Finds the first 'bash' on $PATH
+# Works everywhere - local, CI, Docker
+# Picks up Homebrew bash on macOS
+```
+
+Use `#!/usr/bin/env bash` by default. Only use `#!/bin/bash` when you specifically need a known version at a known path.
+
+---
+
+## Always quote your variables
+
+```bash
+# Without quotes: word-splitting and glob expansion
+FILE="my file.txt"
+cp $FILE /tmp/       # → cp my file.txt /tmp/  (two args, breaks)
+cp "$FILE" /tmp/     # → cp "my file.txt" /tmp/ (one arg, correct)
+
+# Double-quote every variable expansion
+echo "$HOME"
+ls "$DIR"
+rm -rf "$TMPDIR"
+```
+
+Unquoted variables with spaces silently split into multiple words. Files with spaces break scripts that look fine in testing.
+
+**Exception:** `[[ ]]` and `$(( ))` do not require quoting inside them. Everything else: quote it.
+
+---
+
+## Arguments and defaults
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Positional arguments with defaults
+ENV="${1:-}"                    # empty default - validate below
+REGION="${2:-ap-southeast-2}"   # real default
+
+# Validate required args
+if [[ -z "$ENV" ]]; then
+  echo "Usage: $0 <environment> [region]" >&2
+  exit 1
+fi
+
+# One-liner guard - fail with a clear message if unset or empty
+: "${AWS_PROFILE:?AWS_PROFILE must be set}"
+: "${IMAGE_TAG:?IMAGE_TAG must be set}"
+```
+
+`${VAR:?message}` is one line per required variable and gives a clear error. Better than a wall of `if`-then-`fi` blocks.
+
+---
+
+## Variables and scope
+
+```bash
+# Convention: UPPER_CASE for env vars / globals, lower_case for locals
+AWS_PROFILE="my-profile"
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+function deploy() {
+  local env="$1"            # local scope - lowercase
+  local region="${2:-ap-southeast-2}"
+  local timestamp
+  timestamp="$(date +%Y%m%d-%H%M%S)"
+
+  echo "Deploying to $env/$region at $timestamp"
+}
+```
+
+`local` prevents function variables leaking into global scope. Always use it inside functions - without it, every variable is global.
+
+`readonly` makes a variable immutable. Use it for constants and computed paths that should never change after assignment.
+
+---
+
+## Conditionals with `[[ ]]`
+
+```bash
+# Use [[ ]] not [ ] - it's safer and more featureful
+if [[ "$ENV" == "prod" ]]; then
+  echo "deploying to production"
+fi
+
+# String tests
+[[ -z "$VAR" ]]       # true if empty
+[[ -n "$VAR" ]]       # true if non-empty
+[[ "$A" == "$B" ]]    # string equality
+
+# File tests
+[[ -f "$FILE" ]]      # exists and is a regular file
+[[ -d "$DIR" ]]       # exists and is a directory
+[[ -x "$BINARY" ]]    # exists and is executable
+
+# Combining conditions
+if [[ -f "$CONFIG" && -r "$CONFIG" ]]; then
+  source "$CONFIG"
 fi
 ```
 
-The spaces inside `[ ]` are required. The condition uses test operators: `-eq` (equal), `-ne` (not equal), `-lt` (less than), `-gt` (greater than), `-ge` (greater than or equal), `-le` (less than or equal).
-
-For string comparisons use `=` and `!=`:
-
-```bash
-colour="blue"
-
-if [ "$colour" = "blue" ]; then
-  echo "It is blue"
-fi
-```
-
-Always quote variables inside `[ ]` to avoid errors when a variable is empty.
+`[[ ]]` does not word-split or glob-expand, handles empty variables gracefully, and supports `==` pattern matching and `=~` regex.
 
 ---
 
-## Try it yourself
+## Functions: structure your script
 
-1. Write a script that asks for two numbers, adds them together, and prints the result. Test that it handles the case where the first number is larger than the second differently from when the second is larger.
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-2. Write a script that asks for your name and then prints a personalised greeting that changes based on the time of day. Use `$(date +%H)` to get the current hour as a number.
+# ── helpers ──────────────────────────────────────────────────────────────
+log()  { echo "[$(date +%H:%M:%S)] $*"; }
+die()  { echo "ERROR: $*" >&2; exit 1; }
+info() { echo "  → $*"; }
 
-3. Write a script called `grade.sh` that reads a score from the user, then prints `Distinction` (90+), `Credit` (75–89), `Pass` (50–74), or `Fail` (below 50). Run it several times with different scores to confirm each branch works.
+# ── functions ─────────────────────────────────────────────────────────────
+check_deps() {
+  local deps=("aws" "jq" "curl")
+  for dep in "${deps[@]}"; do
+    command -v "$dep" &>/dev/null || die "required tool not found: $dep"
+  done
+}
+
+deploy() {
+  local env="$1"
+  log "Starting deploy to $env"
+  # ...
+}
+
+# ── main ──────────────────────────────────────────────────────────────────
+main() {
+  check_deps
+  deploy "${1:?usage: $0 <env>}"
+}
+
+main "$@"
+```
+
+The `log`/`die`/`info` helpers are the first thing to add to any non-trivial script. The `main()` + `main "$@"` pattern makes the script importable - you can `source` it without executing it.
+
+---
+
+## Traps and cleanup
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+TMPDIR_WORK="$(mktemp -d)"
+
+cleanup() {
+  rm -rf "$TMPDIR_WORK"
+  log "cleaned up $TMPDIR_WORK"
+}
+trap cleanup EXIT
+
+on_error() {
+  local exit_code=$?
+  local line_number=${BASH_LINENO[0]}
+  echo "ERROR: command failed with exit $exit_code at line $line_number" >&2
+}
+trap on_error ERR
+```
+
+`trap cleanup EXIT` is Bash's equivalent of `defer` - it always runs, even if the script exits early due to `set -e`. Temp files are always cleaned up.
+
+---
+
+## The production-ready template
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+log()  { echo "[$(date +%H:%M:%S)] $*"; }
+die()  { echo "ERROR: $*" >&2; exit 1; }
+
+cleanup() { : ; }
+trap cleanup EXIT
+
+check_deps() {
+  for dep in "$@"; do
+    command -v "$dep" &>/dev/null || die "missing: $dep"
+  done
+}
+
+main() {
+  local env="${1:?usage: $(basename "$0") <env>}"
+  check_deps aws jq
+  : "${AWS_PROFILE:?AWS_PROFILE must be set}"
+  log "deploying to $env"
+  # ... actual work
+}
+
+main "$@"
+```
+
+This template gives you safe defaults, cleanup on exit, dependency checks, validated args, and clear errors. Everything that turned the 2am incident into a silent success is now a loud failure.

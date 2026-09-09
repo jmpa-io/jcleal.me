@@ -62,7 +62,8 @@ upload:
 generate-website: ## Generates everything related to the 'jcleal.me' website.
 generate-website: \
 	compile-website \
-	generate-resume
+	generate-resume-pdf \
+	generate-workshop-pdfs
 
 compile-website: ## Compiles the 'jcleal.me' website, using hugo.
 compile-website: cmd/hugo image-hugo
@@ -77,10 +78,10 @@ compile-website: dist/public
 		--log --destination $<
 	@test -z "$(CI)" || echo "##[endgroup]"
 
-generate-resume: ## Generates 'resume.pdf', using pandoc.
-generate-resume: $(RESUME_METADATA) $(RESUME_CONTENT)
-generate-resume: cmd/pandoc image-pandoc
-generate-resume: dist/public
+generate-resume-pdf: ## Generates 'resume.pdf', using pandoc.
+generate-resume-pdf: $(RESUME_METADATA) $(RESUME_CONTENT)
+generate-resume-pdf: cmd/pandoc image-pandoc
+generate-resume-pdf: dist/public
 	@test -z "$(CI)" || echo "##[group]Generating resume.pdf."
 	docker run --rm \
 	-w /app \
@@ -93,6 +94,42 @@ generate-resume: dist/public
 		-o $</resume.pdf
 	@test -z "$(CI)" || echo "##[endgroup]"
 
+generate-workshop-pdfs: ## Generates workshop PDFs (bash-101, docker-101), using pandoc/latex.
+generate-workshop-pdfs: dist/public
+	@test -z "$(CI)" || echo "##[group]Generating bash-101.pdf."
+	@mkdir -p dist/public/pdf
+	docker run --rm \
+	-w /app \
+	-v "$(PWD):/app" \
+	pandoc/latex:latest \
+		-f markdown \
+		-t pdf \
+		--pdf-engine=xelatex \
+		--metadata-file content/bash-101/metadata.yml \
+		-M title="Bash 101" \
+		content/bash-101/_index.md \
+		content/bash-101/part-1.md \
+		content/bash-101/part-2.md \
+		-o dist/public/pdf/bash-101.pdf
+	@test -z "$(CI)" || echo "##[endgroup]"
+	@test -z "$(CI)" || echo "##[group]Generating docker-101.pdf."
+	docker run --rm \
+	-w /app \
+	-v "$(PWD):/app" \
+	pandoc/latex:latest \
+		-f markdown \
+		-t pdf \
+		--pdf-engine=xelatex \
+		--metadata-file content/docker-101/metadata.yml \
+		-M title="Docker 101" \
+		content/docker-101/_index.md \
+		content/docker-101/part-1.md \
+		content/docker-101/part-2.md \
+		content/docker-101/part-3.md \
+		content/docker-101/part-4.md \
+		-o dist/public/pdf/docker-101.pdf
+	@test -z "$(CI)" || echo "##[endgroup]"
+
 serve: ## Serves this website locally, mounted inside a Docker container.
 serve: cmd/hugo image-hugo
 serve: dist/public
@@ -103,7 +140,7 @@ serve: dist/public
 		$(REPO)/hugo \
 		server --disableFastRender
 
-PHONY += generate-website serve
+PHONY += generate-website generate-resume-pdf generate-workshop-pdfs serve
 
 ---: ## ---
 
