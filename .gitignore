@@ -19,3 +19,6 @@ traces.txt
 
 # ignore hugo build lock.
 /.hugo_build.lock
+
+# ignore hugo generated resources.
+/resources/

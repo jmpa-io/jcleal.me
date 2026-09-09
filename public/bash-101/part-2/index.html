@@ -1,0 +1,136 @@
+<!doctype html><htmlclass="dark"><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>2. Arguments, Functions & Exercises. - Jordan Cleal</title><meta name=viewport content="width=device-width,initial-scale=1"><meta itemprop=name content="2. Arguments, Functions & Exercises."><meta itemprop=description content="Exercises: build one real script, step by step Each exercise adds to the same file. By the end you have a production-safe script you can commit. Use a real automation task — not a toy example. A deploy step, a repo setup script, a cleanup job.
+ Exercise 1 — Safe skeleton (~5 min) Create a new file. Pick a name that describes what it will do (deploy.sh, setup.sh, cleanup.sh)."><meta itemprop=wordCount content="777"><meta itemprop=keywords content><meta property="og:title" content="2. Arguments, Functions & Exercises."><meta property="og:description" content="Exercises: build one real script, step by step Each exercise adds to the same file. By the end you have a production-safe script you can commit. Use a real automation task — not a toy example. A deploy step, a repo setup script, a cleanup job.
+ Exercise 1 — Safe skeleton (~5 min) Create a new file. Pick a name that describes what it will do (deploy.sh, setup.sh, cleanup.sh)."><meta property="og:type" content="article"><meta property="og:url" content="https://jcleal.me/bash-101/part-2/"><meta name=twitter:card content="summary"><meta name=twitter:title content="2. Arguments, Functions & Exercises."><meta name=twitter:description content="Exercises: build one real script, step by step Each exercise adds to the same file. By the end you have a production-safe script you can commit. Use a real automation task — not a toy example. A deploy step, a repo setup script, a cleanup job.
+ Exercise 1 — Safe skeleton (~5 min) Create a new file. Pick a name that describes what it will do (deploy.sh, setup.sh, cleanup.sh)."><link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel=stylesheet type=text/css><link rel=stylesheet type=text/css media=screen href=https://jcleal.me/css/normalize.css><link rel=stylesheet type=text/css media=screen href=https://jcleal.me/css/main.css><link rel=stylesheet type=text/css href=https://jcleal.me/css/custom.css><link id=dark-scheme rel=stylesheet type=text/css href=https://jcleal.me/css/dark.css><link id=dark-scheme rel=stylesheet type=text/css href=https://jcleal.me/css/custom.dark.css><script src=https://jcleal.me/js/feather.min.js></script><script src=https://jcleal.me/js/main.js></script></head><link rel=stylesheet href=/css/labs.css><body class=labs><div class="container wrapper"><div class=header><div class=avatar><a href=https://jcleal.me/><img src=https://jcleal.me/my-face.png alt="Jordan Cleal"></a></div><h1 class=site-title><a href=https://jcleal.me/>Jordan Cleal</a></h1><div class=site-description><p>A DevOps Engineer focused on Go, Bash, & AWS.</p><nav class="nav social"><ul class=flat><li><a href=# class=scheme-toggle id=scheme-toggle></a></li></ul></nav></div><nav class=nav><ul class=flat><li><a href=/>About</a></li><li><a href=/resume>Resume</a></li><li><a href=/workshops>Workshops</a></li><li><a href=/posts>Blog</a></li><li><a href=/tags>Blog Tags</a></li><li><a href=/contact>Contact</a></li></ul></nav></div></div><div class=ws-page><div class=ws-wrap><aside class=ws-sidebar><h4>Bash 101</h4><a href=/bash-101/>0. Overview</a>
+<a href=/bash-101/part-1/>1. Why Bash & Safe Scripts.</a>
+<a href=/bash-101/part-2/ class=active>2. Arguments, Functions & Exercises.</a></aside><div class=ws-main><div class=ws-pdf-bar><span>Download the full workshop as a PDF — free.</span>
+<a class=ws-pdf-btn href=/pdf/bash-101.pdf download>Download PDF ↓</a></div><h2 id=exercises-build-one-real-script-step-by-step>Exercises: build one real script, step by step</h2><p>Each exercise adds to the same file. By the end you have a production-safe script you can commit. Use a real automation task — not a toy example. A deploy step, a repo setup script, a cleanup job.</p><hr><h2 id=exercise-1--safe-skeleton-5-min>Exercise 1 — Safe skeleton (~5 min)</h2><p>Create a new file. Pick a name that describes what it will do (<code>deploy.sh</code>, <code>setup.sh</code>, <code>cleanup.sh</code>).</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#ff79c6>#!/usr/bin/env bash
+</span><span style=color:#ff79c6></span><span style=color:#8be9fd;font-style:italic>set</span> -euo pipefail
+
+log<span style=color:#ff79c6>()</span>  <span style=color:#ff79c6>{</span> <span style=color:#8be9fd;font-style:italic>echo</span> <span style=color:#f1fa8c>&#34;[</span><span style=color:#ff79c6>$(</span>date +%H:%M:%S<span style=color:#ff79c6>)</span><span style=color:#f1fa8c>] </span><span style=color:#8be9fd;font-style:italic>$*</span><span style=color:#f1fa8c>&#34;</span>; <span style=color:#ff79c6>}</span>
+die<span style=color:#ff79c6>()</span>  <span style=color:#ff79c6>{</span> <span style=color:#8be9fd;font-style:italic>echo</span> <span style=color:#f1fa8c>&#34;ERROR: </span><span style=color:#8be9fd;font-style:italic>$*</span><span style=color:#f1fa8c>&#34;</span> &gt;&amp;2; <span style=color:#8be9fd;font-style:italic>exit</span> 1; <span style=color:#ff79c6>}</span>
+
+main<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  log <span style=color:#f1fa8c>&#34;starting&#34;</span>
+  <span style=color:#8be9fd;font-style:italic>echo</span> <span style=color:#f1fa8c>&#34;hello from </span><span style=color:#ff79c6>$(</span>basename <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$0</span><span style=color:#f1fa8c>&#34;</span><span style=color:#ff79c6>)</span><span style=color:#f1fa8c>&#34;</span>
+  log <span style=color:#f1fa8c>&#34;done&#34;</span>
+<span style=color:#ff79c6>}</span>
+
+main <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$@</span><span style=color:#f1fa8c>&#34;</span>
+</code></pre></div><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>chmod +x your-script.sh
+./your-script.sh
+</code></pre></div><p><strong>Test <code>set -u</code>:</strong> add <code>echo "$UNDEFINED_VAR"</code> after <code>log "starting"</code>. Run it — it should fail with <code>unbound variable</code>, not print an empty line. Remove it after.</p><p><strong>Test <code>set -e</code>:</strong> add <code>false</code> and confirm the script aborts before printing &ldquo;done&rdquo;. Remove it after.</p><hr><h2 id=exercise-2--arguments--validation-8-min>Exercise 2 — Arguments & validation (~8 min)</h2><p>Keep everything from Exercise 1. Add argument handling to <code>main()</code>:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>main<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  <span style=color:#6272a4># Required argument — fails with usage message if missing</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>env</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>1</span>:?usage: <span style=color:#ff79c6>$(</span>basename <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$0</span><span style=color:#f1fa8c>&#34;</span><span style=color:#ff79c6>)</span> &lt;environment&gt; [region]<span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span>
+  <span style=color:#6272a4># Optional argument with default</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>region</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>2</span><span style=color:#ff79c6>:-</span><span style=color:#8be9fd;font-style:italic>ap</span>-southeast-2<span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span>
+
+  <span style=color:#6272a4># Validate the value, not just presence</span>
+  <span style=color:#ff79c6>case</span> <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$env</span><span style=color:#f1fa8c>&#34;</span> in
+    dev|staging|prod<span style=color:#ff79c6>)</span> ;;
+    *<span style=color:#ff79c6>)</span> die <span style=color:#f1fa8c>&#34;unknown environment: </span><span style=color:#8be9fd;font-style:italic>$env</span><span style=color:#f1fa8c> (expected: dev|staging|prod)&#34;</span> ;;
+  <span style=color:#ff79c6>esac</span>
+
+  <span style=color:#6272a4># Guard: refuse to run in prod without explicit confirmation</span>
+  <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>[[</span> <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$env</span><span style=color:#f1fa8c>&#34;</span> <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;prod&#34;</span> <span style=color:#ff79c6>]]</span>; <span style=color:#ff79c6>then</span>
+    <span style=color:#8be9fd;font-style:italic>read</span> -r -p <span style=color:#f1fa8c>&#34;Deploying to PROD - are you sure? [y/N] &#34;</span> confirm
+    <span style=color:#ff79c6>[[</span> <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$confirm</span><span style=color:#f1fa8c>&#34;</span> <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;y&#34;</span> <span style=color:#ff79c6>]]</span> <span style=color:#ff79c6>||</span> die <span style=color:#f1fa8c>&#34;aborted&#34;</span>
+  <span style=color:#ff79c6>fi</span>
+
+  log <span style=color:#f1fa8c>&#34;targeting </span><span style=color:#8be9fd;font-style:italic>$env</span><span style=color:#f1fa8c> in </span><span style=color:#8be9fd;font-style:italic>$region</span><span style=color:#f1fa8c>&#34;</span>
+<span style=color:#ff79c6>}</span>
+</code></pre></div><p><strong>Verify:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>./your-script.sh
+<span style=color:#6272a4># your-script.sh: 1: usage: your-script.sh &lt;environment&gt; [region]</span>
+
+./your-script.sh badenv
+<span style=color:#6272a4># ERROR: unknown environment: badenv (expected: dev|staging|prod)</span>
+
+./your-script.sh dev
+<span style=color:#6272a4># [10:31:00] targeting dev in ap-southeast-2</span>
+
+./your-script.sh prod
+<span style=color:#6272a4># Deploying to PROD - are you sure? [y/N] n</span>
+<span style=color:#6272a4># ERROR: aborted</span>
+</code></pre></div><hr><h2 id=exercise-3--functions--structure-8-min>Exercise 3 — Functions & structure (~8 min)</h2><p>Keep everything from Exercise 2. Add a dependency check and extract real work into functions:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Add above main()</span>
+check_deps<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>deps</span><span style=color:#ff79c6>=(</span><span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$@</span><span style=color:#f1fa8c>&#34;</span><span style=color:#ff79c6>)</span>
+  <span style=color:#ff79c6>for</span> dep in <span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>deps</span>[@]<span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span>; <span style=color:#ff79c6>do</span>
+    <span style=color:#8be9fd;font-style:italic>command</span> -v <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$dep</span><span style=color:#f1fa8c>&#34;</span> &amp;&gt;/dev/null <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>      <span style=color:#ff79c6>||</span> die <span style=color:#f1fa8c>&#34;required tool not found: </span><span style=color:#8be9fd;font-style:italic>$dep</span><span style=color:#f1fa8c> — please install it&#34;</span>
+  <span style=color:#ff79c6>done</span>
+<span style=color:#ff79c6>}</span>
+
+do_the_thing<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>env</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$1</span><span style=color:#f1fa8c>&#34;</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>region</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$2</span><span style=color:#f1fa8c>&#34;</span>
+  log <span style=color:#f1fa8c>&#34;doing the thing in </span><span style=color:#8be9fd;font-style:italic>$env</span><span style=color:#f1fa8c>/</span><span style=color:#8be9fd;font-style:italic>$region</span><span style=color:#f1fa8c>&#34;</span>
+  <span style=color:#6272a4># your real work here</span>
+<span style=color:#ff79c6>}</span>
+
+main<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>env</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>1</span>:?usage: <span style=color:#ff79c6>$(</span>basename <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$0</span><span style=color:#f1fa8c>&#34;</span><span style=color:#ff79c6>)</span> &lt;environment&gt; [region]<span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>region</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>2</span><span style=color:#ff79c6>:-</span><span style=color:#8be9fd;font-style:italic>ap</span>-southeast-2<span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span>
+
+  check_deps aws jq   <span style=color:#6272a4># ← tools your script actually uses</span>
+  do_the_thing <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$env</span><span style=color:#f1fa8c>&#34;</span> <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$region</span><span style=color:#f1fa8c>&#34;</span>
+<span style=color:#ff79c6>}</span>
+</code></pre></div><p>Replace <code>aws jq</code> with whatever tools your script actually calls. No fake deps.</p><hr><h2 id=exercise-4--cleanup--error-handling-7-min>Exercise 4 — Cleanup & error handling (~7 min)</h2><p>Keep everything from Exercise 3. Add a trap for cleanup and error context:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=color:#6272a4># Add near the top, after set -euo pipefail</span>
+<span style=color:#8be9fd;font-style:italic>TMPDIR_WORK</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;&#34;</span>
+
+cleanup<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  <span style=color:#ff79c6>if</span> <span style=color:#ff79c6>[[</span> -n <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$TMPDIR_WORK</span><span style=color:#f1fa8c>&#34;</span> <span style=color:#ff79c6>]]</span>; <span style=color:#ff79c6>then</span>
+    rm -rf <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$TMPDIR_WORK</span><span style=color:#f1fa8c>&#34;</span>
+    log <span style=color:#f1fa8c>&#34;cleaned up </span><span style=color:#8be9fd;font-style:italic>$TMPDIR_WORK</span><span style=color:#f1fa8c>&#34;</span>
+  <span style=color:#ff79c6>fi</span>
+<span style=color:#ff79c6>}</span>
+<span style=color:#8be9fd;font-style:italic>trap</span> cleanup EXIT
+
+on_error<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>line</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>BASH_LINENO</span>[0]<span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span>
+  <span style=color:#8be9fd;font-style:italic>echo</span> <span style=color:#f1fa8c>&#34;ERROR: script failed at line </span><span style=color:#8be9fd;font-style:italic>$line</span><span style=color:#f1fa8c>&#34;</span> &gt;&amp;<span style=color:#bd93f9>2</span>
+<span style=color:#ff79c6>}</span>
+<span style=color:#8be9fd;font-style:italic>trap</span> on_error ERR
+
+<span style=color:#6272a4># In main() or do_the_thing(), create and use a temp dir:</span>
+<span style=color:#8be9fd;font-style:italic>TMPDIR_WORK</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#ff79c6>$(</span>mktemp -d<span style=color:#ff79c6>)</span><span style=color:#f1fa8c>&#34;</span>
+log <span style=color:#f1fa8c>&#34;working in </span><span style=color:#8be9fd;font-style:italic>$TMPDIR_WORK</span><span style=color:#f1fa8c>&#34;</span>
+</code></pre></div><p><code>trap cleanup EXIT</code> fires on every exit — success, failure, or Ctrl-C. Temp files are always cleaned up.</p><p><strong>Verify:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>./your-script.sh dev
+<span style=color:#6272a4># [10:33:00] working in /tmp/tmp.abc123</span>
+<span style=color:#6272a4># [10:33:00] doing the thing in dev/ap-southeast-2</span>
+<span style=color:#6272a4># [10:33:00] cleaned up /tmp/tmp.abc123</span>
+
+<span style=color:#6272a4># Add &#39;false&#39; inside do_the_thing(), run again:</span>
+<span style=color:#6272a4># [10:33:01] working in /tmp/tmp.xyz456</span>
+<span style=color:#6272a4># ERROR: script failed at line 42</span>
+<span style=color:#6272a4># [10:33:01] cleaned up /tmp/tmp.xyz456  ← trap still ran</span>
+</code></pre></div><hr><h2 id=exercise-5--wire-in-real-work-7-min>Exercise 5 — Wire in real work (~7 min)</h2><p>Replace the placeholder <code>do_the_thing</code> with the actual commands your script needs to run.</p><p><strong>If you are writing a deploy script:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>deploy<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>env</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$1</span><span style=color:#f1fa8c>&#34;</span>
+  : <span style=color:#f1fa8c>&#34;</span><span style=color:#f1fa8c>${</span><span style=color:#8be9fd;font-style:italic>AWS_PROFILE</span>:?AWS_PROFILE must be set<span style=color:#f1fa8c>}</span><span style=color:#f1fa8c>&#34;</span>
+  log <span style=color:#f1fa8c>&#34;syncing to s3...&#34;</span>
+  aws s3 sync ./dist <span style=color:#f1fa8c>&#34;s3://my-bucket-</span><span style=color:#8be9fd;font-style:italic>$env</span><span style=color:#f1fa8c>/&#34;</span> --delete
+  log <span style=color:#f1fa8c>&#34;invalidating CDN...&#34;</span>
+  aws cloudfront create-invalidation <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>    --distribution-id <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$CF_ID</span><span style=color:#f1fa8c>&#34;</span> <span style=color:#f1fa8c>\
+</span><span style=color:#f1fa8c></span>    --paths <span style=color:#f1fa8c>&#34;/*&#34;</span>
+<span style=color:#ff79c6>}</span>
+</code></pre></div><p><strong>If you are writing a setup script:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>setup<span style=color:#ff79c6>()</span> <span style=color:#ff79c6>{</span>
+  <span style=color:#8be9fd;font-style:italic>local</span> <span style=color:#8be9fd;font-style:italic>target_dir</span><span style=color:#ff79c6>=</span><span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$1</span><span style=color:#f1fa8c>&#34;</span>
+  log <span style=color:#f1fa8c>&#34;creating directory structure...&#34;</span>
+  mkdir -p <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$target_dir</span><span style=color:#f1fa8c>&#34;</span>/<span style=color:#ff79c6>{</span>src,tests,docs<span style=color:#ff79c6>}</span>
+  log <span style=color:#f1fa8c>&#34;copying config templates...&#34;</span>
+  cp -r <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$SCRIPT_DIR</span><span style=color:#f1fa8c>/templates/.&#34;</span> <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$target_dir</span><span style=color:#f1fa8c>/&#34;</span>
+  log <span style=color:#f1fa8c>&#34;initialising git...&#34;</span>
+  git -C <span style=color:#f1fa8c>&#34;</span><span style=color:#8be9fd;font-style:italic>$target_dir</span><span style=color:#f1fa8c>&#34;</span> init -q
+<span style=color:#ff79c6>}</span>
+</code></pre></div><p>Do not copy these verbatim — use your actual task. The point is to leave with something real.</p><p><strong>Final check:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash>./your-script.sh              <span style=color:#6272a4># → usage error</span>
+./your-script.sh badenv       <span style=color:#6272a4># → validation error</span>
+./your-script.sh dev          <span style=color:#6272a4># → runs, cleans up</span>
+./your-script.sh dev us-west-2  <span style=color:#6272a4># → runs with override</span>
+
+head -3 your-script.sh
+<span style=color:#6272a4># #!/usr/bin/env bash</span>
+<span style=color:#6272a4># set -euo pipefail</span>
+
+wc -l your-script.sh    <span style=color:#6272a4># aim for under 150 lines</span>
+</code></pre></div><hr><h2 id=what-you-built>What you built</h2><ul><li><code>set -euo pipefail</code> — fails loudly, never silently</li><li>Validated args — clear usage errors, not mysterious crashes</li><li>Dependency checks — tells you what is missing before it fails</li><li>Functions — named, local-scoped, testable chunks</li><li>Trap cleanup — temp files gone, always</li><li><code>main "$@"</code> — importable, not side-effectful on source</li></ul><p>References: <a href=https://www.shellcheck.net>shellcheck.net</a> · <a href=https://google.github.io/styleguide/shellguide.html>Google Shell Style Guide</a></p><div class=ws-nav-footer><a href=/bash-101/part-1/>← 1. Why Bash & Safe Scripts.</a>
+<a href=# class=ws-top-btn>↑ Back to top</a></div></div></div></div><div class="footer wrapper"><nav class=nav><div>2026 <a href=https://github.com/knadh/hugo-ink>Ink</a> theme on <a href=https://gohugo.io>Hugo</a> | <a href=https://jmpa.io>jmpa.io</a></div></nav></div></body></html>

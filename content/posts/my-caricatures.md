@@ -11,7 +11,7 @@ tags: [caricatures, first-post]
 
 I wanted to share a collection of caricatures I've had made (or had made for me) over the years - I had picked up a few before, but I really started collecting them properly after I travelled to **South Korea** in **2023**.
 
-I love seeing how different artists interpret how I look — it’s weird and funny and kind of fascinating.
+I love seeing how different artists interpret how I look - it’s weird and funny and kind of fascinating.
 
 Check them out! (they are broken down by the year they were made) 👇🏼
 
@@ -21,7 +21,7 @@ Check them out! (they are broken down by the year they were made) 👇🏼
 
 <img src="/img/caricatures/2025, Edinburgh, Scotland, 2 1.jpg" alt="2025 | Edinburgh, Scotland | 2 1" class="centered-img" />
 
-> This caricature was made with my Mum and I as the subject - my parents came over from Australia to visit my partner & I in **Edinburgh, Scotland** (🏴󠁧󠁢󠁳󠁣󠁴󠁿). We got this to commemorate the occasion near **Edinburgh Castle** (for a third time)! 👨‍👩‍👦
+> This caricature was made with my Mum and I as the subject - my parents came over from Australia to visit my second ex & I in **Edinburgh, Scotland** (🏴󠁧󠁢󠁳󠁣󠁴󠁿). We got this to commemorate the occasion near **Edinburgh Castle** (for a third time)! 👨‍👩‍👦
 
 ---
 
@@ -105,7 +105,7 @@ Check them out! (they are broken down by the year they were made) 👇🏼
 
 <img src="/img/caricatures/2024, Brussels, Belgium, 1 1.png" alt="2024 | Brussels, Belgium | 1 1" class="centered-img" />
 
-> This flattering one was drawn by a kind man in **Brussels, Belgium** (🇧🇪). Halfway through, it suddenly poured — but thankfully, he had an umbrella! ☂️
+> This flattering one was drawn by a kind man in **Brussels, Belgium** (🇧🇪). Halfway through, it suddenly poured - but thankfully, he had an umbrella! ☂️
 
 ---
 
@@ -153,7 +153,7 @@ Check them out! (they are broken down by the year they were made) 👇🏼
 
 <img src="/img/caricatures/2024, Kyoto, Japan, 1 1.png" alt="2024 | Kyoto, Japan | 1 1" class="centered-img" />
 
-> This caricature was created by the lovely **[@jura](https://www.instagram.com/juraaa19)** for my partner and I in **Kyoto, Japan** (🇯🇵) - she's very skilled and talented! Another one of my favourites.
+> This caricature was created by the lovely **[@jura](https://www.instagram.com/juraaa19)** for my second ex and I in **Kyoto, Japan** (🇯🇵) - she's very skilled and talented! Another one of my favourites.
 
 ---
 
@@ -177,7 +177,7 @@ Check them out! (they are broken down by the year they were made) 👇🏼
 
 <img src="/img/caricatures/2022, Melbourne, Australia, 1 1.jpg" alt="2022 | Melbourne, Australia | 1 1" class="centered-img" />
 
-> While not a new drawing per say, to signify the end of my relationship with my ex, I modified and changed this caricature to fit my life going forward in **Melbourne, Australia** (🇦🇺). I use this image for my profile pictures online A LOT!
+> While not a new drawing per say, to signify the end of my relationship with my first ex, I modified and changed this caricature to fit my life going forward in **Melbourne, Australia** (🇦🇺). I use this image for my profile pictures online A LOT!
 
 ---
 
@@ -189,7 +189,7 @@ Check them out! (they are broken down by the year they were made) 👇🏼
 
 <img src="/img/caricatures/2019, Mt Fuji, Japan, 1 1.png" alt="2019 | Mt Fuji, Japan | 1 1" class="centered-img" />
 
-> This is the first caricature I ever got made, with my ex, at the **Fugi-Q Highland** theme park near **Mt Fui, Japan** (🇯🇵). The artist captured us well, minus our really large teeth! 😁
+> This is the first caricature I ever got made, with my first ex, at the **Fugi-Q Highland** theme park near **Mt Fui, Japan** (🇯🇵). The artist captured us well, minus our really large teeth! 😁
 
 ---
 
