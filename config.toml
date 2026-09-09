@@ -19,7 +19,7 @@ pygmentscodefencesguesssyntax = true
     mainSections = ["posts"]
     subtitle = "A DevOps Engineer focused on Go, Bash, & AWS."
     featherIconsCDN = true
-    avatar = "https://jcleal.me/my-face.png"
+    avatar = "/my-face.jpg"
     mode = "dark"
     customCSS = "css/custom.css"
     customDarkCSS = "css/custom.dark.css"
@@ -36,22 +36,22 @@ url = "/resume"
 weight = 2
 
 [[menu.main]]
+name = "Workshops"
+url = "/workshops"
+weight = 3
+
+[[menu.main]]
 name = "Blog"
 url = "/posts"
-weight = 3
+weight = 4
 
 [[menu.main]]
 name = "Blog Tags"
 url = "/tags"
-weight = 4
-
-[[menu.main]]
-name = "Labs"
-url = "/lab"
 weight = 5
 
 [[menu.main]]
-name = "📡 Contact"
+name = "Contact"
 url = "/contact"
 weight = 6
 
