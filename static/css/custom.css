@@ -10,11 +10,17 @@ html.ocean  { --jc-accent: #1a9de0; --jc-accent-hover: #0f80c0; }
 html.forest { --jc-accent: #28b830; --jc-accent-hover: #1e9428; }
 html.sunset { --jc-accent: #f05a28; --jc-accent-hover: #d04018; }
 html.violet { --jc-accent: #8b40e0; --jc-accent-hover: #7030c0; }
+html.yellow { --jc-accent: #b89000; --jc-accent-hover: #987800; }
+html.grey   { --jc-accent: #7080a0; --jc-accent-hover: #506080; }
+html.purple { --jc-accent: #9030d0; --jc-accent-hover: #7020b0; }
 
 html.dark.ocean  { --jc-accent: #40c0ff; --jc-accent-hover: #20a8e8; }
 html.dark.forest { --jc-accent: #40e048; --jc-accent-hover: #28c030; }
 html.dark.sunset { --jc-accent: #ff7848; --jc-accent-hover: #f05a28; }
 html.dark.violet { --jc-accent: #b060ff; --jc-accent-hover: #9040e0; }
+html.dark.yellow { --jc-accent: #f0c820; --jc-accent-hover: #d8b010; }
+html.dark.grey   { --jc-accent: #a0b8d0; --jc-accent-hover: #8098b8; }
+html.dark.purple { --jc-accent: #c060ff; --jc-accent-hover: #a040e8; }
 
 /* ── global accent overrides (beats main.css #3700ff rules) ── */
 a { color: var(--jc-accent); }
@@ -168,23 +174,26 @@ html.dark .jc-palette-popup {
 .jc-palette-btn.active { border-color: #333; }
 html.dark .jc-palette-btn.active { border-color: #eee; }
 
+/* date box: keep accent-tinted background, white text */
+.post-header .meta .date {
+  background: var(--jc-accent) !important;
+  border-radius: 4px;
+}
 .post-header .meta .date .day {
   font-family: "Arial";
   font-size: 3em;
   margin-top: 10px;
-  color: var(--jc-accent);
-  background: none !important;
+  color: #fff !important;
+  background: transparent !important;
 }
 .post-header .meta .date .rest {
-  color: var(--jc-accent);
-  opacity: 0.6;
-  background: none !important;
+  color: #fff !important;
+  opacity: 0.85;
+  background: transparent !important;
 }
-.post-header .meta .date {
-  background: none !important;
-}
-html.dark .post-header .meta .date .day { color: var(--jc-accent) !important; background: none !important; }
-html.dark .post-header .meta .date .rest { color: var(--jc-accent) !important; background: none !important; }
+html.dark .post-header .meta .date { background: var(--jc-accent) !important; }
+html.dark .post-header .meta .date .day { color: #fff !important; background: transparent !important; }
+html.dark .post-header .meta .date .rest { color: #fff !important; background: transparent !important; }
 
 .header {
   overflow: visible;
