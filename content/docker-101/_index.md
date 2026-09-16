@@ -1,5 +1,9 @@
 ---
 title: Docker 101
+description: "Containers, images, layers, multi-stage builds, storage, debugging, registry, and scratch images."
+workshopTags: [docker, containers, devops]
+icon: docker
+pdfPath: /pdf/docker-101.pdf
 ---
 
 # Docker 101
