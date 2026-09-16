@@ -8,17 +8,20 @@
 
     <h1 class="page-title">Tags</h1>
 
-    {{/* Split tags into workshop tags and post tags */}}
+    {{/* find global max count for bar scaling */}}
+    {{ $maxCount := 1 }}
+    {{ range .Data.Terms.ByCount }}
+      {{ if gt .Count $maxCount }}{{ $maxCount = .Count }}{{ end }}
+    {{ end }}
+
+    {{/* split into workshop vs post tags */}}
     {{ $workshopSections := slice "bash-101" "docker-101" }}
     {{ $workshopTags := slice }}
     {{ $postTags := slice }}
-
     {{ range $key, $value := .Data.Terms.ByCount }}
       {{ $isWorkshop := false }}
       {{ range $value.Pages }}
-        {{ if in $workshopSections .Section }}
-          {{ $isWorkshop = true }}
-        {{ end }}
+        {{ if in $workshopSections .Section }}{{ $isWorkshop = true }}{{ end }}
       {{ end }}
       {{ if $isWorkshop }}
         {{ $workshopTags = $workshopTags | append $value }}
@@ -27,23 +30,45 @@
       {{ end }}
     {{ end }}
 
-    {{ if $workshopTags }}
-    <h3 class="tags-section-heading">Workshops</h3>
-    <div class="tag-cloud">
-      {{ range $workshopTags }}
-      <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/">{{ .Name }}<sup>{{ .Count }}</sup></a>
+    <div class="tag-chart-wrap">
+      {{ if $workshopTags }}
+      <div class="tag-chart-section">
+        <div class="tag-chart-heading">
+          <span>Workshops</span>
+          <span class="tag-chart-total">{{ len $workshopTags }} tags</span>
+        </div>
+        {{ range $workshopTags }}
+        {{ $pct := (div (mul .Count 100) $maxCount) }}
+        <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/" class="tag-bar-row">
+          <span class="tag-bar-label">{{ .Name }}</span>
+          <span class="tag-bar-track">
+            <span class="tag-bar-fill tag-bar-fill--workshop" style="width: {{ $pct }}%"></span>
+          </span>
+          <span class="tag-bar-count">{{ .Count }}</span>
+        </a>
+        {{ end }}
+      </div>
       {{ end }}
-    </div>
-    {{ end }}
 
-    {{ if $postTags }}
-    <h3 class="tags-section-heading">Posts</h3>
-    <div class="tag-cloud">
-      {{ range $postTags }}
-      <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/">{{ .Name }}<sup>{{ .Count }}</sup></a>
+      {{ if $postTags }}
+      <div class="tag-chart-section">
+        <div class="tag-chart-heading">
+          <span>Posts</span>
+          <span class="tag-chart-total">{{ len $postTags }} tags</span>
+        </div>
+        {{ range $postTags }}
+        {{ $pct := (div (mul .Count 100) $maxCount) }}
+        <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/" class="tag-bar-row">
+          <span class="tag-bar-label">{{ .Name }}</span>
+          <span class="tag-bar-track">
+            <span class="tag-bar-fill tag-bar-fill--post" style="width: {{ $pct }}%"></span>
+          </span>
+          <span class="tag-bar-count">{{ .Count }}</span>
+        </a>
+        {{ end }}
+      </div>
       {{ end }}
     </div>
-    {{ end }}
 
   </div>
   {{ partial "footer.html" . }}
