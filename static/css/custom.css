@@ -1,15 +1,91 @@
 ::-moz-selection { background: var(--jc-accent); color: #fff; text-shadow: none; }
 ::selection      { background: var(--jc-accent); color: #fff; text-shadow: none; }
 
-.tags-section-heading {
+/* ── Tag chart ── */
+.tag-chart-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5em;
+  margin-top: 1.5em;
+}
+.tag-chart-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.tag-chart-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   font-size: 0.72em;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: #999;
-  margin: 1.5em 0 0.75em;
   font-weight: 600;
+  padding-bottom: 0.6em;
+  margin-bottom: 0.25em;
+  border-bottom: 1px solid #e0e0e0;
 }
-html.dark .tags-section-heading { color: #666; }
+html.dark .tag-chart-heading { color: #666; border-bottom-color: #2a2a2a; }
+.tag-chart-total {
+  font-size: 0.9em;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #bbb;
+}
+html.dark .tag-chart-total { color: #555; }
+
+.tag-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.45em 0.5em;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.12s;
+  border-bottom: none !important;
+}
+.tag-bar-row:hover { background: color-mix(in srgb, var(--jc-accent) 6%, transparent); }
+html.dark .tag-bar-row:hover { background: color-mix(in srgb, var(--jc-accent) 12%, transparent); }
+
+.tag-bar-label {
+  width: 110px;
+  flex-shrink: 0;
+  font-size: 0.88em;
+  color: var(--jc-accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tag-bar-track {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: #eee;
+  overflow: hidden;
+}
+html.dark .tag-bar-track { background: #2a2a2a; }
+.tag-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  min-width: 4px;
+  transition: width 0.3s ease;
+}
+.tag-bar-fill--workshop { background: var(--jc-accent); }
+.tag-bar-fill--post     { background: var(--jc-btn); }
+.tag-bar-count {
+  width: 1.8em;
+  text-align: right;
+  font-size: 0.78em;
+  color: #aaa;
+  flex-shrink: 0;
+}
+html.dark .tag-bar-count { color: #555; }
+
+@media (max-width: 480px) {
+  .tag-bar-label { width: 80px; }
+}
 
 /* ── palette themes ── */
 :root {
