@@ -288,6 +288,9 @@ pre code {
   height: auto;
   border: 2px solid black;
 }
+html.dark .centered-img {
+  border: 2px solid white;
+}
 
 blockquote {
   font-style: normal;
