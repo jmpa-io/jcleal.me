@@ -51,4 +51,3 @@ weight = 5
 
 [taxonomies]
   tag = "tags"
-  workshopTag = "workshopTags"

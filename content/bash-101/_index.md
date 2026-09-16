@@ -1,7 +1,7 @@
 ---
 title: Bash 101
 description: "Write scripts that actually work — set -euo pipefail, safe arguments, functions, traps, and a production-ready template."
-workshopTags: [bash, scripting, automation]
+tags: [bash, scripting, automation]
 icon: bash
 pdfPath: /pdf/bash-101.pdf
 ---
