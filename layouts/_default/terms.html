@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html {{- if (eq .Site.Params.mode "dark" ) -}}class="dark" {{ end }}>
+{{ partial "header.html" . }}
+
+<body>
+  <div class="container wrapper tags">
+    {{ partial "head.html" . }}
+
+    <h1 class="page-title">Tags</h1>
+
+    {{/* Split tags into workshop tags and post tags */}}
+    {{ $workshopSections := slice "bash-101" "docker-101" }}
+    {{ $workshopTags := slice }}
+    {{ $postTags := slice }}
+
+    {{ range $key, $value := .Data.Terms.ByCount }}
+      {{ $isWorkshop := false }}
+      {{ range $value.Pages }}
+        {{ if in $workshopSections .Section }}
+          {{ $isWorkshop = true }}
+        {{ end }}
+      {{ end }}
+      {{ if $isWorkshop }}
+        {{ $workshopTags = $workshopTags | append $value }}
+      {{ else }}
+        {{ $postTags = $postTags | append $value }}
+      {{ end }}
+    {{ end }}
+
+    {{ if $workshopTags }}
+    <h3 class="tags-section-heading">Workshops</h3>
+    <div class="tag-cloud">
+      {{ range $workshopTags }}
+      <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/">{{ .Name }}<sup>{{ .Count }}</sup></a>
+      {{ end }}
+    </div>
+    {{ end }}
+
+    {{ if $postTags }}
+    <h3 class="tags-section-heading">Posts</h3>
+    <div class="tag-cloud">
+      {{ range $postTags }}
+      <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/">{{ .Name }}<sup>{{ .Count }}</sup></a>
+      {{ end }}
+    </div>
+    {{ end }}
+
+  </div>
+  {{ partial "footer.html" . }}
+</body>
+
+</html>

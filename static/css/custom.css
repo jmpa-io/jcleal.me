@@ -1,6 +1,16 @@
 ::-moz-selection { background: var(--jc-accent); color: #fff; text-shadow: none; }
 ::selection      { background: var(--jc-accent); color: #fff; text-shadow: none; }
 
+.tags-section-heading {
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #999;
+  margin: 1.5em 0 0.75em;
+  font-weight: 600;
+}
+html.dark .tags-section-heading { color: #666; }
+
 /* ── palette themes ── */
 :root {
   --jc-accent: #3700ff;
