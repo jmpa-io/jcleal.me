@@ -1,12 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
   var toggle = document.getElementById("scheme-toggle");
 
-  var scheme = "light";
+  var htmlEl = document.documentElement;
+  var scheme = htmlEl.classList.contains("dark") ? "dark" : "light";
   var savedScheme = localStorage.getItem("scheme");
-  var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-  if (prefersDark) { scheme = "dark"; }
-  if (savedScheme)  { scheme = savedScheme; }
+  if (savedScheme) { scheme = savedScheme; }
 
   if (scheme === "dark") {
     darkscheme(toggle);

@@ -6,7 +6,7 @@ AUS [+61 434 557 224](tel:+61434557224)
 
 ### Summary.
 
-A passionate DevOps Engineer seeking to broaden their knowledge and experience into unknown territories.
+A passionate Senior Platform / DevOps Engineer focused on building high quality, performant, and maintainable software - with a strong background in automation, CI/CD, and platform engineering.
 
 * Competent in the design, creation, and deployment of solutions to cloud platforms.
 
@@ -24,21 +24,48 @@ A passionate DevOps Engineer seeking to broaden their knowledge and experience i
 
 ### Skills.
 
-**Programming / Scripting Languages**: Go, Bash; dabbled in JavaScript, TypeScript, C++, C#, PowerShell.
+**Programming / Scripting Languages**: Go, Bash, Python; dabbled in JavaScript, TypeScript, C++, C#, PowerShell.
 
-**Frameworks & Tools**: git, docker, docker-compose, awscli, sam (AWS SAM), make.
+**Frameworks & Tools**: git, docker, docker compose, awscli, sam (AWS SAM), make, Ansible, OpenTelemetry; dabbled in Proxmox, k3s.
+
+**Security & Platform Tools**: CyberArk (Privas, PSM), Tanium, Artifactory, Snyk, Vault.
 
 **Cloud Vendors**: AWS - CloudFormation, Route53, CloudFront, API Gateway, S3 (Storage + Hosting), EC2, SSM (Automations + Parameter Store), Lambda, CloudWatch, MSK, Kinesis Data Firehose, DynamoDB, AMP + AMG; dabbled with Kinesis, SNS + SQS, EKS, OpenSearch + Kibana, Glue + Athena + QuickSight.
 
 **API Styles**: REST, GraphQL.
 
-**CI/CD**: Buildkite, GitHub Actions; dabbled in Jenkins.
+**CI/CD**: GitHub Actions, Buildkite; dabbled in Jenkins.
 
 **Vendor Management**: GitHub, Buildkite, AWS, Sumo Logic, New Relic, Datadog.
 
 **Development approaches**: Infrastructure-as-code, command line over UI, prototyping in Bash before writing in Go (if applicable), data-driven decisions.
 
 ### Professional Experience.
+
+#### Senior Platform Engineer, Group Security @ [Commonwealth Bank of Australia](https://www.commbank.com.au).
+
+Melbourne | October 2025 - Present
+
+* Built an automated deployment pipeline from scratch for patching Chrome and Chromedriver across CyberArk PSM hosts via Tanium and Artifactory, replacing a fully manual process. Rolled out across every environment from DEV to PROD with a scheduled workflow so new versions are picked up automatically, saving engineers 10-12 hours per week. Extended the pattern across 5-6 repositories so other teams could adopt it for their own dependencies.
+
+* Recorded a ~70-minute end-to-end walkthrough of the Chrome/Chromedriver pipeline - covering both the Tanium side and the full code breakdown - so any team member could pick it up independently. Presented the work at the team's All Hands.
+
+* Developed and managed Ansible playbooks for on-premises CyberArk deployments, defining infrastructure configuration as code and enabling consistent, repeatable deployments across environments - automating a previously manual process, saving 8-10 hours per developer to patch instances, and improving the overall security posture of CyberArk at CBA.
+
+* Designed and built GitHub Actions CI/CD pipelines across multiple repositories, contributing reusable patterns back to CBA's org-wide GitHub Actions community and raising improvements to shared platform repositories such as `aap.config` and `observability-fleet-config`.
+
+* Introduced Make as a standard entrypoint across CI/CD pipelines, giving teams a consistent way to run each other's applications - adopted across ~20 repositories.
+
+* Wrote automated Python test scripts for the CyberArk Privas platform, including API-level tests for onboarding and offboarding, and added ~20 tests to support a CyberArk upgrade, consolidating the team's test suite in the process.
+
+* Ran 2 workshops for ~20-30 engineers each, promoting best practices including Makefiles as repository entrypoints, Docker, OpenTelemetry, and local development practices - informally mentoring graduate engineers on the team in the process.
+
+
+#### Career Break.
+
+April 2024 - October 2025
+
+Took time away from full-time employment to travel Europe and live in Edinburgh, Scotland. During this time, continued building and maintaining a personal homelab using Ansible, Proxmox, and k3s, and learning Neovim and Python.
 
 #### Senior DevOps Engineer, CI/CD team @ [MYOB](https://myob.com.au).
 
@@ -48,7 +75,7 @@ Melbourne | March 2023 - April 2024
 
 * Assisted in the design, architecture, documentation, and creation of a new centrally managed CI/CD platform (previously the CI/CD team was running a distributed one).
 
-* Played a key role in gathering valuable feedback from beta customers of the new centrally managed CI/CD platform and faciliting iterative improvements.
+* Played a key role in gathering valuable feedback from beta customers of the new centrally managed CI/CD platform and facilitating iterative improvements.
 
 * Presented the design & architecture of the new centrally managed CI/CD platform to the TAG group within MYOB (a group of senior technical leaders & architects across MYOB) to confirm the technical direction of the platform with key stakeholders, as these changes affect each team at MYOB.
 
