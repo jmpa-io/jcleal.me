@@ -174,6 +174,18 @@ html.dark .footer a:hover { color: var(--jc-accent) !important; }
 html.dark ::-moz-selection { background: var(--jc-accent) !important; }
 html.dark ::selection { background: var(--jc-accent) !important; }
 
+/* social nav li items need inline-flex to sit on one line (ul.flat li is display:block) */
+.header .site-description nav ul.flat {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: -8px;
+}
+.header .site-description nav ul.flat li {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* scheme-toggle + palette trigger — match jmpa button style */
 .header .site-description a.scheme-toggle,
 .jc-palette-trigger {

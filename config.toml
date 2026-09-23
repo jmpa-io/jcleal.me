@@ -17,7 +17,7 @@ pygmentscodefencesguesssyntax = true
 
 [params]
     mainSections = ["posts"]
-    subtitle = "A DevOps Engineer focused on Go, Bash, & AWS."
+    subtitle = "A Senior Platform / DevOps Engineer focused on automation, CI/CD, and platform engineering."
     featherIconsCDN = true
     avatar = "/my-face.jpg"
     mode = "dark"

@@ -1,14 +1,13 @@
 Hi! I'm Jordan. 👋🏼
 
-I'm a **DevOps Engineer** based in **Melbourne, Australia** (previously **Geelong, Australia** & **Edinburgh, Scotland**) focused on solving problems using `Go`, `Bash`, and deploying to `AWS` using `Cloudformation`.
+I'm a **Senior Platform / DevOps Engineer** based in **Melbourne, Australia** (previously **Edinburgh, Scotland** & **Geelong, Australia**) focused on building high quality, performant, and maintainable software.
 
 Some key areas of interest for me are:
 
-* Anything to do with automation, especially cron jobs.
-* Anything to do with CI/CD practices.
-* Anything to do with Observability.
-* Mentoring.
-* [Open Telemetry](https://opentelemetry.io/).
+* Automation - especially replacing manual processes with reliable, repeatable pipelines.
+* CI/CD practices and platform engineering.
+* Observability and [Open Telemetry](https://opentelemetry.io/).
+* Mentoring and sharing engineering best practices.
 * Bots (eg. [Slack bots](https://api.slack.com/bot-users)).
 * Microservices & event driven mechanisms.
 
