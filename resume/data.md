@@ -28,7 +28,7 @@ A passionate Senior Platform / DevOps Engineer focused on building high quality,
 
 **Frameworks & Tools**: git, docker, docker compose, awscli, sam (AWS SAM), make, Ansible, OpenTelemetry; dabbled in Proxmox, k3s.
 
-**Security & Platform Tools**: CyberArk (Privas, PSM), Tanium, Artifactory, Snyk, Vault.
+**Security & Platform Tools**: CyberArk (PSM), Tanium, Artifactory, Snyk, Vault.
 
 **Cloud Vendors**: AWS - CloudFormation, Route53, CloudFront, API Gateway, S3 (Storage + Hosting), EC2, SSM (Automations + Parameter Store), Lambda, CloudWatch, MSK, Kinesis Data Firehose, DynamoDB, AMP + AMG; dabbled with Kinesis, SNS + SQS, EKS, OpenSearch + Kibana, Glue + Athena + QuickSight.
 
@@ -56,7 +56,7 @@ Melbourne | October 2025 - Present
 
 * Introduced Make as a standard entrypoint across CI/CD pipelines, giving teams a consistent way to run each other's applications - adopted across ~20 repositories.
 
-* Wrote automated Python test scripts for the CyberArk Privas platform, including API-level tests for onboarding and offboarding, and added ~20 tests to support a CyberArk upgrade, consolidating the team's test suite in the process.
+* Wrote automated Python test scripts for the CyberArk platform, including API-level tests for onboarding and offboarding, and added ~20 tests to support a CyberArk upgrade, consolidating the team's test suite in the process.
 
 * Ran 2 workshops for ~20-30 engineers each, promoting best practices including Makefiles as repository entrypoints, Docker, OpenTelemetry, and local development practices - informally mentoring graduate engineers on the team in the process.
 
