@@ -1,11 +1,13 @@
 ---
 date: 2020-12-29
 title: "Hello World!"
-description: "My first blog post."
+description: "First post — a quick intro."
 tags: [blog]
 ---
 
-This is my first blog post, just to see how things look / are formatted.
+First post. Mostly here to check the formatting works.
 
-More coming soon :)
+I'm Jordan — software engineer based in Melbourne. I work on platform tooling and infrastructure by day, and make watercolour paintings and ink drawings in my spare time.
+
+This site is where I keep my resume, some workshop notes, and the occasional post. Nothing too serious.
 

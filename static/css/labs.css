@@ -145,7 +145,7 @@ html:not(.dark) .ws-sidebar h4 { color: #999; }
 html:not(.dark) .ws-sidebar a { color: #666; }
 .ws-sidebar a:hover { color: #ddd; border-bottom: none; }
 html:not(.dark) .ws-sidebar a:hover { color: #111; }
-html.dark .ws-sidebar a.active { color: #9375fd; border-left-color: #9375fd; }
+html.dark .ws-sidebar a.active { color: var(--jc-btn); border-left-color: var(--jc-btn); }
 html:not(.dark) .ws-sidebar a.active { color: #3700ff; border-left-color: #3700ff; }
 
 .ws-main { flex: 1; min-width: 0; }
@@ -201,7 +201,7 @@ html.dark .ws-pdf-btn:hover {
 html:not(.dark) .ws-nav-footer { border-top-color: #ddd; }
 .ws-nav-footer a { color: #888; text-decoration: none; }
 html:not(.dark) .ws-nav-footer a { color: #666; }
-html.dark .ws-nav-footer a:hover { color: #9375fd; border-bottom: none; }
+html.dark .ws-nav-footer a:hover { color: var(--jc-btn); border-bottom: none; }
 html:not(.dark) .ws-nav-footer a:hover { color: #3700ff; border-bottom: none; }
 html.dark .ws-top-btn {
   color: #9375fd !important;

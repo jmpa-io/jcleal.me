@@ -3,7 +3,7 @@ title: "Contact"
 type: "page"
 ---
 
-[LinkedIn](https://www.linkedin.com/in/jordan-cleal) is my prefered method of contact, however email will work too.
+[LinkedIn](https://www.linkedin.com/in/jordan-cleal) is my preferred method of contact, however email will work too.
 
 ## Email
 
