@@ -189,7 +189,7 @@ Check them out! (they are broken down by the year they were made) 👇🏼
 
 <img src="/img/caricatures/2019, Mt Fuji, Japan, 1 1.png" alt="2019 | Mt Fuji, Japan | 1 1" class="centered-img" />
 
-> This is the first caricature I ever got made, with my first ex, at the **Fugi-Q Highland** theme park near **Mt Fui, Japan** (🇯🇵). The artist captured us well, minus our really large teeth! 😁
+> This is the first caricature I ever got made, with my first ex, at the **Fuji-Q Highland** theme park near **Mt Fuji, Japan** (🇯🇵). The artist captured us well, minus our really large teeth! 😁
 
 ---
 
