@@ -1,21 +1,22 @@
-Hi! I'm Jordan. 👋🏼
+Hi, I'm Jordan. 👋🏼
 
-I'm a **Senior Platform / DevOps Engineer** based in **Melbourne, Australia** (previously **Edinburgh, Scotland** & **Geelong, Australia**) focused on building high quality, performant, and maintainable software.
+I'm a **Senior Platform Engineer** based in **Melbourne, Australia**. I build the infrastructure other engineers depend on — CI/CD platforms, observability stacks, deployment pipelines — with a focus on automation, repeatability, and making complex systems straightforward to operate.
 
-Some key areas of interest for me are:
+I've been doing this since 2017, starting as a graduate at MYOB and now working in Group Security at Commonwealth Bank. Along the way I've shipped platform decisions worth millions in cost savings, led small teams, run technical workshops for 20–30 engineers at a time, and mentored engineers across various stages of their careers.
 
-* Automation - especially replacing manual processes with reliable, repeatable pipelines.
-* CI/CD practices and platform engineering.
-* Observability and [Open Telemetry](https://opentelemetry.io/).
-* Mentoring and sharing engineering best practices.
-* Bots (eg. [Slack bots](https://api.slack.com/bot-users)).
-* Microservices & event driven mechanisms.
+Outside work, I make watercolour paintings (sold at [jmpa.io](https://jmpa.io)) and collect caricatures from wherever I happen to be travelling. I've lived in Geelong, Melbourne, and Edinburgh.
 
 ---
 
-If you're interested in seeing how this website has been created, managed, or deployed, the source code is publicly available [here](https://github.com/jmpa-io/jcleal.me).
+**Things I care about:**
+
+- CI/CD that's fast, visible, and boring to operate — pipelines that ship reliably and page nobody at 2am
+- [OpenTelemetry](https://opentelemetry.io/) and treating observability as a first-class concern, not an afterthought
+- Writing Go carefully — typed errors, small interfaces, code that reads clearly six months later
+- Bash as a serious tool, worth structuring properly
+- Mentoring engineers who are earlier in their careers
 
 ---
 
-If you're looking to hire me, check out my [resume](./resume), or reach out to me directly via my [contact details](./contact).
+The [resume](/resume) has the full work history. The [workshops](/workshops) are self-guided deep dives on Bash and Docker. The [blog](/posts) has occasional writing.
 
