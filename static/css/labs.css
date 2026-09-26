@@ -39,7 +39,7 @@ html:not(.dark) .labs-tag { border-color: #ccc; color: #666; }
   transition: border-color 0.15s;
 }
 html:not(.dark) .labs-tag-item { border-color: #ddd; background: #fafafa; }
-html.dark .labs-tag-item:hover { border-color: var(--jc-btn, #9375fd); }
+html.dark .labs-tag-item:hover { border-color: var(--jc-btn, var(--jc-btn)); }
 html:not(.dark) .labs-tag-item:hover { border-color: var(--jc-btn, #3700ff); }
 .labs-tag-item .labs-tag { font-size: 0.9em; }
 .labs-tag-count {
@@ -85,7 +85,7 @@ html:not(.dark) .labs-tag-count { background: #eee; color: #666; }
 html:not(.dark) .labs-card { border-color: #ddd; background: #fafafa; }
 html:not(.dark) .labs-card:hover { border-color: #3700ff; }
 html.dark .labs-card { background: #0a0a0a; }
-html.dark .labs-card:hover { border-color: #9375fd; }
+html.dark .labs-card:hover { border-color: var(--jc-btn); }
 .labs-card-icon {
   flex-shrink: 0;
   width: 40px;
@@ -106,7 +106,7 @@ html.dark .labs-card-body strong { color: #ddd; }
 html:not(.dark) .labs-card-body strong { color: #111; }
 .labs-card-body span { font-size: 0.84em; color: #888; line-height: 1.6; }
 html:not(.dark) .labs-card-body span { color: #555; }
-html.dark .labs-card-body em { font-size: 0.82em; color: #9375fd; font-style: normal; margin-top: 0.4em; }
+html.dark .labs-card-body em { font-size: 0.82em; color: var(--jc-btn); font-style: normal; margin-top: 0.4em; }
 html:not(.dark) .labs-card-body em { font-size: 0.82em; color: #3700ff; font-style: normal; margin-top: 0.4em; }
 
 /* ── Workshop layout — sidebar + content ── */
@@ -204,8 +204,8 @@ html:not(.dark) .ws-nav-footer a { color: #666; }
 html.dark .ws-nav-footer a:hover { color: var(--jc-btn); border-bottom: none; }
 html:not(.dark) .ws-nav-footer a:hover { color: #3700ff; border-bottom: none; }
 html.dark .ws-top-btn {
-  color: #9375fd !important;
-  border: 1px solid #9375fd;
+  color: var(--jc-btn) !important;
+  border: 1px solid var(--jc-btn);
   padding: 0.25em 0.8em;
   border-radius: 3px;
   font-size: 0.85em;
@@ -247,7 +247,7 @@ html:not(.dark) .ws-top-btn:hover { background: rgba(55,0,255,0.05); border-bott
   html:not(.dark) .ws-sidebar { border-bottom-color: #ddd; }
   .ws-sidebar h4 { width: 100%; margin-bottom: 0.25em; }
   .ws-sidebar a { padding: 0.2em 0.5em; border-left: none; border: 1px solid transparent; border-radius: 3px; }
-  html.dark .ws-sidebar a.active { border-color: #9375fd; }
+  html.dark .ws-sidebar a.active { border-color: var(--jc-btn); }
   html:not(.dark) .ws-sidebar a.active { border-color: #3700ff; }
   /* PDF bar: hide label text, keep button only */
   .ws-pdf-bar span { display: none; }
