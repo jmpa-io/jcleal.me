@@ -444,33 +444,29 @@ blockquote {
 }
 
 /* ── Inline feather icons outside nav ── */
-/* Footer links, workshop PDF bar, workshop nav footer, tag links, download btns */
+/* Override feather's display:block on SVGs everywhere they appear outside the header nav */
+svg.feather {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+/* Keep nav social icons at their original size */
+.header .site-description nav svg.feather {
+  width: 18px !important;
+  height: 18px !important;
+}
+/* Make the containing links flex so icon+text sit side by side */
 .footer a,
 .ws-pdf-btn,
 .ws-nav-footer a,
 .ws-top-btn,
 .labs-tag-browse a,
 .labs-card-body em,
-.pdf-download-btn,
-.post .tags ul.flat li a {
+.pdf-download-btn {
   display: inline-flex !important;
   align-items: center !important;
   gap: 5px !important;
-}
-/* Feather sets width/height as HTML attributes — use !important to override */
-.footer a svg,
-.ws-pdf-btn svg,
-.ws-nav-footer a svg,
-.ws-top-btn svg,
-.labs-tag-browse a svg,
-.labs-card-body em svg,
-.pdf-download-btn svg,
-.post .tags ul.flat li a svg {
-  flex-shrink: 0 !important;
-  width: 13px !important;
-  height: 13px !important;
-  display: inline-block !important;
-  vertical-align: middle !important;
 }
 
 /* ── Scrollbar ── */
