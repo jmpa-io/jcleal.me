@@ -22,15 +22,15 @@
       {{ if $pdfPath }}
       <div class="ws-pdf-bar">
         <span>Download the full workshop as a PDF - free.</span>
-        <a class="ws-pdf-btn" href="{{ $pdfPath }}" download>Download PDF ↓</a>
+        <a class="ws-pdf-btn" href="{{ $pdfPath }}" download><i data-feather="download"></i> Download PDF</a>
       </div>
       {{ end }}
       {{ $ctx.Content }}
       {{ if not $isOverview }}
       <div class="ws-nav-footer">
-        {{ with $ctx.NextInSection }}<a href="{{ .RelPermalink }}">← {{ .Title }}</a>{{ else }}<span></span>{{ end }}
-        {{ with $ctx.PrevInSection }}<a href="{{ .RelPermalink }}">{{ .Title }} →</a>{{ end }}
-        <a href="#" class="ws-top-btn">↑ Back to top</a>
+        {{ with $ctx.NextInSection }}<a href="{{ .RelPermalink }}"><i data-feather="chevron-left"></i> {{ .Title }}</a>{{ else }}<span></span>{{ end }}
+        {{ with $ctx.PrevInSection }}<a href="{{ .RelPermalink }}">{{ .Title }} <i data-feather="chevron-right"></i></a>{{ end }}
+        <a href="#" class="ws-top-btn"><i data-feather="arrow-up"></i> Back to top</a>
       </div>
       {{ end }}
     </div>

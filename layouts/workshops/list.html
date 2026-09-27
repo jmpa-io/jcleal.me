@@ -13,7 +13,7 @@
       </div>
       <div class="markdown labs-content">
         <p>Self-guided workshops. Work through them at your own pace — download the PDF to keep forever.</p>
-        <p class="labs-tag-browse"><a href="/tags">Browse by tag →</a></p>
+        <p class="labs-tag-browse"><a href="/tags"><i data-feather="tag"></i> Browse by tag <i data-feather="arrow-right"></i></a></p>
         <div class="labs-cards">
           {{ range .Site.Sections }}
             {{ if .Params.tags }}
@@ -44,7 +44,7 @@
                   {{ range . }}<span class="labs-tag">{{ . }}</span>{{ end }}
                 </div>
                 {{ end }}
-                <em>Start →</em>
+                <em>Start <i data-feather="arrow-right"></i></em>
               </div>
             </a>
             {{ end }}
