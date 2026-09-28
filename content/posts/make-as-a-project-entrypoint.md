@@ -24,7 +24,7 @@ make lint
 make deploy
 ```
 
-A new engineer joining the team doesn't need to learn which build tool each repo uses, where the run script lives, or which flags are required. They look at the Makefile and they understand what's available. That discoverability matters — especially in platform teams that own a lot of repositories.
+A new engineer joining the team doesn't need to learn which build tool each repo uses, where the run script lives, or which flags are required. They look at the Makefile and they understand what's available. That discoverability matters - especially in platform teams that own a lot of repositories.
 
 ---
 
@@ -59,7 +59,7 @@ lint: ## Run linters.
 
 A few things worth noting:
 
-**`make help` as the default goal.** Running `make` with no arguments shows what's available. This is the single most useful thing you can do for discoverability — it costs nothing and saves a lot of time.
+**`make help` as the default goal.** Running `make` with no arguments shows what's available. This is the single most useful thing you can do for discoverability - it costs nothing and saves a lot of time.
 
 **`##` comments on every target.** The `help` target greps for these and displays them. Targets without a `##` comment are internal and don't show up. This is a lightweight way to separate public targets from private ones without any tooling.
 
@@ -82,7 +82,7 @@ Once every repository has a consistent Make entrypoint, CI pipelines become triv
   run: make lint
 ```
 
-No per-repo logic. No conditional scripts. The pipeline definition is identical across every repository — what varies is the Makefile.
+No per-repo logic. No conditional scripts. The pipeline definition is identical across every repository - what varies is the Makefile.
 
 When running in CI, I pass `CI=true` as an environment variable. Makefile targets can use this to enable grouping:
 
@@ -105,7 +105,7 @@ The pattern I use at jmpa-io is a `Makefile.common.mk` that lives in a separate 
 include $(shell while [[ ! -d .git ]]; do cd ..; done; pwd)/Makefile.common.mk
 ```
 
-This walks up the directory tree to find the repo root, then includes the common file. Common targets — Docker image builds, CloudFormation deploys, binary builds, test helpers — live in one place. When the pattern changes, it changes once.
+This walks up the directory tree to find the repo root, then includes the common file. Common targets - Docker image builds, CloudFormation deploys, binary builds, test helpers - live in one place. When the pattern changes, it changes once.
 
 The consuming Makefile only needs to define `PROJECT` and whatever targets are specific to that repo:
 
@@ -124,7 +124,7 @@ Everything else comes from the common file.
 
 ## What I'd do differently
 
-The main tradeoff with Make is that it's not obvious. Someone who's never written a Makefile will find the syntax weird — the tab requirement, the automatic variables (`$@`, `$<`, `$^`), the way variables expand. I've seen junior engineers avoid modifying Makefiles because they don't want to break something they don't understand.
+The main tradeoff with Make is that it's not obvious. Someone who's never written a Makefile will find the syntax weird - the tab requirement, the automatic variables (`$@`, `$<`, `$^`), the way variables expand. I've seen junior engineers avoid modifying Makefiles because they don't want to break something they don't understand.
 
 The answer is documentation and workshops. At MYOB I ran sessions specifically on Makefiles as part of onboarding to the CI/CD platform. At CBA I've done the same. The investment is small compared to the consistency you get back.
 

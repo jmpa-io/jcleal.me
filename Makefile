@@ -133,7 +133,7 @@ generate-workshop-pdfs: dist/public
 serve: ## Serves this website locally, mounted inside a Docker container.
 serve: cmd/hugo image-hugo
 serve: dist/public
-	@docker run --rm -it \
+	@docker run --rm \
 		-w /app \
   		-v "$(PWD):/app" \
   		-p "1313:1313" \
