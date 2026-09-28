@@ -87,34 +87,62 @@ html.dark .tag-bar-count { color: #555; }
   .tag-bar-label { width: 80px; }
 }
 
-/* ── palette themes ── */
-:root {
-  --jc-accent: #3700ff;
-  --jc-accent-hover: #3700ff;
-}
-/* ocean=blue, forest=green, sunset=orange-red, violet=indigo, yellow=amber, grey=slate, purple=magenta
-   --jc-accent  → links (base hue)
-   --jc-heading → headings/titles (deeper, more saturated)
-   --jc-btn     → tag borders, buttons (slightly lighter/shifted) */
-:root {
-  --jc-heading: #3700ff;
-  --jc-btn:     #3700ff;
-}
-html.ocean  { --jc-accent: #0e8fd8; --jc-accent-hover: #0870b8; --jc-heading: #0a6eb0; --jc-btn: #1aa8e8; }
-html.forest { --jc-accent: #1ea832; --jc-accent-hover: #168c28; --jc-heading: #157828; --jc-btn: #28c040; }
-html.sunset { --jc-accent: #e84820; --jc-accent-hover: #c83010; --jc-heading: #c03010; --jc-btn: #f86830; }
-html.violet { --jc-accent: #6030d0; --jc-accent-hover: #4820b0; --jc-heading: #4820a8; --jc-btn: #7848e8; }
-html.yellow { --jc-accent: #c09000; --jc-accent-hover: #a07800; --jc-heading: #906800; --jc-btn: #d8a810; }
-html.grey   { --jc-accent: #607090; --jc-accent-hover: #485878; --jc-heading: #404e68; --jc-btn: #7888a8; }
-html.purple { --jc-accent: #d01880; --jc-accent-hover: #b00868; --jc-heading: #a00060; --jc-btn: #e840a0; }
+/* ── palette themes ──
+   Each palette sets ONE base color (--jc-base for light, --jc-base-dark for dark).
+   All derived variables are computed mathematically from that base using oklch
+   (perceptually uniform lightness — equal steps look equal across all hues).
 
-html.dark.ocean  { --jc-accent: #38b8f8; --jc-accent-hover: #1898e0; --jc-heading: #60d0ff; --jc-btn: #1898e0; }
-html.dark.forest { --jc-accent: #38d848; --jc-accent-hover: #20c030; --jc-heading: #60f070; --jc-btn: #20c030; }
-html.dark.sunset { --jc-accent: #ff6840; --jc-accent-hover: #e84820; --jc-heading: #ff9060; --jc-btn: #e84820; }
-html.dark.violet { --jc-accent: #9060f8; --jc-accent-hover: #7040e0; --jc-heading: #b080ff; --jc-btn: #7040e0; }
-html.dark.yellow { --jc-accent: #f0c820; --jc-accent-hover: #d8a810; --jc-heading: #ffe050; --jc-btn: #d8a810; }
-html.dark.grey   { --jc-accent: #90a8c8; --jc-accent-hover: #7090b0; --jc-heading: #b0c8e0; --jc-btn: #7090b0; }
-html.dark.purple { --jc-accent: #f840a8; --jc-accent-hover: #e02090; --jc-heading: #ff70c0; --jc-btn: #e02090; }
+   Light ramp:
+     heading      = base, lightness −25% (deep/dark)
+     accent       = base (the pure hue)
+     accent-hover = base, lightness −12%
+     btn          = base, lightness +28%, chroma −40% (pale wash)
+     muted        = base, lightness +18%, chroma −60% (desaturated)
+     subtle       = base at 6% opacity (near-invisible tint)
+
+   Dark ramp (inverted — lighter = more vivid on dark bg):
+     heading      = base, lightness +30%
+     accent       = base, lightness +15%
+     accent-hover = base, lightness +22%
+     btn          = base, lightness −20%, chroma −40%
+     muted        = base, lightness −10%, chroma −55%
+     subtle       = base at 10% opacity
+*/
+
+:root {
+  --jc-base:      oklch(45% 0.28 264);
+  --jc-base-dark: oklch(45% 0.28 264);
+}
+html.ocean  { --jc-base: oklch(52% 0.18 220); --jc-base-dark: oklch(52% 0.18 220); }
+html.forest { --jc-base: oklch(48% 0.18 145); --jc-base-dark: oklch(48% 0.18 145); }
+html.sunset { --jc-base: oklch(54% 0.22  30); --jc-base-dark: oklch(54% 0.22  30); }
+html.violet { --jc-base: oklch(42% 0.24 280); --jc-base-dark: oklch(42% 0.24 280); }
+html.yellow { --jc-base: oklch(58% 0.17  80); --jc-base-dark: oklch(58% 0.17  80); }
+html.grey   { --jc-base: oklch(48% 0.07 230); --jc-base-dark: oklch(48% 0.07 230); }
+html.purple { --jc-base: oklch(48% 0.24 340); --jc-base-dark: oklch(48% 0.24 340); }
+
+/* light mode — derived from --jc-base */
+:root,
+html.ocean, html.forest, html.sunset, html.violet, html.yellow, html.grey, html.purple {
+  --jc-heading:      oklch(from var(--jc-base) calc(l - 0.25) c h);
+  --jc-accent:       oklch(from var(--jc-base) l c h);
+  --jc-accent-hover: oklch(from var(--jc-base) calc(l - 0.12) c h);
+  --jc-btn:          oklch(from var(--jc-base) calc(l + 0.28) calc(c - 0.08) h);
+  --jc-muted:        oklch(from var(--jc-base) calc(l + 0.18) calc(c - 0.12) h);
+  --jc-subtle:       color-mix(in oklch, var(--jc-base) 6%, transparent);
+}
+
+/* dark mode — derived from --jc-base-dark */
+html.dark,
+html.dark.ocean, html.dark.forest, html.dark.sunset,
+html.dark.violet, html.dark.yellow, html.dark.grey, html.dark.purple {
+  --jc-heading:      oklch(from var(--jc-base-dark) calc(l + 0.30) c h);
+  --jc-accent:       oklch(from var(--jc-base-dark) calc(l + 0.15) c h);
+  --jc-accent-hover: oklch(from var(--jc-base-dark) calc(l + 0.22) c h);
+  --jc-btn:          oklch(from var(--jc-base-dark) calc(l - 0.20) calc(c - 0.08) h);
+  --jc-muted:        oklch(from var(--jc-base-dark) calc(l - 0.10) calc(c - 0.12) h);
+  --jc-subtle:       color-mix(in oklch, var(--jc-base-dark) 10%, transparent);
+}
 
 /* ── global accent overrides (beats main.css #3700ff rules) ── */
 /* links → base accent */
@@ -122,13 +150,16 @@ a { color: var(--jc-accent); }
 a:hover { border-bottom-color: var(--jc-accent-hover); border-bottom-width: 2px; }
 blockquote { border-color: var(--jc-accent); }
 :not(pre) > code { color: var(--jc-accent); }
+::selection      { background: var(--jc-subtle); }
+::-moz-selection { background: var(--jc-subtle); }
 
-/* headings / titles → deeper shifted tone */
+/* headings / titles → brightest tone */
 .site-title a { color: var(--jc-heading); }
 .site-title a:hover { border-bottom: none; }
 .post .title a,
 .list .posts .post-header h1.title a { color: var(--jc-heading); }
-.section .section-header { color: var(--jc-heading); opacity: 0.7; }
+.section .section-header { color: var(--jc-heading); opacity: 0.8; }
+h1, h2, h3, h4 { color: var(--jc-heading); }
 
 /* tags + buttons → lighter shifted tone */
 .post .tags a,
@@ -156,6 +187,18 @@ blockquote { border-color: var(--jc-accent); }
 .labs-card:hover { border-color: var(--jc-btn) !important; }
 .labs-card-body em { color: var(--jc-btn) !important; }
 
+/* muted → dates, meta, footer links, section labels */
+.post-header .meta,
+.post-header .meta .date,
+.list .posts .post-header .meta,
+.footer a,
+.header .site-description p,
+.section .section-header { color: var(--jc-muted); }
+
+/* subtle → hover backgrounds */
+.tag-bar-row:hover { background: var(--jc-subtle) !important; }
+html.dark .tag-bar-row:hover { background: var(--jc-subtle) !important; }
+
 /* misc */
 .footer a:hover { color: var(--jc-accent); }
 .post .draft-label { color: var(--jc-accent); }
@@ -165,14 +208,21 @@ blockquote { border-color: var(--jc-accent); }
 html.dark a,
 html.dark a:hover { color: var(--jc-accent) !important; }
 html.dark blockquote { border-color: var(--jc-accent) !important; }
+html.dark :not(pre) > code { color: var(--jc-accent) !important; }
 html.dark .post .tags a,
 html.dark .post-tags .tags a { border-color: var(--jc-btn) !important; color: var(--jc-btn) !important; }
 html.dark .post .title a,
 html.dark .list .posts .post-header h1.title a { color: var(--jc-heading) !important; }
 html.dark .site-title a { color: var(--jc-heading) !important; }
+html.dark h1, html.dark h2, html.dark h3, html.dark h4 { color: var(--jc-heading) !important; }
+html.dark .post-header .meta,
+html.dark .post-header .meta .date,
+html.dark .list .posts .post-header .meta,
+html.dark .footer a,
+html.dark .header .site-description p { color: var(--jc-muted) !important; }
 html.dark .footer a:hover { color: var(--jc-accent) !important; }
-html.dark ::-moz-selection { background: var(--jc-accent) !important; }
-html.dark ::selection { background: var(--jc-accent) !important; }
+html.dark ::-moz-selection { background: var(--jc-subtle) !important; }
+html.dark ::selection { background: var(--jc-subtle) !important; }
 
 /* social nav li items need inline-flex to sit on one line (ul.flat li is display:block) */
 .header .site-description nav ul.flat {
