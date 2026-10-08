@@ -1,5 +1,5 @@
 (function () {
-  var PALETTES = ['ocean', 'forest', 'sunset', 'violet', 'yellow', 'grey', 'purple'];
+  var PALETTES = ['ocean', 'forest', 'sunset', 'violet', 'yellow', 'grey', 'purple', 'crimson', 'teal'];
   var PALETTE_KEY = 'jc-palette';
 
   function applyPalette(palette) {
