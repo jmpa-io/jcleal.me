@@ -318,35 +318,40 @@ html.dark .jc-palette-popup {
 .jc-palette-btn.active { border-color: #333; }
 html.dark .jc-palette-btn.active { border-color: #eee; }
 
-/* date: large day number in accent, MM YYYY pill underneath */
+/* date: bold day number with a small uppercase month/year label underneath */
 .post-header .meta .date {
   background: transparent !important;
   width: 64px;
   text-align: center;
+  border-left: 2px solid var(--jc-accent) !important;
+  padding-left: 10px !important;
 }
 .post-header .meta .date .day {
-  font-family: "Arial";
-  font-size: 3em;
+  font-size: 2.1em;
+  font-weight: 700;
   margin-top: 0;
-  margin-bottom: 4px !important;
+  margin-bottom: 1px !important;
   line-height: 1;
-  color: var(--jc-accent) !important;
+  color: var(--jc-heading) !important;
   background: transparent !important;
   display: block;
 }
 .post-header .meta .date .rest {
-  display: inline-block;
-  background: var(--jc-btn) !important;
-  color: #fff !important;
-  font-size: 0.65em;
-  line-height: 1;
-  padding: 5px 12px;
-  border-radius: 4px;
+  display: block;
+  background: transparent !important;
+  color: var(--jc-muted) !important;
+  font-size: 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  padding: 0 !important;
+  border-radius: 0 !important;
   opacity: 1 !important;
 }
 html.dark .post-header .meta .date { background: transparent !important; }
-html.dark .post-header .meta .date .day { color: var(--jc-accent) !important; background: transparent !important; }
-html.dark .post-header .meta .date .rest { background: var(--jc-btn) !important; color: #fff !important; }
+html.dark .post-header .meta .date .day { color: var(--jc-heading) !important; background: transparent !important; }
+html.dark .post-header .meta .date .rest { color: var(--jc-muted) !important; }
 
 .header {
   overflow: visible;
@@ -355,14 +360,14 @@ html.dark .post-header .meta .date .rest { background: var(--jc-btn) !important;
 .header .avatar img {
   width: 110px;
   height: 110px;
-  border-radius: 50%;
+  border-radius: 0;
   margin: -8px auto 0 auto;
   display: block;
-  outline: 2px solid #ccc;
+  outline: 2px solid #000;
   outline-offset: 2px;
 }
 html.dark .header .avatar img {
-  outline-color: #555;
+  outline-color: #fff;
 }
 
 .rest {
