@@ -18,5 +18,5 @@ Outside work, I make watercolour paintings (sold at [jmpa.io](https://jmpa.io)) 
 
 ---
 
-The [resume](/resume) has the full work history. The [workshops](/workshops) are self-guided deep dives on Bash and Docker. The [blog](/posts) has occasional writing.
+The [resume](/resume) has the full work history. The [workshops](/workshops) are self-guided technical deep dives. The [blog](/posts) has occasional writing.
 
