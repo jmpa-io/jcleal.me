@@ -324,158 +324,37 @@ html.dark .jc-palette-popup {
 .jc-palette-btn.active { border-color: #333; }
 html.dark .jc-palette-btn.active { border-color: #eee; }
 
-/* date: small sentence-case pill badge, sitting under the title */
-.post-header .meta {
-  margin: 2px 0 10px 0 !important;
-}
+/* date: flat column beside the title, monospace (Fira Code) instead of serif */
 .post-header .meta .date {
-  display: inline-block;
-  width: auto !important;
-  margin-right: 0 !important;
-  padding: 2px 10px !important;
-  text-align: left;
-  font-size: 0.78em;
-  color: var(--jc-muted) !important;
-  background: var(--jc-subtle) !important;
-  border-radius: 20px;
-}
-html.dark .post-header .meta .date {
-  color: var(--jc-muted) !important;
-  background: var(--jc-subtle) !important;
-}
-
-/* ── date style comparison demo (content/compare-dates.md) ── */
-.date-demo-block {
-  padding: 24px 0;
-  border-bottom: 1px dashed #ddd;
-}
-html.dark .date-demo-block { border-bottom-color: #333; }
-.date-demo-block h3 {
-  font-size: 0.9em;
-  color: #999;
-  margin-bottom: 14px;
-}
-.date-cmp-a .meta, .date-cmp-b .meta, .date-cmp-c .meta, .date-cmp-d .meta {
-  margin: 0 !important;
-}
-
-.date-cmp-a .meta .date {
   width: 64px;
-  margin-right: 30px !important;
+  margin-right: 24px;
   text-align: center;
   border-left: 2px solid var(--jc-accent);
   padding-left: 12px;
   background: transparent !important;
 }
-.date-cmp-a .meta .date .day {
+.post-header .meta .date .day {
   display: block;
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
-  font-size: 2.1em;
+  font-family: 'Fira Code', 'Fira Mono', 'Cascadia Code', ui-monospace, monospace;
+  font-weight: 600;
+  font-size: 1.7em;
   line-height: 1;
   color: var(--jc-heading);
   margin-bottom: 4px;
   background: transparent !important;
   padding: 0 !important;
 }
-.date-cmp-a .meta .date .rest {
+.post-header .meta .date .rest {
   display: block;
-  font-size: 0.7em;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: var(--jc-muted);
-  background: transparent !important;
-}
-
-.date-cmp-b .meta .date {
-  width: 50px;
-  margin-right: 18px !important;
-  text-align: center;
-  border-left: 1px solid var(--jc-accent);
-  padding-left: 10px;
-  background: transparent !important;
-}
-.date-cmp-b .meta .date .day {
-  display: block;
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
-  font-size: 1.6em;
-  line-height: 1;
-  color: var(--jc-heading);
-  margin-bottom: 2px;
-  background: transparent !important;
-  padding: 0 !important;
-}
-.date-cmp-b .meta .date .rest {
-  display: block;
-  font-size: 0.65em;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--jc-muted);
-  background: transparent !important;
-}
-
-.date-cmp-c .meta .date {
-  width: 64px;
-  margin-right: 24px !important;
-  text-align: center;
-  border-left: none !important;
-  padding-left: 0 !important;
-  background: transparent !important;
-}
-.date-cmp-c .meta .date .day {
-  display: block;
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
-  font-size: 2.1em;
-  line-height: 1;
-  color: var(--jc-accent);
-  margin-bottom: 4px;
-  background: transparent !important;
-  padding: 0 !important;
-}
-.date-cmp-c .meta .date .rest {
-  display: block;
-  font-size: 0.75em;
+  font-family: 'Fira Code', 'Fira Mono', 'Cascadia Code', ui-monospace, monospace;
+  font-size: 0.62em;
   font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--jc-muted);
-  background: transparent !important;
-}
-
-.date-cmp-d .meta .date {
-  width: 64px;
-  margin-right: 24px !important;
-  padding-right: 16px;
-  text-align: center;
-  border-left: none !important;
-  border-right: 1px solid #ddd;
-  background: transparent !important;
-}
-html.dark .date-cmp-d .meta .date { border-right-color: #444; }
-.date-cmp-d .meta .date .day {
-  display: block;
-  font-family: "Playfair Display", serif;
-  font-weight: 700;
-  font-size: 2.1em;
-  line-height: 1;
-  color: var(--jc-muted);
-  margin-bottom: 4px;
-  background: transparent !important;
-  padding: 0 !important;
-}
-.date-cmp-d .meta .date .rest {
-  display: block;
-  font-size: 0.7em;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--jc-muted);
   background: transparent !important;
 }
+html.dark .post-header .meta .date { background: transparent !important; }
 
 .header {
   overflow: visible;
