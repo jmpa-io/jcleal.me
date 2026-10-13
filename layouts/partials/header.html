@@ -26,6 +26,7 @@
 	{{- if isset .Site.Params "customcss" }}
 		<link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}{{ .Site.Params.customCSS }}" />
 	{{ end }}
+	<link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/palette.css" />
 
         <link id="dark-scheme" rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/dark.css" />
         {{- if isset .Site.Params "customdarkcss" }}
@@ -37,9 +38,20 @@
 	{{- else if or (isset .Site.Params "social") (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") -}}
 		<script src="{{ .Site.BaseURL }}js/feather.min.js"></script>
 	{{ end }}
-		<script src="{{ .Site.BaseURL }}js/main.js"></script>
 	{{- if isset .Site.Params "customjs" -}}
 		{{- range .Site.Params.customJS }}<script src="{{ $.Site.BaseURL }}{{ . }}"></script>{{- end }}
 	{{- end }}
 	<script src="{{ .Site.BaseURL }}js/palette.js"></script>
+	<script>
+		Palette.init({
+			btnSelector: '.jc-palette-btn',
+			triggerId: 'jc-palette-trigger',
+			popupId: 'jc-palette-popup',
+			toggleId: 'scheme-toggle',
+			onScheme: function (scheme, toggle) {
+				if (!toggle || typeof feather === 'undefined') return;
+				toggle.innerHTML = scheme === 'dark' ? feather.icons.sun.toSvg() : feather.icons.moon.toSvg();
+			}
+		});
+	</script>
 </head>
