@@ -70,6 +70,7 @@ compile-website: cmd/hugo image-hugo
 compile-website: dist/public
 	@test -z "$(CI)" || echo "##[group]Compiling website."
 	docker run --rm \
+		--user $$(id -u):$$(id -g) \
 		-w /app \
 		-v "$(PWD):/app" \
 		-v "$(PWD)/public" \
