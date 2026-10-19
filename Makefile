@@ -58,6 +58,10 @@ website: ADDITIONAL_PARAMETER_OVERRIDES="AcmCertificateArn=$(CERT_ARN) "
 website: ADDITIONAL_PARAMETER_OVERRIDES+="HostedZoneId=$(HOSTED_ZONE_ID) "
 website: deploy-website
 
+sync: ## Syncs the downloaded website artifact (dist/) to AWS S3; called by the 50-upload pipeline.
+sync:
+	aws s3 sync --delete dist/ s3://$(UPLOAD_BUCKET)/
+
 upload: ## Uploads generated website content to AWS S3. Be careful with this command!
 upload:
 	aws s3 sync --delete dist/public/ s3://$(UPLOAD_BUCKET)/
