@@ -1,6 +1,7 @@
 # ignore general files.
 .DS_Store
 .vscode/
+node_modules/
 
 # ignore generated files.
 /out
