@@ -1,0 +1,13 @@
+{
+  "name": "jcleal.me-tests",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Minimal JS test suite for static/js/palette.js (not part of the Hugo site build).",
+  "scripts": {
+    "test": "NODE_OPTIONS=--no-experimental-webstorage vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.9",
+    "jsdom": "^25.0.1"
+  }
+}
