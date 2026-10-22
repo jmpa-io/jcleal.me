@@ -32,8 +32,8 @@ HOSTED_ZONE_ID ?= $(shell aws ssm get-parameter --name /$(PARAM_PREFIX)/hosted-z
 UPLOAD_BUCKET ?= $(shell aws ssm get-parameter --name /$(PARAM_PREFIX)/bucket --query 'Parameter.Value' --output text)
 
 # The arn to the cert stored in ACM.
-# NOTE: This is using '$(REPO)' because this cert is only deployed to production.
-CERT_ARN ?= $(shell aws ssm get-parameter --region us-east-1 --name /certs/$(REPO)/arn --query 'Parameter.Value' --output text)
+# NOTE: dev certs (/certs/dev.<site>/arn) live in the dev AWS account, prod certs (/certs/<site>/arn) in prod.
+CERT_ARN ?= $(shell aws ssm get-parameter --region us-east-1 --name /certs/$(PARAM_PREFIX)/arn --query 'Parameter.Value' --output text)
 
 pull-config: # Pulls the config pulled from AWS when deploying.
 pull-config:
