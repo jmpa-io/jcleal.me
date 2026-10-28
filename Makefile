@@ -28,8 +28,8 @@ endif
 # The hosted zone id in Route53.
 HOSTED_ZONE_ID ?= $(shell aws ssm get-parameter --name /$(PARAM_PREFIX)/hosted-zone/id --query 'Parameter.Value' --output text)
 
-# The bucket to upload the website to.
-UPLOAD_BUCKET ?= $(shell aws ssm get-parameter --name /$(PARAM_PREFIX)/bucket --query 'Parameter.Value' --output text)
+# The bucket to upload the website to. The bucket is named after the domain (see cf/website/template.yml).
+UPLOAD_BUCKET ?= $(PARAM_PREFIX)
 
 # The arn to the cert stored in ACM.
 # NOTE: dev certs (/certs/dev.<site>/arn) live in the dev AWS account, prod certs (/certs/<site>/arn) in prod.
@@ -53,9 +53,17 @@ cert: AWS_REGION=us-east-1
 cert: ADDITIONAL_PARAMETER_OVERRIDES="HostedZoneId=$(HOSTED_ZONE_ID) "
 cert: deploy-cert
 
+# The live prod stack predates the <project>-website-<env> naming, so keep its name and CI updates it in place.
+ifeq ($(ENVIRONMENT),prod)
+override STACK_NAME := jcleal-me
+endif
+
 website: ## Deploys the 'website' stack.
-website: ADDITIONAL_PARAMETER_OVERRIDES="AcmCertificateArn=$(CERT_ARN) "
+# Prod keeps the zone and certificate it already has (a deploy reuses the previous values of parameters not given).
+ifneq ($(ENVIRONMENT),prod)
+website: ADDITIONAL_PARAMETER_OVERRIDES+="AcmCertificateArn=$(CERT_ARN) "
 website: ADDITIONAL_PARAMETER_OVERRIDES+="HostedZoneId=$(HOSTED_ZONE_ID) "
+endif
 website: deploy-website
 
 sync: ## Syncs the downloaded website artifact (dist/) to AWS S3; called by the 50-upload pipeline.
