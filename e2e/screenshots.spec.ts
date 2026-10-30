@@ -14,6 +14,8 @@ const popup = async (page: Page) => {
 
 const shot = (page: Page, name: string, opts = {}) => expect(page).toHaveScreenshot(`${name}.png`, opts);
 
+const PAIRS = { 'teal-pink': ['#008080', '#ff69b4'], 'near-white': ['#fffde0', '#ffffff'] } as const;
+
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => document.fonts.ready);
@@ -26,21 +28,26 @@ test('home dark', async ({ page }) => {
   await shot(page, 'home-dark', { fullPage: true });
 });
 
-for (const scheme of ['light', 'dark']) {
-  test(`popup with custom colours (${scheme})`, async ({ page }) => {
-    if (scheme === 'dark') await page.locator('#scheme-toggle').click();
-    await popup(page);
-    await fill(page, '#jc-custom-primary', '#118833');
-    await fill(page, '#jc-custom-secondary', '#aa22cc');
-    await shot(page, `popup-custom-${scheme}`);
-  });
+for (const [name, [p, s]] of Object.entries(PAIRS)) {
+  for (const scheme of ['light', 'dark']) {
+    test(`${name} page (${scheme})`, async ({ page }) => {
+      if (scheme === 'dark') await page.locator('#scheme-toggle').click();
+      await page.evaluate(([p, s]) => (window as any).Palette.set({ primary: p, secondary: s }), [p, s]);
+      await shot(page, `page-${name}-${scheme}`, { fullPage: true });
+    });
+    test(`${name} popup (${scheme})`, async ({ page }) => {
+      if (scheme === 'dark') await page.locator('#scheme-toggle').click();
+      await popup(page);
+      await fill(page, '#jc-custom-primary', p);
+      await fill(page, '#jc-custom-secondary', s);
+      await shot(page, `popup-${name}-${scheme}`);
+    });
+  }
 }
 
-test('preset selected', async ({ page }) => {
+test('popup default', async ({ page }) => {
   await popup(page);
-  await page.locator('.jc-palette-btn[data-palette="forest"]').click();
-  await popup(page);
-  await shot(page, 'preset-forest');
+  await shot(page, 'popup-default');
 });
 
 test('footer', async ({ page }) => {
