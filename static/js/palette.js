@@ -1,37 +1,98 @@
-// jmpa-io shared palette + day/night core — master copy. Mirrored into
-// jmpa.io, startpage.jcleal.me. Edit here first.
+// jmpa-io shared colour system (primary + secondary) and day/night core.
+// MASTER COPY: jcleal.me/static/js/palette.js. It is mirrored byte-for-byte into
+// art.jmpa.io, jmpa.io, portfolio.jcleal.me and startpage.jcleal.me. Edit here first, then re-copy.
+//
+// Two colours drive the whole look. From them we derive (via CSS oklch relative
+// colours, set as inline custom properties on <html>) every role a site needs:
+// --pal-bg/-surface/-surface-2/-border/-border-strong/-text/-muted/-heading/
+// -link/-link-hover/-accent2/-btn/-btn-text/-focus/-sel-bg/-sel-text/-code-bg/
+// -code-text and, for the Win98 sites, --pal-title-a/-title-b/-face/-face-hi/
+// -face-shadow/-desk. Text/link/UI lightness is clamped per scheme so WCAG AA
+// (4.5:1 text, 3:1 UI) holds for any pick; each site maps these to its own names.
 (function () {
-  var PALETTES = ['ocean', 'forest', 'sunset', 'violet', 'yellow', 'grey', 'purple', 'crimson', 'teal'];
-
-  function applyPalette(key, btnSelector) {
-    PALETTES.forEach(function (p) { document.documentElement.classList.remove(p); });
-    if (key && PALETTES.indexOf(key) !== -1) document.documentElement.classList.add(key);
-    document.querySelectorAll(btnSelector).forEach(function (btn) {
-      btn.classList.toggle('active', btn.dataset.palette === key);
-    });
-  }
-
-
-  // ── custom colours (primary + secondary) ──
-  // NOTE: this custom-colour feature currently exists only in jcleal.me; the
-  // other mirrored copies don't have it (it's opt-in via `customIds`).
   var HEX = /^#[0-9a-f]{6}$/i;
-  var CUSTOM_VARS = ['--pal-base', '--pal-base-dark', '--pal-base-2', '--pal-base-2-dark'];
-  // Lightness ranges (oklch L) that keep the derived ramps readable on the
-  // white / dark backgrounds; anything outside is pulled into range.
-  var L_LIGHT = [0.38, 0.54];
-  var L_DARK  = [0.45, 0.62];
+  var DEFAULT = { primary: '#c04828', secondary: '#2f7fae' }; // "sunset"
 
-  function ramp(hex, range) {
-    return 'oklch(from ' + hex + ' clamp(' + range[0] + ', l, ' + range[1] + ') c h)';
+  // Pre-picker preset names, migrated once to their primary/secondary pair.
+  var LEGACY = {
+    ocean:   { primary: '#007baf', secondary: '#cd4805' },
+    forest:  { primary: '#007500', secondary: '#b243ba' },
+    sunset:  DEFAULT,
+    violet:  { primary: '#4315c9', secondary: '#9c8600' },
+    yellow:  { primary: '#ad6a00', secondary: '#0559d2' },
+    grey:    { primary: '#2e657e', secondary: '#976346' },
+    purple:  { primary: '#aa0086', secondary: '#008c4f' },
+    crimson: { primary: '#b80040', secondary: '#008a84' },
+    teal:    { primary: '#007c6e', secondary: '#cf386b' }
+  };
+
+  // oklch lightness ranges that keep links/buttons readable on the derived backgrounds.
+  var L_LINK = { light: [0.38, 0.49], dark: [0.72, 0.86] };
+  var L_BAR = [0.28, 0.48]; // Win98 title bars: white text stays >= 4.5:1.
+
+  function clampL(hex, r) {
+    return 'oklch(from ' + hex + ' clamp(' + r[0] + ', l, ' + r[1] + ') c h)';
+  }
+  function tone(hex, l, maxC) {
+    return 'oklch(from ' + hex + ' ' + l + ' min(c, ' + maxC + ') h)';
   }
 
-  // sRGB hex -> oklch lightness (Ottosson), used only to tell the user when a
-  // colour had to be adjusted.
+  function buildVars(c, dark) {
+    var P = c.primary, S = c.secondary, v = {};
+    var link = clampL(P, dark ? L_LINK.dark : L_LINK.light);
+    var bar = clampL(P, L_BAR);
+    v['--pal-primary'] = P;
+    v['--pal-secondary'] = S;
+    v['--pal-link'] = link;
+    v['--pal-link-hover'] = 'oklch(from ' + link + ' calc(l ' + (dark ? '+ 0.06' : '- 0.08') + ') c h)';
+    v['--pal-accent2'] = clampL(S, dark ? L_LINK.dark : L_LINK.light);
+    v['--pal-btn'] = link;
+    v['--pal-btn-text'] = dark ? 'oklch(0.16 0 0)' : '#fff';
+    v['--pal-focus'] = link;
+    if (dark) {
+      v['--pal-bg'] = tone(S, 0.16, 0.02);
+      v['--pal-surface'] = tone(S, 0.2, 0.025);
+      v['--pal-surface-2'] = tone(S, 0.25, 0.03);
+      v['--pal-border'] = tone(S, 0.32, 0.04);
+      v['--pal-border-strong'] = tone(S, 0.58, 0.08);
+      v['--pal-text'] = tone(P, 0.9, 0.03);
+      v['--pal-heading'] = tone(P, 0.95, 0.06);
+      v['--pal-muted'] = tone(P, 0.74, 0.05);
+      v['--pal-sel-bg'] = tone(P, 0.4, 0.1);
+      v['--pal-sel-text'] = '#fff';
+      v['--pal-code-bg'] = tone(S, 0.25, 0.03);
+      v['--pal-code-text'] = tone(P, 0.84, 0.1);
+    } else {
+      v['--pal-bg'] = tone(S, 0.985, 0.012);
+      v['--pal-surface'] = tone(S, 0.965, 0.02);
+      v['--pal-surface-2'] = tone(S, 0.94, 0.03);
+      v['--pal-border'] = tone(S, 0.88, 0.04);
+      v['--pal-border-strong'] = tone(S, 0.58, 0.08);
+      v['--pal-text'] = tone(P, 0.26, 0.04);
+      v['--pal-heading'] = tone(P, 0.3, 0.14);
+      v['--pal-muted'] = tone(P, 0.46, 0.05);
+      v['--pal-sel-bg'] = tone(P, 0.88, 0.08);
+      v['--pal-sel-text'] = tone(P, 0.22, 0.04);
+      v['--pal-code-bg'] = tone(S, 0.94, 0.03);
+      v['--pal-code-text'] = tone(P, 0.36, 0.1);
+    }
+    // dark code blocks + Win98 chrome (jmpa.io / portfolio): bar from primary, tinted grey faces, secondary desktop.
+    v['--pal-pre-bg'] = tone(S, 0.22, 0.03);
+    v['--pal-title-a'] = bar;
+    v['--pal-title-b'] = 'oklch(from ' + bar + ' calc(l + 0.14) c h)';
+    v['--pal-face'] = tone(S, 0.81, 0.015);
+    v['--pal-face-hi'] = tone(S, 0.97, 0.01);
+    v['--pal-face-shadow'] = tone(S, 0.55, 0.02);
+    v['--pal-face-dark'] = tone(S, 0.3, 0.02);
+    v['--pal-desk'] = tone(S, 0.55, 0.14);
+    return v;
+  }
+
+  // sRGB hex -> oklch lightness (Ottosson), used only to tell the user when a colour was adjusted.
   function hexLightness(hex) {
     var c = [1, 3, 5].map(function (i) {
-      var v = parseInt(hex.slice(i, i + 2), 16) / 255;
-      return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+      var x = parseInt(hex.slice(i, i + 2), 16) / 255;
+      return x <= 0.04045 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
     });
     var l = Math.cbrt(0.4122214708 * c[0] + 0.5363325363 * c[1] + 0.0514459929 * c[2]);
     var m = Math.cbrt(0.2119034982 * c[0] + 0.6806995451 * c[1] + 0.1073969566 * c[2]);
@@ -39,160 +100,204 @@
     return 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s;
   }
 
+  function adjustedNote(c, dark) {
+    var r = dark ? L_LINK.dark : L_LINK.light;
+    var out = [];
+    [['Primary', c.primary], ['Secondary', c.secondary]].forEach(function (x) {
+      var l = hexLightness(x[1]);
+      if (l < r[0] || l > r[1]) out.push(x[0]);
+    });
+    return out.length ? out.join(' and ') + ' adjusted for readability.' : '';
+  }
+
+  var VAR_NAMES = Object.keys(buildVars(DEFAULT, false));
+
+  function isValid(c) {
+    return !!c && typeof c === 'object' && HEX.test(c.primary) && HEX.test(c.secondary);
+  }
+
   function readCustom(key) {
     try {
       var c = JSON.parse(localStorage.getItem(key));
-      if (c && HEX.test(c.primary) && HEX.test(c.secondary)) return c;
+      if (isValid(c)) return { primary: c.primary.toLowerCase(), secondary: c.secondary.toLowerCase() };
     } catch (e) { /* ignore corrupt storage */ }
     return null;
   }
 
-  function applyCustom(c) {
+  // Maps an old `palette` preset key to the new storage format, once, then deletes it.
+  function migrate(paletteKey, customKey) {
+    var old;
+    try { old = localStorage.getItem(paletteKey); } catch (e) { return; }
+    if (old === null) return;
+    if (!readCustom(customKey) && Object.prototype.hasOwnProperty.call(LEGACY, old)) {
+      localStorage.setItem(customKey, JSON.stringify(LEGACY[old]));
+    }
+    localStorage.removeItem(paletteKey);
+  }
+
+  var state = { custom: null, dark: false, listeners: [], customKey: 'palette-custom', schemeKey: 'scheme', toggle: null, onScheme: null, inputs: null, note: null };
+
+  function current() { return state.custom || DEFAULT; }
+
+  function applyVars() {
     var style = document.documentElement.style;
-    if (!c) {
-      CUSTOM_VARS.forEach(function (v) { style.removeProperty(v); });
-      return;
+    var vars = buildVars(current(), state.dark);
+    Object.keys(vars).forEach(function (k) { style.setProperty(k, vars[k]); });
+    if (state.note) state.note.textContent = state.custom ? adjustedNote(state.custom, state.dark) : '';
+    state.listeners.forEach(function (fn) { fn(Palette.get()); });
+  }
+
+  function syncInputs() {
+    if (!state.inputs) return;
+    state.inputs.primary.value = current().primary;
+    state.inputs.secondary.value = current().secondary;
+  }
+
+  // Shared day/night: the `scheme` key ('light'|'dark') is an explicit choice; absent = follow the OS.
+  function storedScheme() {
+    try {
+      var v = localStorage.getItem(state.schemeKey);
+      return v === 'dark' || v === 'light' ? v : null;
+    } catch (e) { return null; }
+  }
+  function osScheme() {
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyScheme(scheme) {
+    state.dark = scheme === 'dark';
+    var root = document.documentElement;
+    root.classList.toggle('dark', state.dark);
+    root.setAttribute('data-scheme', scheme);
+    root.style.colorScheme = scheme;
+    if (state.toggle) {
+      state.toggle.classList.toggle('dark', state.dark);
+      state.toggle.classList.toggle('light', !state.dark);
+      state.toggle.setAttribute('aria-pressed', String(state.dark));
     }
-    PALETTES.forEach(function (p) { document.documentElement.classList.remove(p); });
-    style.setProperty('--pal-base', ramp(c.primary, L_LIGHT));
-    style.setProperty('--pal-base-dark', ramp(c.primary, L_DARK));
-    style.setProperty('--pal-base-2', ramp(c.secondary, L_LIGHT));
-    style.setProperty('--pal-base-2-dark', ramp(c.secondary, L_DARK));
+    if (state.onScheme) state.onScheme(scheme, state.toggle);
+    applyVars();
   }
 
-  function adjustedNote(c) {
-    var out = [];
-    [['Primary', c.primary], ['Secondary', c.secondary]].forEach(function (x) {
-      var l = hexLightness(x[1]);
-      if (l < L_LIGHT[0] || l > L_LIGHT[1]) out.push(x[0]);
-    });
-    return out.length ? out.join(' and ') + ' adjusted so text stays readable.' : '';
-  }
-
-  function applyScheme(scheme, toggleEl, onScheme) {
-    document.documentElement.classList.toggle('dark', scheme === 'dark');
-    if (toggleEl) {
-      toggleEl.classList.toggle('dark', scheme === 'dark');
-      toggleEl.classList.toggle('light', scheme !== 'dark');
-    }
-    if (onScheme) onScheme(scheme, toggleEl);
-  }
-
-  window.Palette = {
-    PALETTES: PALETTES,
+  var Palette = {
+    DEFAULT: DEFAULT,
+    LEGACY: LEGACY,
+    VAR_NAMES: VAR_NAMES,
+    vars: buildVars,
+    get: function () {
+      return { primary: current().primary, secondary: current().secondary, custom: !!state.custom };
+    },
+    // Validates, persists and applies a pair. Returns false (and changes nothing) for invalid input.
+    set: function (c) {
+      if (!isValid(c)) return false;
+      state.custom = { primary: c.primary.toLowerCase(), secondary: c.secondary.toLowerCase() };
+      localStorage.setItem(state.customKey, JSON.stringify(state.custom));
+      applyVars();
+      syncInputs();
+      return true;
+    },
+    reset: function () {
+      state.custom = null;
+      localStorage.removeItem(state.customKey);
+      applyVars();
+      syncInputs();
+    },
+    onChange: function (fn) { state.listeners.push(fn); },
+    scheme: function () { return storedScheme() || osScheme(); },
+    setScheme: function (s) {
+      if (s !== 'dark' && s !== 'light') return false;
+      try { localStorage.setItem(state.schemeKey, s); } catch (e) { /* storage unavailable */ }
+      applyScheme(s);
+      return true;
+    },
+    toggleScheme: function () { return Palette.setScheme(state.dark ? 'light' : 'dark'); },
+    // Forget the explicit choice and follow the OS again.
+    followOs: function () {
+      try { localStorage.removeItem(state.schemeKey); } catch (e) { /* ignore */ }
+      applyScheme(osScheme());
+    },
     init: function (opts) {
       opts = opts || {};
-      var paletteKey  = opts.paletteKey  || 'palette';
-      var schemeKey   = opts.schemeKey   || 'scheme';
-      var btnSelector = opts.btnSelector || '.palette-btn';
-      var triggerId   = opts.triggerId;
-      var popupId     = opts.popupId;
-      var toggleId    = opts.toggleId;
-      var onScheme    = opts.onScheme;
-      var customKey   = opts.customKey || 'palette-custom';
-      var customIds   = opts.customIds; // { primary, secondary, reset, note }
+      var schemeKey = opts.schemeKey || 'scheme';
+      var toggleId = opts.toggleId;
+      var customIds = opts.customIds; // { primary, secondary, reset, note } (all optional ids)
+      state.customKey = opts.customKey || 'palette-custom';
+      state.schemeKey = schemeKey;
+      state.onScheme = opts.onScheme;
 
-      // apply immediately to avoid a flash of the wrong theme/palette
-      var storedCustom = customIds ? readCustom(customKey) : null;
-      applyPalette(storedCustom ? null : localStorage.getItem(paletteKey), btnSelector);
-      applyCustom(storedCustom);
-      var scheme = localStorage.getItem(schemeKey) ||
-        (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-      applyScheme(scheme, toggleId ? document.getElementById(toggleId) : null, onScheme);
+      // Applied immediately (this runs in <head>) so there is no flash of the wrong colours.
+      migrate(opts.paletteKey || 'palette', state.customKey);
+      state.custom = readCustom(state.customKey);
+      applyScheme(Palette.scheme());
 
+      // Follow the OS live until the user makes an explicit choice.
+      if (window.matchMedia) {
+        var mq = window.matchMedia('(prefers-color-scheme: dark)');
+        var onOs = function () { if (!storedScheme()) applyScheme(osScheme()); };
+        if (mq.addEventListener) mq.addEventListener('change', onOs);
+        else if (mq.addListener) mq.addListener(onOs);
+      }
       document.addEventListener('DOMContentLoaded', function () {
-        var trigger = triggerId && document.getElementById(triggerId);
-        var popup   = popupId && document.getElementById(popupId);
-        var toggle  = toggleId && document.getElementById(toggleId);
+        var trigger = opts.triggerId && document.getElementById(opts.triggerId);
+        var popup = opts.popupId && document.getElementById(opts.popupId);
+        var toggle = toggleId && document.getElementById(toggleId);
 
         if (trigger && popup) {
+          var setOpen = function (open) {
+            popup.classList.toggle('open', open);
+            trigger.setAttribute('aria-expanded', String(open));
+          };
+          trigger.setAttribute('aria-expanded', 'false');
           trigger.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            popup.classList.toggle('open');
+            setOpen(!popup.classList.contains('open'));
           });
-          document.addEventListener('click', function (e) {
-            if (!popup.contains(e.target) && e.target !== trigger) {
-              popup.classList.remove('open');
+          if (opts.outsideClose !== false) {
+            document.addEventListener('click', function (e) {
+              if (!popup.contains(e.target) && e.target !== trigger && !trigger.contains(e.target)) setOpen(false);
+            });
+          }
+          document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && popup.classList.contains('open')) {
+              setOpen(false);
+              trigger.focus();
             }
           });
         }
 
         if (customIds) {
-          var primary   = document.getElementById(customIds.primary);
+          var primary = document.getElementById(customIds.primary);
           var secondary = document.getElementById(customIds.secondary);
-          var reset     = document.getElementById(customIds.reset);
-          var note      = document.getElementById(customIds.note);
+          var reset = customIds.reset && document.getElementById(customIds.reset);
+          state.note = customIds.note ? document.getElementById(customIds.note) : null;
           if (primary && secondary) {
-            var defaults = { primary: primary.value, secondary: secondary.value };
-            if (storedCustom) {
-              primary.value = storedCustom.primary;
-              secondary.value = storedCustom.secondary;
-              if (note) note.textContent = adjustedNote(storedCustom);
-            }
-            var onCustom = function () {
-              var c = { primary: primary.value, secondary: secondary.value };
-              if (!HEX.test(c.primary) || !HEX.test(c.secondary)) return;
-              localStorage.setItem(customKey, JSON.stringify(c));
-              localStorage.removeItem(paletteKey);
-              applyPalette(null, btnSelector);
-              applyCustom(c);
-              if (note) note.textContent = adjustedNote(c);
-            };
-            primary.addEventListener('input', onCustom);
-            secondary.addEventListener('input', onCustom);
+            state.inputs = { primary: primary, secondary: secondary };
+            syncInputs();
+            applyVars();
+            var onInput = function () { Palette.set({ primary: primary.value, secondary: secondary.value }); };
+            primary.addEventListener('input', onInput);
+            secondary.addEventListener('input', onInput);
             if (reset) {
               reset.addEventListener('click', function (e) {
                 e.preventDefault();
-                e.stopPropagation();
-                localStorage.removeItem(customKey);
-                localStorage.removeItem(paletteKey);
-                applyCustom(null);
-                applyPalette(null, btnSelector);
-                primary.value = defaults.primary;
-                secondary.value = defaults.secondary;
-                if (note) note.textContent = '';
+                Palette.reset();
               });
             }
           }
         }
 
-        document.querySelectorAll(btnSelector).forEach(function (btn) {
-          var p = btn.dataset.palette;
-          btn.classList.toggle('active', p === (storedCustom ? '' : (localStorage.getItem(paletteKey) || '')));
-          btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var current = localStorage.getItem(paletteKey);
-            if (customIds) {
-              localStorage.removeItem(customKey);
-              applyCustom(null);
-              if (defaults) {
-                primary.value = defaults.primary;
-                secondary.value = defaults.secondary;
-              }
-              if (note) note.textContent = '';
-            }
-            if (current === p) {
-              localStorage.removeItem(paletteKey);
-              applyPalette(null, btnSelector);
-            } else {
-              localStorage.setItem(paletteKey, p);
-              applyPalette(p, btnSelector);
-            }
-            if (popup) popup.classList.remove('open');
-          });
-        });
-
         if (toggle) {
-          applyScheme(localStorage.getItem(schemeKey) || scheme, toggle, onScheme);
-          toggle.addEventListener('click', function () {
-            var next = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-            localStorage.setItem(schemeKey, next);
-            applyScheme(next, toggle, onScheme);
+          state.toggle = toggle;
+          applyScheme(Palette.scheme());
+          toggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            Palette.toggleScheme();
           });
         }
       });
     }
   };
+
+  window.Palette = Palette;
 })();

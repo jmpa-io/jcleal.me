@@ -26,7 +26,6 @@
 	{{- if isset .Site.Params "customcss" }}
 		<link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}{{ .Site.Params.customCSS }}" />
 	{{ end }}
-	<link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/palette.css" />
 
         <link id="dark-scheme" rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/dark.css" />
         {{- if isset .Site.Params "customdarkcss" }}
@@ -44,7 +43,6 @@
 	<script src="{{ .Site.BaseURL }}js/palette.js"></script>
 	<script>
 		Palette.init({
-			btnSelector: '.jc-palette-btn',
 			triggerId: 'jc-palette-trigger',
 			popupId: 'jc-palette-popup',
 			customIds: { primary: 'jc-custom-primary', secondary: 'jc-custom-secondary', reset: 'jc-custom-reset', note: 'jc-custom-note' },
