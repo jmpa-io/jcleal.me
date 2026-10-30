@@ -343,4 +343,14 @@ describe('popup wiring', () => {
     a.dispatchEvent(new window.Event('input', { bubbles: true }));
     expect(document.getElementById('n').textContent).toBe('');
   });
+
+  it('Palette.note() exposes the same text for UIs without a note element', async () => {
+    const P = await loadPalette();
+    P.init({});
+    expect(P.note()).toBe('');
+    P.set({ primary: '#fffde0', secondary: '#2a6590' });
+    expect(P.note()).toMatch(/Primary adjusted for readability/);
+    P.reset();
+    expect(P.note()).toBe('');
+  });
 });
