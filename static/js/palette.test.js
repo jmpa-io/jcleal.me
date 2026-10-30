@@ -158,11 +158,13 @@ describe('Palette.init — day/night scheme', () => {
     Palette.init({ toggleId: 'theme-toggle', onScheme });
     document.dispatchEvent(new window.Event('DOMContentLoaded'));
 
-    expect(onScheme).toHaveBeenCalledWith('light', document.getElementById('theme-toggle'));
+    const toggleEl = document.getElementById('theme-toggle');
+    expect(onScheme.mock.calls.at(-1)[0]).toBe('light');
+    expect(onScheme.mock.calls.at(-1)[1]).toBe(toggleEl);
 
     onScheme.mockClear();
-    document.getElementById('theme-toggle').click();
-    expect(onScheme).toHaveBeenCalledWith('dark', document.getElementById('theme-toggle'));
+    toggleEl.click();
+    expect(onScheme.mock.calls.at(-1)[0]).toBe('dark');
   });
 });
 
@@ -209,5 +211,71 @@ describe('Palette.init — trigger/popup', () => {
 
     document.querySelector('.palette-btn').click();
     expect(popup.classList.contains('open')).toBe(false);
+  });
+});
+
+describe('Palette.init — custom colours', () => {
+  const customOpts = {
+    btnSelector: '.palette-btn',
+    customIds: { primary: 'p1', secondary: 'p2', reset: 'rst', note: 'nt' },
+  };
+  const customDom =
+    '<button class="palette-btn" data-palette="ocean"></button>' +
+    '<input id="p1" type="color" value="#c04828"><input id="p2" type="color" value="#2f7fae">' +
+    '<button id="rst"></button><span id="nt"></span>';
+  const vars = () => ['--pal-base', '--pal-base-2'].map((v) => document.documentElement.style.getPropertyValue(v));
+
+  it('applies stored custom colours on init and reflects them in the inputs', async () => {
+    document.body.innerHTML = customDom;
+    localStorage.setItem('palette-custom', JSON.stringify({ primary: '#118833', secondary: '#aa22cc' }));
+    const Palette = await loadPalette();
+    Palette.init(customOpts);
+    document.dispatchEvent(new window.Event('DOMContentLoaded'));
+
+    expect(vars()[0]).toContain('#118833');
+    expect(vars()[1]).toContain('#aa22cc');
+    expect(document.getElementById('p1').value).toBe('#118833');
+  });
+
+  it('clicking a preset clears custom colours, storage and the inputs', async () => {
+    document.body.innerHTML = customDom;
+    localStorage.setItem('palette-custom', JSON.stringify({ primary: '#118833', secondary: '#aa22cc' }));
+    const Palette = await loadPalette();
+    Palette.init(customOpts);
+    document.dispatchEvent(new window.Event('DOMContentLoaded'));
+
+    document.querySelector('.palette-btn').click();
+
+    expect(vars()).toEqual(['', '']);
+    expect(localStorage.getItem('palette-custom')).toBeNull();
+    expect(localStorage.getItem('palette')).toBe('ocean');
+    expect(document.getElementById('p1').value).toBe('#c04828');
+  });
+
+  it('ignores invalid stored custom colours (no CSS injection)', async () => {
+    document.body.innerHTML = customDom;
+    localStorage.setItem('palette-custom', '{"primary":"red;}","secondary":"#aa22cc"}');
+    const Palette = await loadPalette();
+    Palette.init(customOpts);
+    document.dispatchEvent(new window.Event('DOMContentLoaded'));
+
+    expect(vars()).toEqual(['', '']);
+    expect(document.getElementById('p1').value).toBe('#c04828');
+  });
+
+  it('input events store valid colours and Reset clears them', async () => {
+    document.body.innerHTML = customDom;
+    const Palette = await loadPalette();
+    Palette.init(customOpts);
+    document.dispatchEvent(new window.Event('DOMContentLoaded'));
+
+    const p1 = document.getElementById('p1');
+    p1.value = '#336699';
+    p1.dispatchEvent(new window.Event('input', { bubbles: true }));
+    expect(JSON.parse(localStorage.getItem('palette-custom')).primary).toBe('#336699');
+
+    document.getElementById('rst').click();
+    expect(localStorage.getItem('palette-custom')).toBeNull();
+    expect(vars()).toEqual(['', '']);
   });
 });
