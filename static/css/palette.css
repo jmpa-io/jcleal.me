@@ -24,10 +24,11 @@
 */
 
 :root {
-  --pal-base:        oklch(48% 0.19 240);
-  --pal-base-dark:   oklch(48% 0.19 240);
-  --pal-base-2:      oklch(60% 0.17  60);
-  --pal-base-2-dark: oklch(60% 0.17  60);
+  /* jcleal.me diverges from the shared master: default palette is sunset. */
+  --pal-base:        oklch(54% 0.22  30);
+  --pal-base-dark:   oklch(54% 0.22  30);
+  --pal-base-2:      oklch(55% 0.15 210);
+  --pal-base-2-dark: oklch(55% 0.15 210);
 }
 html.ocean   { --pal-base: oklch(52% 0.18 220); --pal-base-dark: oklch(52% 0.18 220); --pal-base-2: oklch(58% 0.18  40); --pal-base-2-dark: oklch(58% 0.18  40); }
 html.forest  { --pal-base: oklch(48% 0.18 145); --pal-base-dark: oklch(48% 0.18 145); --pal-base-2: oklch(58% 0.20 325); --pal-base-2-dark: oklch(58% 0.20 325); }

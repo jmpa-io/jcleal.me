@@ -445,24 +445,28 @@ blockquote {
   border-bottom: 1px solid var(--jc-accent) !important;
 }
 
-/* footer: left/right split instead of a single right-aligned blob */
+/* footer: one size, one rhythm; left/right split that wraps cleanly */
 .footer {
   text-align: left;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  padding: 20px 0;
 }
 .footer-inner {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: baseline;
-  gap: 20px;
+  gap: 6px 24px;
 }
-.footer-left {
-  text-align: left;
-}
+.footer-left,
 .footer-right {
-  text-align: right;
-  white-space: nowrap;
-  flex-shrink: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
 }
+.footer-sep { opacity: 0.5; }
 
 /* ── Inline feather icons outside nav ── */
 /* Override feather's display:block on SVGs everywhere they appear outside the header nav */
@@ -478,7 +482,6 @@ svg.feather {
   height: 18px !important;
 }
 /* Make the containing links flex so icon+text sit side by side */
-.footer a,
 .ws-pdf-btn,
 .ws-nav-footer a,
 .ws-top-btn,
@@ -570,14 +573,6 @@ html.dark * { scrollbar-color: var(--jc-accent) #111; }
   .footer-inner {
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px;
-  }
-  .footer-left,
-  .footer-right {
-    text-align: left;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    line-height: 1.8;
   }
   /* prevent wrapper from being clipped at edges */
   .wrapper {
