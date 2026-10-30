@@ -147,6 +147,10 @@ e2e: ## Runs the Playwright screenshot + interaction tests against dist/public (
 
 PHONY += e2e
 
+e2e-sync: ## Mirrors the shared palette.js + e2e masters (kept here) into the other four repos and verifies them.
+	bash e2e/sync-master.sh
+
+PHONY += e2e-sync
 ---: ## ---
 
 # Includes the common Makefile.
