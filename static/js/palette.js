@@ -13,11 +13,13 @@
 
 
   // ── custom colours (primary + secondary) ──
+  // NOTE: this custom-colour feature currently exists only in jcleal.me; the
+  // other mirrored copies don't have it (it's opt-in via `customIds`).
   var HEX = /^#[0-9a-f]{6}$/i;
   var CUSTOM_VARS = ['--pal-base', '--pal-base-dark', '--pal-base-2', '--pal-base-2-dark'];
   // Lightness ranges (oklch L) that keep the derived ramps readable on the
   // white / dark backgrounds; anything outside is pulled into range.
-  var L_LIGHT = [0.38, 0.60];
+  var L_LIGHT = [0.38, 0.54];
   var L_DARK  = [0.45, 0.62];
 
   function ramp(hex, range) {
@@ -165,6 +167,11 @@
             if (customIds) {
               localStorage.removeItem(customKey);
               applyCustom(null);
+              if (defaults) {
+                primary.value = defaults.primary;
+                secondary.value = defaults.secondary;
+              }
+              if (note) note.textContent = '';
             }
             if (current === p) {
               localStorage.removeItem(paletteKey);

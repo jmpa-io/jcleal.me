@@ -572,11 +572,19 @@ html.dark * { scrollbar-color: var(--jc-accent) #111; }
     flex-wrap: nowrap;
     gap: 6px;
   }
-  /* palette popup: clamp to viewport so it never overflows right edge */
+  /* palette popup: span the header width (anchored to the description row) so it never overflows the viewport */
+  .header .site-description {
+    position: relative;
+  }
+  .jc-palette-wrap {
+    position: static;
+  }
   .jc-palette-popup {
-    right: auto;
     left: 0;
-    max-width: calc(100vw - 32px);
+    right: 0;
+    top: 100%;
+    width: auto;
+    max-width: none;
     flex-wrap: wrap;
   }
   /* posts list: tighter vertical spacing */
