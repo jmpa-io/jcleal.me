@@ -6,6 +6,7 @@
 #          e2e/playwright.config.ts, e2e/helpers/palette-helpers.ts, e2e/server.mjs.
 # Per-repo (never mirrored): e2e/site.ts and the *.spec.ts files.
 set -euo pipefail
+unset CDPATH
 
 here="$(cd "$(dirname "$0")/.." && pwd)"
 root="$(cd "$here/.." && pwd)"
