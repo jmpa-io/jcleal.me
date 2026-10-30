@@ -51,6 +51,12 @@
 		        <a href="#" class="jc-palette-btn" data-palette="teal" aria-label="Teal" title="Teal">
 		          <svg width="14" height="14" viewBox="0 0 14 14"><path d="M7,1 A6,6 0 0,1 7,13 Z" fill="#1a9a92"/><path d="M7,1 A6,6 0 0,0 7,13 Z" fill="#c23a4a"/></svg>
 		        </a>
+		        <div class="jc-palette-custom">
+		          <label>Primary <input type="color" id="jc-custom-primary" value="#c04828"></label>
+		          <label>Secondary <input type="color" id="jc-custom-secondary" value="#2f7fae"></label>
+		          <button type="button" id="jc-custom-reset">Reset</button>
+		          <span class="jc-custom-note" id="jc-custom-note" role="status"></span>
+		        </div>
 		      </div>
 		    </li>
 		    {{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") -}}
