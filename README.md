@@ -48,6 +48,10 @@ npm run test:update                                          # refresh the commi
 ```
 Or just `make e2e`.
 
+### Shared masters (this repo is the master)
+
+These files are mirrored byte-identical into art.jmpa.io, jmpa.io, portfolio.jcleal.me and startpage.jcleal.me: `static/js/palette.js`, `e2e/playwright.config.ts`, `e2e/helpers/palette-helpers.ts`, `e2e/server.mjs`. Edit them **here only**, then run `make e2e-sync` (`bash e2e/sync-master.sh`; `check` verifies without copying). Site-specific selectors/ports live in each repo's `e2e/site.ts`.
+
 
 ## Running locally?
 

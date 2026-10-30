@@ -1,5 +1,5 @@
 import { test, expect } from './fixtures';
-import { contrastFailures } from './audit';
+import { contrastFailures } from './helpers/palette-helpers';
 import type { Page } from '@playwright/test';
 
 const PRIMARY = '#jc-custom-primary';
