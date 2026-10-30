@@ -1,18 +1,12 @@
 import { JSDOM } from 'jsdom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// palette.js is a plain IIFE (no exports) that attaches window.Palette as a
-// side effect of being loaded, and registers listeners directly on
-// `document` (DOMContentLoaded, outside-click handling, etc). A single
-// shared jsdom `document` would accumulate listeners across tests and cause
-// cross-test interference (e.g. a stale DOMContentLoaded handler re-firing
-// and double-toggling state), so each test gets a brand new JSDOM instance
-// as the global window/document/localStorage, and vi.resetModules() forces
-// palette.js's IIFE to re-run fresh against those new globals.
+// palette.js is a plain IIFE that attaches window.Palette and registers document listeners,
+// so each test gets a fresh JSDOM and a fresh module evaluation.
 let dom;
 
 beforeEach(() => {
-  dom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'http://localhost/' });
+  dom = new JSDOM('<!doctype html><html><head></head><body></body></html>', { url: 'http://localhost/' });
   globalThis.window = dom.window;
   globalThis.document = dom.window.document;
   globalThis.localStorage = dom.window.localStorage;
@@ -28,254 +22,325 @@ async function loadPalette() {
   return window.Palette;
 }
 
-describe('Palette.init — initial palette application', () => {
-  it('applies no palette class when storage is empty', async () => {
-    const Palette = await loadPalette();
-    Palette.init();
-    expect(document.documentElement.classList.length).toBe(0);
-  });
+const root = () => document.documentElement;
+const stored = () => JSON.parse(localStorage.getItem('palette-custom'));
 
-  it('applies the stored palette class on init', async () => {
-    localStorage.setItem('palette', 'ocean');
-    const Palette = await loadPalette();
-    Palette.init();
-    expect(document.documentElement.classList.contains('ocean')).toBe(true);
-  });
+// --- minimal evaluator for the relative-colour strings palette.js emits (oklch(from X ...)) ---
+function hexToRgb(h) {
+  return [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
+}
+const lin = (c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+const gam = (c) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055);
+function rgbToOklch([r, g, b]) {
+  const [R, G, B] = [r, g, b].map(lin);
+  const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B);
+  const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B);
+  const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+  const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+  const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
+  const bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+  return [L, Math.hypot(a, bb), (Math.atan2(bb, a) * 180) / Math.PI];
+}
+function oklchToRgb([L, C, H]) {
+  const a = C * Math.cos((H * Math.PI) / 180);
+  const b = C * Math.sin((H * Math.PI) / 180);
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  const rgb = [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ];
+  // gamut clip by reducing chroma
+  if (rgb.some((v) => v < -1e-4 || v > 1 + 1e-4) && C > 0) return oklchToRgb([L, C * 0.97, H]);
+  return rgb.map((v) => Math.min(1, Math.max(0, gam(Math.min(1, Math.max(0, v))))));
+}
+function evalColour(str) {
+  str = str.trim();
+  if (str[0] === '#') return str.length === 4 ? hexToRgb('#' + [...str.slice(1)].map((c) => c + c).join('')) : hexToRgb(str);
+  if (str.startsWith('oklch(from ')) {
+    const inner = str.slice(11, -1);
+    let src;
+    let rest;
+    if (inner[0] === '#') {
+      src = inner.slice(0, 7);
+      rest = inner.slice(8);
+    } else {
+      let depth = 0;
+      let i = 0;
+      for (; i < inner.length; i++) {
+        if (inner[i] === '(') depth++;
+        if (inner[i] === ')' && --depth === 0) break;
+      }
+      src = inner.slice(0, i + 1);
+      rest = inner.slice(i + 2);
+    }
+    const [L, C, H] = rgbToOklch(evalColour(src));
+    let nl;
+    let m;
+    if ((m = rest.match(/^clamp\(([\d.]+), l, ([\d.]+)\) c h$/))) nl = Math.min(+m[2], Math.max(+m[1], L));
+    else if ((m = rest.match(/^calc\(l ([+-]) ([\d.]+)\) c h$/))) nl = L + (m[1] === '+' ? 1 : -1) * +m[2];
+    else if ((m = rest.match(/^([\d.]+) min\(c, ([\d.]+)\) h$/))) return oklchToRgb([+m[1], Math.min(C, +m[2]), H]);
+    else throw new Error('unsupported: ' + str);
+    return oklchToRgb([nl, C, H]);
+  }
+  if (str.startsWith('oklch(')) {
+    const [l, c, h] = str.slice(6, -1).split(/\s+/).map(Number);
+    return oklchToRgb([l, c, h]);
+  }
+  throw new Error('unsupported: ' + str);
+}
+function luminance(rgb) {
+  const [r, g, b] = rgb.map(lin);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+function contrast(a, b) {
+  const [x, y] = [luminance(evalColour(a)), luminance(evalColour(b))].sort((p, q) => q - p);
+  return (x + 0.05) / (y + 0.05);
+}
 
-  it('ignores an unrecognized stored palette value', async () => {
-    localStorage.setItem('palette', 'not-a-real-palette');
-    const Palette = await loadPalette();
-    Palette.init();
-    Palette.PALETTES.forEach((p) => {
-      expect(document.documentElement.classList.contains(p)).toBe(false);
-    });
-  });
+const SWEEP = ['#ffffff', '#000000', '#808080', '#fffde0', '#ff0000', '#0000ff', '#00ff00', '#ffff00', '#c04828', '#2f7fae'];
 
-  it('supports a custom paletteKey option', async () => {
-    localStorage.setItem('custom-palette', 'forest');
-    const Palette = await loadPalette();
-    Palette.init({ paletteKey: 'custom-palette' });
-    expect(document.documentElement.classList.contains('forest')).toBe(true);
-  });
+describe('contrast sweep (WCAG AA) in both schemes', () => {
+  for (const dark of [false, true]) {
+    for (const p of SWEEP) {
+      it(`${dark ? 'dark' : 'light'} primary ${p} with a range of secondaries`, async () => {
+        const Palette = await loadPalette();
+        for (const s of SWEEP) {
+          const v = Palette.vars({ primary: p, secondary: s }, dark);
+          const ctx = `${p}/${s}`;
+          for (const bg of ['--pal-bg', '--pal-surface', '--pal-surface-2']) {
+            expect(contrast(v['--pal-text'], v[bg]), `text on ${bg} ${ctx}`).toBeGreaterThanOrEqual(4.5);
+            expect(contrast(v['--pal-heading'], v[bg]), `heading on ${bg} ${ctx}`).toBeGreaterThanOrEqual(4.5);
+            expect(contrast(v['--pal-muted'], v[bg]), `muted on ${bg} ${ctx}`).toBeGreaterThanOrEqual(4.5);
+            expect(contrast(v['--pal-link'], v[bg]), `link on ${bg} ${ctx}`).toBeGreaterThanOrEqual(4.5);
+            expect(contrast(v['--pal-accent2'], v[bg]), `accent2 on ${bg} ${ctx}`).toBeGreaterThanOrEqual(4.5);
+            expect(contrast(v['--pal-border-strong'], v[bg]), `border on ${bg} ${ctx}`).toBeGreaterThanOrEqual(3);
+          }
+          expect(contrast(v['--pal-btn-text'], v['--pal-btn']), `button ${ctx}`).toBeGreaterThanOrEqual(4.5);
+          expect(contrast(v['--pal-sel-text'], v['--pal-sel-bg']), `selection ${ctx}`).toBeGreaterThanOrEqual(4.5);
+          expect(contrast(v['--pal-code-text'], v['--pal-code-bg']), `code ${ctx}`).toBeGreaterThanOrEqual(4.5);
+          expect(contrast('#ffffff', v['--pal-title-a']), `title a ${ctx}`).toBeGreaterThanOrEqual(4.5);
+          expect(contrast('#ffffff', v['--pal-title-b']), `title b ${ctx}`).toBeGreaterThanOrEqual(3);
+        }
+      });
+    }
+  }
 });
 
-describe('Palette.init — palette buttons', () => {
-  it('marks the button matching the stored palette as active after DOMContentLoaded', async () => {
-    document.body.innerHTML =
-      '<button class="palette-btn" data-palette="ocean"></button>' +
-      '<button class="palette-btn" data-palette="forest"></button>';
-    localStorage.setItem('palette', 'ocean');
+describe('Palette.init defaults and application', () => {
+  it('works with no options and applies the sunset default', async () => {
     const Palette = await loadPalette();
     Palette.init();
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    const [oceanBtn, forestBtn] = document.querySelectorAll('.palette-btn');
-    expect(oceanBtn.classList.contains('active')).toBe(true);
-    expect(forestBtn.classList.contains('active')).toBe(false);
+    expect(Palette.get()).toEqual({ primary: '#c04828', secondary: '#2f7fae', custom: false });
+    expect(root().style.getPropertyValue('--pal-primary')).toBe('#c04828');
+    expect(root().style.getPropertyValue('--pal-link')).toContain('oklch(from');
   });
 
-  it('clicking the active palette button clears the palette', async () => {
-    document.body.innerHTML = '<button class="palette-btn" data-palette="ocean"></button>';
-    localStorage.setItem('palette', 'ocean');
+  it('applies stored custom colours on init without waiting for DOMContentLoaded', async () => {
+    localStorage.setItem('palette-custom', JSON.stringify({ primary: '#008080', secondary: '#FF69B4' }));
     const Palette = await loadPalette();
     Palette.init();
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    const btn = document.querySelector('.palette-btn');
-    btn.click();
-
-    expect(localStorage.getItem('palette')).toBeNull();
-    expect(document.documentElement.classList.contains('ocean')).toBe(false);
-    expect(btn.classList.contains('active')).toBe(false);
+    expect(Palette.get()).toEqual({ primary: '#008080', secondary: '#ff69b4', custom: true });
+    expect(root().style.getPropertyValue('--pal-primary')).toBe('#008080');
+    expect(root().style.getPropertyValue('--pal-secondary')).toBe('#ff69b4');
   });
 
-  it('clicking a different palette button switches to it', async () => {
-    document.body.innerHTML =
-      '<button class="palette-btn" data-palette="ocean"></button>' +
-      '<button class="palette-btn" data-palette="forest"></button>';
-    localStorage.setItem('palette', 'ocean');
-    const Palette = await loadPalette();
-    Palette.init();
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    const [oceanBtn, forestBtn] = document.querySelectorAll('.palette-btn');
-    forestBtn.click();
-
-    expect(localStorage.getItem('palette')).toBe('forest');
-    expect(document.documentElement.classList.contains('forest')).toBe(true);
-    expect(document.documentElement.classList.contains('ocean')).toBe(false);
-    expect(forestBtn.classList.contains('active')).toBe(true);
-    expect(oceanBtn.classList.contains('active')).toBe(false);
-  });
-});
-
-describe('Palette.init — day/night scheme', () => {
-  it('applies the dark class when the stored scheme is dark', async () => {
+  it('rebuilds variables when the scheme is dark', async () => {
     localStorage.setItem('scheme', 'dark');
     const Palette = await loadPalette();
     Palette.init();
-    expect(document.documentElement.classList.contains('dark')).toBe(true);
+    expect(root().classList.contains('dark')).toBe(true);
+    expect(root().style.getPropertyValue('--pal-bg')).toContain('0.16');
   });
+});
 
-  it('does not apply the dark class when the stored scheme is light', async () => {
-    localStorage.setItem('scheme', 'light');
+describe('persistence, reset', () => {
+  it('set() persists and applies; reset() clears storage and inline vars return to default', async () => {
     const Palette = await loadPalette();
     Palette.init();
-    expect(document.documentElement.classList.contains('dark')).toBe(false);
+    Palette.set({ primary: '#112233', secondary: '#ddeeff' });
+    expect(stored()).toEqual({ primary: '#112233', secondary: '#ddeeff' });
+    expect(root().style.getPropertyValue('--pal-primary')).toBe('#112233');
+    Palette.reset();
+    expect(localStorage.getItem('palette-custom')).toBeNull();
+    expect(Palette.get().custom).toBe(false);
+    expect(root().style.getPropertyValue('--pal-primary')).toBe('#c04828');
   });
 
-  it('toggles dark/light classes on the toggle element to match stored scheme', async () => {
-    document.body.innerHTML = '<button id="theme-toggle"></button>';
-    localStorage.setItem('scheme', 'light');
+  it('notifies onChange listeners', async () => {
     const Palette = await loadPalette();
-    Palette.init({ toggleId: 'theme-toggle' });
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    const toggle = document.getElementById('theme-toggle');
-    expect(toggle.classList.contains('light')).toBe(true);
-    expect(toggle.classList.contains('dark')).toBe(false);
+    Palette.init();
+    const fn = vi.fn();
+    Palette.onChange(fn);
+    Palette.set({ primary: '#112233', secondary: '#ddeeff' });
+    expect(fn.mock.calls.at(-1)[0].primary).toBe('#112233');
   });
 
-  it('clicking the toggle flips the scheme and persists it to localStorage', async () => {
-    document.body.innerHTML = '<button id="theme-toggle"></button>';
-    localStorage.setItem('scheme', 'light');
+  it('set() ignores invalid colours', async () => {
     const Palette = await loadPalette();
-    Palette.init({ toggleId: 'theme-toggle' });
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
+    Palette.init();
+    Palette.set({ primary: 'red;}', secondary: '#ddeeff' });
+    expect(localStorage.getItem('palette-custom')).toBeNull();
+    expect(Palette.get().custom).toBe(false);
+  });
+});
 
-    document.getElementById('theme-toggle').click();
+describe('migration from the legacy preset key', () => {
+  it('maps a preset name to its pair, then deletes the old key', async () => {
+    localStorage.setItem('palette', 'teal');
+    const Palette = await loadPalette();
+    Palette.init();
+    expect(stored()).toEqual({ primary: '#007c6e', secondary: '#cf386b' });
+    expect(localStorage.getItem('palette')).toBeNull();
+    expect(Palette.get().primary).toBe('#007c6e');
+  });
 
+  it('does not overwrite existing custom colours, but still removes the old key', async () => {
+    localStorage.setItem('palette', 'teal');
+    localStorage.setItem('palette-custom', JSON.stringify({ primary: '#111111', secondary: '#eeeeee' }));
+    const Palette = await loadPalette();
+    Palette.init();
+    expect(stored()).toEqual({ primary: '#111111', secondary: '#eeeeee' });
+    expect(localStorage.getItem('palette')).toBeNull();
+  });
+
+  it('removes an unknown legacy value without creating custom colours', async () => {
+    localStorage.setItem('palette', '"><script>');
+    const Palette = await loadPalette();
+    Palette.init();
+    expect(localStorage.getItem('palette')).toBeNull();
+    expect(localStorage.getItem('palette-custom')).toBeNull();
+    expect(Palette.get().custom).toBe(false);
+  });
+});
+
+describe('invalid storage is ignored safely', () => {
+  for (const bad of ['{"primary":"red;}"}', '{"primary":"#fff","secondary":"#000"}', 'not json', '[]', 'null', '{"primary":"#12345g","secondary":"#123456"}']) {
+    it(`ignores ${bad}`, async () => {
+      localStorage.setItem('palette-custom', bad);
+      const Palette = await loadPalette();
+      Palette.init();
+      expect(Palette.get()).toEqual({ primary: '#c04828', secondary: '#2f7fae', custom: false });
+      expect(root().getAttribute('style') || '').not.toContain('red;}');
+    });
+  }
+});
+
+describe('day/night scheme', () => {
+  function mockOs(initial) {
+    let dark = initial === 'dark';
+    const listeners = [];
+    window.matchMedia = () => ({
+      get matches() { return dark; },
+      addEventListener: (_t, fn) => listeners.push(fn),
+    });
+    return (next) => { dark = next === 'dark'; listeners.forEach((fn) => fn()); };
+  }
+
+  it('defaults to the OS scheme when nothing is stored', async () => {
+    mockOs('dark');
+    const Palette = await loadPalette();
+    Palette.init();
+    expect(root().classList.contains('dark')).toBe(true);
+    expect(root().getAttribute('data-scheme')).toBe('dark');
+  });
+
+  it('live-updates on OS change only while there is no explicit choice', async () => {
+    const setOs = mockOs('light');
+    const Palette = await loadPalette();
+    Palette.init();
+    expect(root().classList.contains('dark')).toBe(false);
+    setOs('dark');
+    expect(root().classList.contains('dark')).toBe(true);
+    Palette.setScheme('light');
+    setOs('dark');
+    expect(root().classList.contains('dark')).toBe(false);
+    Palette.followOs();
+    expect(root().classList.contains('dark')).toBe(true);
+  });
+
+  it('toggleScheme persists under `scheme`, re-derives vars, and survives a reload', async () => {
+    mockOs('light');
+    let Palette = await loadPalette();
+    Palette.init();
+    const light = root().style.getPropertyValue('--pal-bg');
+    Palette.toggleScheme();
     expect(localStorage.getItem('scheme')).toBe('dark');
-    expect(document.documentElement.classList.contains('dark')).toBe(true);
-    expect(document.getElementById('theme-toggle').classList.contains('dark')).toBe(true);
+    expect(root().style.getPropertyValue('--pal-bg')).not.toBe(light);
+    Palette = await loadPalette();
+    root().classList.remove('dark');
+    Palette.init();
+    expect(root().classList.contains('dark')).toBe(true);
   });
 
-  it('invokes the onScheme callback with the current scheme', async () => {
-    document.body.innerHTML = '<button id="theme-toggle"></button>';
-    localStorage.setItem('scheme', 'light');
-    const onScheme = vi.fn();
+  it('ignores an invalid stored scheme and notifies onScheme', async () => {
+    mockOs('light');
+    localStorage.setItem('scheme', 'blue');
     const Palette = await loadPalette();
-    Palette.init({ toggleId: 'theme-toggle', onScheme });
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    const toggleEl = document.getElementById('theme-toggle');
-    expect(onScheme.mock.calls.at(-1)[0]).toBe('light');
-    expect(onScheme.mock.calls.at(-1)[1]).toBe(toggleEl);
-
-    onScheme.mockClear();
-    toggleEl.click();
-    expect(onScheme.mock.calls.at(-1)[0]).toBe('dark');
+    const seen = [];
+    Palette.init({ onScheme: (s) => seen.push(s) });
+    expect(seen[0]).toBe('light');
+    expect(Palette.setScheme('nope')).toBe(false);
   });
 });
 
-describe('Palette.init — trigger/popup', () => {
-  it('clicking the trigger toggles the open class on the popup', async () => {
-    document.body.innerHTML = '<button id="trigger"></button><div id="popup"></div>';
+describe('popup wiring', () => {
+  function markup() {
+    document.body.innerHTML = `
+      <button id="t" aria-expanded="false"></button>
+      <div id="p" hidden>
+        <input id="a" type="color" value="#c04828"><input id="b" type="color" value="#2f7fae">
+        <button id="r">Reset</button><span id="n"></span>
+      </div>
+      <p id="out">outside</p>`;
+  }
+  async function boot() {
+    markup();
     const Palette = await loadPalette();
-    Palette.init({ triggerId: 'trigger', popupId: 'popup' });
+    Palette.init({ triggerId: 't', popupId: 'p', customIds: { primary: 'a', secondary: 'b', reset: 'r', note: 'n' } });
     document.dispatchEvent(new window.Event('DOMContentLoaded'));
+    return Palette;
+  }
 
-    const trigger = document.getElementById('trigger');
-    const popup = document.getElementById('popup');
-
-    trigger.click();
-    expect(popup.classList.contains('open')).toBe(true);
-  });
-
-  it('clicking outside the popup and trigger closes the popup', async () => {
-    document.body.innerHTML =
-      '<button id="trigger"></button><div id="popup"></div><div id="outside"></div>';
-    const Palette = await loadPalette();
-    Palette.init({ triggerId: 'trigger', popupId: 'popup' });
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    const popup = document.getElementById('popup');
-    document.getElementById('trigger').click();
-    expect(popup.classList.contains('open')).toBe(true);
-
-    document.getElementById('outside').click();
-    expect(popup.classList.contains('open')).toBe(false);
-  });
-
-  it('clicking a palette button closes an open popup', async () => {
-    document.body.innerHTML =
-      '<button id="trigger"></button>' +
-      '<div id="popup"><button class="palette-btn" data-palette="ocean"></button></div>';
-    const Palette = await loadPalette();
-    Palette.init({ triggerId: 'trigger', popupId: 'popup' });
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    const popup = document.getElementById('popup');
-    document.getElementById('trigger').click();
-    expect(popup.classList.contains('open')).toBe(true);
-
-    document.querySelector('.palette-btn').click();
-    expect(popup.classList.contains('open')).toBe(false);
-  });
-});
-
-describe('Palette.init — custom colours', () => {
-  const customOpts = {
-    btnSelector: '.palette-btn',
-    customIds: { primary: 'p1', secondary: 'p2', reset: 'rst', note: 'nt' },
-  };
-  const customDom =
-    '<button class="palette-btn" data-palette="ocean"></button>' +
-    '<input id="p1" type="color" value="#c04828"><input id="p2" type="color" value="#2f7fae">' +
-    '<button id="rst"></button><span id="nt"></span>';
-  const vars = () => ['--pal-base', '--pal-base-2'].map((v) => document.documentElement.style.getPropertyValue(v));
-
-  it('applies stored custom colours on init and reflects them in the inputs', async () => {
-    document.body.innerHTML = customDom;
-    localStorage.setItem('palette-custom', JSON.stringify({ primary: '#118833', secondary: '#aa22cc' }));
-    const Palette = await loadPalette();
-    Palette.init(customOpts);
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    expect(vars()[0]).toContain('#118833');
-    expect(vars()[1]).toContain('#aa22cc');
-    expect(document.getElementById('p1').value).toBe('#118833');
-  });
-
-  it('clicking a preset clears custom colours, storage and the inputs', async () => {
-    document.body.innerHTML = customDom;
-    localStorage.setItem('palette-custom', JSON.stringify({ primary: '#118833', secondary: '#aa22cc' }));
-    const Palette = await loadPalette();
-    Palette.init(customOpts);
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    document.querySelector('.palette-btn').click();
-
-    expect(vars()).toEqual(['', '']);
+  it('colour inputs update the palette immediately; reset restores defaults', async () => {
+    const Palette = await boot();
+    const a = document.getElementById('a');
+    a.value = '#008080';
+    a.dispatchEvent(new window.Event('input', { bubbles: true }));
+    expect(stored().primary).toBe('#008080');
+    expect(Palette.get().custom).toBe(true);
+    document.getElementById('r').click();
     expect(localStorage.getItem('palette-custom')).toBeNull();
-    expect(localStorage.getItem('palette')).toBe('ocean');
-    expect(document.getElementById('p1').value).toBe('#c04828');
+    expect(a.value).toBe('#c04828');
   });
 
-  it('ignores invalid stored custom colours (no CSS injection)', async () => {
-    document.body.innerHTML = customDom;
-    localStorage.setItem('palette-custom', '{"primary":"red;}","secondary":"#aa22cc"}');
-    const Palette = await loadPalette();
-    Palette.init(customOpts);
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    expect(vars()).toEqual(['', '']);
-    expect(document.getElementById('p1').value).toBe('#c04828');
+  it('trigger toggles aria-expanded; outside click and Escape close; inputs do not', async () => {
+    await boot();
+    const t = document.getElementById('t');
+    const p = document.getElementById('p');
+    t.click();
+    expect(t.getAttribute('aria-expanded')).toBe('true');
+    expect(p.classList.contains('open')).toBe(true);
+    document.getElementById('a').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
+    expect(t.getAttribute('aria-expanded')).toBe('true');
+    document.getElementById('out').click();
+    expect(t.getAttribute('aria-expanded')).toBe('false');
+    t.click();
+    document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(t.getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('input events store valid colours and Reset clears them', async () => {
-    document.body.innerHTML = customDom;
-    const Palette = await loadPalette();
-    Palette.init(customOpts);
-    document.dispatchEvent(new window.Event('DOMContentLoaded'));
-
-    const p1 = document.getElementById('p1');
-    p1.value = '#336699';
-    p1.dispatchEvent(new window.Event('input', { bubbles: true }));
-    expect(JSON.parse(localStorage.getItem('palette-custom')).primary).toBe('#336699');
-
-    document.getElementById('rst').click();
-    expect(localStorage.getItem('palette-custom')).toBeNull();
-    expect(vars()).toEqual(['', '']);
+  it('shows the readability note only when a colour had to be adjusted', async () => {
+    await boot();
+    const a = document.getElementById('a');
+    a.value = '#fffde0';
+    a.dispatchEvent(new window.Event('input', { bubbles: true }));
+    expect(document.getElementById('n').textContent).toMatch(/adjusted for readability/);
+    a.value = '#8a3a1a';
+    document.getElementById('b').value = '#2a6590';
+    a.dispatchEvent(new window.Event('input', { bubbles: true }));
+    expect(document.getElementById('n').textContent).toBe('');
   });
 });
