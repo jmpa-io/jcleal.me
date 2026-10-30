@@ -493,6 +493,9 @@ svg.feather {
   gap: 5px !important;
 }
 
+/* no rubber-band / bounce past the page edges (it drags the footer around) */
+html, body { overscroll-behavior: none; }
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: #f0f0f0; }
