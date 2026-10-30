@@ -28,6 +28,18 @@ make generate-website
 ```
 See the [./Makefile](./Makefile) if you're interested in seeing the commands specific to this repository without cloning. You could also dive into the [./Makefile.common.mk](./Makefile.common.mk) but it's quite large.
 
+## Testing
+
+Unit tests (`static/js/palette.js`): `npm test`.
+
+Playwright screenshot + interaction tests (system Chrome, external requests blocked) live in [./e2e](./e2e):
+```bash
+hugo --baseURL http://localhost:4171/ --destination public   # build the site (or `make compile-website`, then SITE_DIR=../dist/public)
+cd e2e && npm ci && npx playwright test                      # run (SITE_DIR defaults to ../public)
+npm run test:update                                          # refresh the committed baselines in e2e/*-snapshots
+```
+Or just `make e2e`.
+
 
 ## Running locally?
 
