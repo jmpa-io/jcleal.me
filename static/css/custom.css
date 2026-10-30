@@ -87,14 +87,21 @@ html.dark .tag-bar-count { color: #555; }
   .tag-bar-label { width: 80px; }
 }
 
-/* ── palette themes — moved to css/palette.css (shared across jmpa-io sites) ── */
+/* ── palette: colours come from palette.js (--pal-*), these are the no-JS sunset fallbacks ── */
 :root {
-  --jc-heading:      var(--pal-heading);
-  --jc-accent:       var(--pal-accent);
-  --jc-accent-hover: var(--pal-accent-hover);
-  --jc-btn:          var(--pal-btn);
-  --jc-muted:        var(--pal-muted);
-  --jc-subtle:       var(--pal-subtle);
+  --jc-heading:      var(--pal-heading, #5a1a0a);
+  --jc-accent:       var(--pal-link, #b43c1e);
+  --jc-accent-hover: var(--pal-link-hover, #8a2a10);
+  --jc-btn:          var(--pal-btn, #b43c1e);
+  --jc-muted:        var(--pal-muted, #6a4a42);
+  --jc-subtle:       color-mix(in oklch, var(--jc-accent) 12%, transparent);
+  --jc-bg:           var(--pal-bg, #fff);
+  --jc-surface:      var(--pal-surface, #f7f7f7);
+  --jc-surface-2:    var(--pal-surface-2, #eeeeee);
+  --jc-border:       var(--pal-border, #e0e0e0);
+  --jc-border-strong: var(--pal-border-strong, #999);
+  --jc-text:         var(--pal-text, #333);
+  --jc-accent2:      var(--pal-accent2, #1f6f95);
 }
 
 /* ── global accent overrides (beats main.css #3700ff rules) ── */
@@ -240,16 +247,16 @@ html.dark .jc-palette-trigger:hover {
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--jc-surface);
+  border: 1px solid var(--jc-border);
   border-radius: 6px;
-  padding: 6px;
+  padding: 10px 12px;
   gap: 6px;
   flex-direction: row;
   box-shadow: 0 4px 14px rgba(0,0,0,0.12);
   z-index: 200;
   white-space: nowrap;
-  width: 320px;
+  width: 270px;
   max-width: calc(100vw - 32px);
 }
 .jc-palette-popup.open { display: flex; flex-wrap: wrap; }
@@ -259,13 +266,10 @@ html.dark .jc-palette-trigger:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 12px;
-  margin-top: 2px;
-  padding-top: 8px;
-  border-top: 1px solid #ddd;
   font-size: 0.75rem;
   white-space: normal;
 }
-html.dark .jc-palette-custom { border-top-color: #444; }
+html.dark .jc-palette-custom { border-top-color: transparent; }
 .jc-palette-custom label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
 .jc-palette-custom input[type='color'] {
   width: 26px;
@@ -290,24 +294,10 @@ html.dark .jc-palette-custom { border-top-color: #444; }
 .jc-custom-note { flex-basis: 100%; color: var(--jc-muted); }
 .jc-custom-note:empty { display: none; }
 html.dark .jc-palette-popup {
-  background: #222;
-  border-color: #444;
+  background: var(--jc-surface);
+  border-color: var(--jc-border);
   box-shadow: 0 4px 14px rgba(0,0,0,0.5);
 }
-.jc-palette-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 4px;
-  border: 2px solid transparent;
-  transition: border-color 0.1s;
-  text-decoration: none !important;
-}
-.jc-palette-btn:hover { border-color: #aaa; border-bottom: 2px solid #aaa !important; }
-.jc-palette-btn.active { border-color: #333; }
-html.dark .jc-palette-btn.active { border-color: #eee; }
 
 /* date: flat column beside the title, monospace (Fira Code) instead of serif */
 .post-header .meta .date {
@@ -542,6 +532,69 @@ html, body { overscroll-behavior: none; }
 * { scrollbar-width: thin; scrollbar-color: var(--jc-accent) #f0f0f0; }
 html.dark ::-webkit-scrollbar-track { background: #111; }
 html.dark * { scrollbar-color: var(--jc-accent) #111; }
+
+/* ── whole-look theme: every surface/text role follows the two picked colours (palette.js roles) ──
+   Nested under html:root:root so it outranks dark.css / the per-component literals above. */
+html:root:root {
+  background-color: var(--jc-bg);
+  color: var(--jc-text);
+  color-scheme: light;
+  &.dark { color-scheme: dark; }
+  & body { background-color: var(--jc-bg) !important; color: var(--jc-text) !important; }
+  & p, & li, & td, & th, & dd, & dt, & .intro-text, & .post-content { color: var(--jc-text) !important; }
+  & h1, & h2, & h3, & h4, & h5, & h6,
+  & .site-title a, & .post .title a, & .list .posts .post-header h1.title a { color: var(--jc-heading) !important; }
+  & a, & a:hover { color: var(--jc-accent) !important; }
+  & a:hover { color: var(--jc-accent-hover) !important; opacity: 1; }
+  & :focus-visible { outline: 2px solid var(--pal-focus, var(--jc-accent)); outline-offset: 2px; }
+  & ::selection { background: var(--pal-sel-bg, var(--jc-subtle)) !important; color: var(--pal-sel-text, inherit) !important; }
+  & hr, & .header nav, & .footer, & .footer-inner { border-color: var(--jc-border) !important; }
+  & blockquote { border-color: var(--jc-accent) !important; color: var(--jc-muted); background: var(--jc-surface); }
+  & table th, & table td { border-color: var(--jc-border); }
+  & table tbody tr:nth-of-type(even) { background-color: var(--jc-surface) !important; }
+  & :not(pre) > code { background: var(--pal-code-bg, var(--jc-surface-2)) !important; color: var(--pal-code-text, var(--jc-text)) !important; }
+  & .highlight, & pre { background-color: var(--pal-pre-bg, #282a36) !important; }
+  & .highlight pre { background-color: var(--pal-pre-bg, #282a36) !important; }
+  /* header / footer / meta */
+  & .header .site-description p, & .post-header .meta, & .post-header .meta .date,
+  & .list .posts .post-header .meta, & .footer, & .footer a, & .footer-sep { color: var(--jc-muted) !important; }
+  & .footer a:hover { color: var(--jc-accent) !important; }
+  & .header .site-description a.scheme-toggle, & .jc-palette-trigger {
+    border-color: var(--jc-border-strong) !important;
+    color: var(--jc-muted);
+  }
+  & .header .site-description a.scheme-toggle:hover, & .jc-palette-trigger:hover {
+    border-color: var(--jc-accent) !important;
+    color: var(--jc-accent) !important;
+  }
+  /* tags + buttons */
+  & .post .tags a, & .post-tags .tags a, & .pdf-download-btn, & .ws-pdf-btn {
+    border-color: var(--jc-btn) !important;
+    color: var(--jc-btn) !important;
+    background: transparent;
+  }
+  & .pdf-download-btn:hover, & .ws-pdf-btn:hover { background: var(--pal-btn, var(--jc-btn)) !important; color: var(--pal-btn-text, #fff) !important; }
+  /* cards, labs, workshop sidebar, tag chart */
+  & .labs-card, & .labs-tag-item { background: var(--jc-surface); border-color: var(--jc-border); }
+  & .labs-card:hover, & .labs-tag-item:hover { border-color: var(--jc-accent); }
+  & .labs-card-body strong { color: var(--jc-heading); }
+  & .labs-card-body span, & .labs-tag, & .labs-tag-count, & .ws-sidebar h4, & .ws-sidebar a,
+  & .ws-pdf-bar, & .tag-chart-heading, & .tag-chart-total, & .tag-bar-count { color: var(--jc-muted); }
+  & .labs-card-body em, & .ws-sidebar a.active, & .ws-sidebar a:hover, & .tag-bar-label { color: var(--jc-accent); }
+  & .labs-tag-count { background: var(--jc-surface-2); }
+  & .labs-tag { border-color: var(--jc-border-strong); }
+  & .ws-sidebar, & .ws-pdf-bar, & .tag-chart-heading { border-color: var(--jc-border); }
+  & .ws-sidebar a.active { border-left-color: var(--jc-accent); }
+  & .tag-bar-track { background: var(--jc-surface-2); }
+  /* popup */
+  & .jc-palette-popup { background: var(--jc-surface); border-color: var(--jc-border-strong); color: var(--jc-text); }
+  & .jc-palette-custom input[type='color'], & .jc-palette-custom button { border-color: var(--jc-border-strong); color: var(--jc-text); background: var(--jc-surface-2); }
+  & .jc-palette-custom button:hover { border-color: var(--jc-accent); color: var(--jc-accent); }
+  & .jc-custom-note { color: var(--jc-muted); }
+}
+/* scrollbars follow the surface colours */
+html:root:root ::-webkit-scrollbar-track { background: var(--jc-surface); }
+html:root:root * { scrollbar-color: var(--jc-accent) var(--jc-surface); }
 
 @media (max-width: 768px) {
   /* header — smaller avatar and title */

@@ -28,9 +28,17 @@ make generate-website
 ```
 See the [./Makefile](./Makefile) if you're interested in seeing the commands specific to this repository without cloning. You could also dive into the [./Makefile.common.mk](./Makefile.common.mk) but it's quite large.
 
+## Colours and day/night
+
+Two colours (Primary, Secondary) from the popup next to the header toggle drive every surface, text, border, link, button, selection and code colour (derived with CSS `oklch()` relative colours, lightness clamped so text stays WCAG AA in both modes; an "adjusted for readability" note appears when needed). Default is the sunset pair. There are no presets.
+
+- Stored in `localStorage['palette-custom']` as `{primary, secondary}` (6-digit hex; anything else is ignored). The old `palette` preset key is migrated once, then deleted.
+- Day/night follows `prefers-color-scheme` (live) until the sun/moon toggle is used; the explicit choice is stored in `localStorage['scheme']`.
+- Both are applied by `static/js/palette.js` from `<head>` so there is no flash. `palette.js` is the master copy, mirrored byte-for-byte into art.jmpa.io, jmpa.io, portfolio.jcleal.me and startpage.jcleal.me.
+
 ## Testing
 
-Unit tests (`static/js/palette.js`): `npm test`.
+Unit tests (`static/js/palette.js`, includes a WCAG contrast sweep, migration, invalid storage, scheme): `npm test`.
 
 Playwright screenshot + interaction tests (system Chrome, external requests blocked) live in [./e2e](./e2e):
 ```bash
