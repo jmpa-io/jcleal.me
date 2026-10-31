@@ -99,8 +99,10 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
+  # Deploys only run from main; tests run on every branch.
   deploy:
     needs: [build-website, test-website]
+    if: github.ref == 'refs/heads/main'
     uses: jmpa-io/pipelines/.github/workflows/40-deploy-to-aws.yml@main
     with:
       templates: website
@@ -111,6 +113,7 @@ jobs:
 
   upload-website:
     needs: [deploy]
+    if: github.ref == 'refs/heads/main'
     uses: jmpa-io/pipelines/.github/workflows/50-upload-artifacts-to-s3.yml@main
     with:
       artifact: jcleal.me
