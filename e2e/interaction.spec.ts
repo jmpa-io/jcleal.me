@@ -185,6 +185,17 @@ test.describe('day/night scheme', () => {
     expect(await page.evaluate(() => (window as any).__early)).toBe(true);
   });
 
+  test('day/night toggle shows a visible icon in both schemes', async ({ page }) => {
+    for (const scheme of ['light', 'dark']) {
+      await page.emulateMedia({ colorScheme: scheme as 'light' | 'dark' });
+      await page.evaluate(() => localStorage.removeItem('scheme'));
+      await page.reload();
+      const svg = page.locator('#scheme-toggle svg');
+      await expect(svg).toBeVisible();
+      expect(await svg.locator('path, circle').count()).toBeGreaterThan(0);
+    }
+  });
+
   test('toggle persists under `scheme` across reload and beats the OS', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.reload();
