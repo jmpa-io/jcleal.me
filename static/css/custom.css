@@ -586,7 +586,13 @@ html:root:root {
   & hr, & .header nav, & .footer, & .footer-inner { border-color: var(--jc-border) !important; }
   & blockquote { border-color: var(--jc-accent) !important; color: var(--jc-muted); background: var(--jc-surface); }
   & table th, & table td { border-color: var(--jc-border); }
+  /* links inside running text need a non-colour cue (WCAG 1.4.1) */
+  & p a, & :is(.post > ul, .post > ol, .markdown) a:not(.pdf-download-btn) { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  & p a:hover, & :is(.post > ul, .post > ol, .markdown) a:not(.pdf-download-btn):hover { text-decoration: none; }
+  & table th { background-color: var(--jc-surface-2) !important; }
   & table tbody tr:nth-of-type(even) { background-color: var(--jc-surface) !important; }
+  /* Dracula's comment colour (#6272a4) is 3.65:1 on the dark code background; lift it to pass AA. */
+  & .highlight span[style*="#6272a4"] { color: oklch(0.78 0.05 270) !important; }
   & :not(pre) > code { background: var(--pal-code-bg, var(--jc-surface-2)) !important; color: var(--pal-code-text, var(--jc-text)) !important; }
   & .highlight, & pre { background-color: var(--pal-pre-bg, #282a36) !important; }
   & .highlight pre { background-color: var(--pal-pre-bg, #282a36) !important; }
