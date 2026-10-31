@@ -75,7 +75,7 @@ compile-website: dist/public
 		-v "$(PWD)/public" \
 		-v "$(PWD)/resources" \
 		$(REPO)/hugo \
-		--log --destination $<
+		--logLevel info --destination $<
 	@test -z "$(CI)" || echo "##[endgroup]"
 
 generate-resume-pdf: ## Generates 'resume.pdf', using pandoc.
