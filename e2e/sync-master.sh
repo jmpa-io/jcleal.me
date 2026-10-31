@@ -4,7 +4,8 @@
 #   e2e/sync-master.sh check    verify only (non-zero exit on drift)
 # Masters: static/js/palette.js (palette.js location differs per repo, see PALETTE below),
 #          e2e/playwright.config.ts, e2e/helpers/palette-helpers.ts, e2e/server.mjs.
-# Per-repo (never mirrored): e2e/site.ts and the *.spec.ts files.
+# Per-repo (never mirrored): e2e/site.ts and the *.spec.ts files. The CRT files (public/crt.{js,css}) are owned by
+# portfolio.jcleal.me only (jmpa.io no longer has a CRT), so they are not mirrored.
 set -euo pipefail
 unset CDPATH
 
@@ -26,8 +27,6 @@ for repo in "${!PALETTE[@]}"; do
   pairs=("static/js/palette.js:${PALETTE[$repo]}")
   # startpage runs the master unit tests too (vitest + jsdom).
   [ "$repo" = startpage.jcleal.me ] && pairs+=("static/js/palette.test.js:src/js/palette.test.js")
-  # the Win98 CRT masters live in jmpa.io and are mirrored to portfolio.
-  [ "$repo" = portfolio.jcleal.me ] && pairs+=("../jmpa.io/static/js/crt.js:public/crt.js" "../jmpa.io/static/css/crt.css:public/crt.css")
   for f in "${E2E[@]}"; do pairs+=("$f:$f"); done
   for pair in "${pairs[@]}"; do
     src="$here/${pair%%:*}"
