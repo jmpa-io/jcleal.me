@@ -499,6 +499,12 @@ blockquote {
 /* GitHub links: the official mark sits inline before the text, 16px, in the link colour */
 .gh-link .gh-mark { width: 16px; height: 16px; display: inline-block; vertical-align: -3px; margin-right: 6px; }
 
+/* the theme underlines every hovered link in hard-coded purple; in the footer use a thin palette-coloured underline, with the icon link kept on one line */
+.footer a:hover,
+.footer a:focus-visible { border-bottom: 0 !important; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.footer .gh-link { display: inline-flex; align-items: center; white-space: nowrap; }
+.footer .gh-link .gh-mark { vertical-align: 0; }
+
 /* tag chips, top of a post/workshop under the title and above the content */
 .tag-chips {
   display: flex;
