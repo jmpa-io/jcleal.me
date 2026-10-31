@@ -49,5 +49,10 @@ name = "Contact"
 url = "/contact"
 weight = 5
 
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 6
+
 [taxonomies]
   tag = "tags"

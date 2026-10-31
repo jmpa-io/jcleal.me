@@ -1,0 +1,8 @@
+{{- /* Compact tag chips, linking to /tags/<tag>/. Usage: {{ partial "tag-chips.html" .Params.tags }} */ -}}
+{{- with . }}
+<ul class="tag-chips" aria-label="Tags">
+  {{- range . }}
+  <li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}/"><i data-feather="tag"></i>{{ . }}</a></li>
+  {{- end }}
+</ul>
+{{- end }}
