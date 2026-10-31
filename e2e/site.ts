@@ -12,7 +12,7 @@ export const site: {
   openPicker?: (page: Page) => Promise<void>;
 } = {
   name: 'jcleal.me',
-  port: 4171,
+  port: Number(process.env.E2E_PORT || 4171), // E2E_PORT runs a second checkout/worktree beside the first.
   siteDir: '../public',
   projects: [
     { name: 'desktop', use: { viewport: { width: 1280, height: 800 } } },

@@ -12,25 +12,30 @@ unset CDPATH
 here="$(cd "$(dirname "$0")/.." && pwd)"
 root="$(cd "$here/.." && pwd)"
 mode="${1:-sync}"
+# Worktrees sit beside the original checkouts as <repo>-audit: mirror into siblings carrying the same suffix.
+suffix=""
+case "$(basename "$here")" in *-audit) suffix="-audit" ;; esac
 
-# repo -> where its palette.js mirror lives
-declare -A PALETTE=(
-  [art.jmpa.io]=static/js/palette.js
-  [jmpa.io]=static/js/palette.js
-  [portfolio.jcleal.me]=public/palette.js
-  [startpage.jcleal.me]=src/js/palette.js
-)
+# repo -> where its palette.js mirror lives (a function, not declare -A, so it runs on macOS bash 3.2)
+REPOS="art.jmpa.io jmpa.io portfolio.jcleal.me startpage.jcleal.me"
+palette_path() {
+  case "$1" in
+    art.jmpa.io|jmpa.io) echo static/js/palette.js ;;
+    portfolio.jcleal.me) echo public/palette.js ;;
+    startpage.jcleal.me) echo src/js/palette.js ;;
+  esac
+}
 E2E=(e2e/playwright.config.ts e2e/helpers/palette-helpers.ts e2e/server.mjs)
 
 rc=0
-for repo in "${!PALETTE[@]}"; do
-  pairs=("static/js/palette.js:${PALETTE[$repo]}")
+for repo in $REPOS; do
+  pairs=("static/js/palette.js:$(palette_path "$repo")")
   # startpage runs the master unit tests too (vitest + jsdom).
   [ "$repo" = startpage.jcleal.me ] && pairs+=("static/js/palette.test.js:src/js/palette.test.js")
   for f in "${E2E[@]}"; do pairs+=("$f:$f"); done
   for pair in "${pairs[@]}"; do
     src="$here/${pair%%:*}"
-    dst="$root/$repo/${pair##*:}"
+    dst="$root/$repo$suffix/${pair##*:}"
     if [ "$mode" = "sync" ]; then
       mkdir -p "$(dirname "$dst")"
       cp "$src" "$dst"
