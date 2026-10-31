@@ -7,8 +7,13 @@ on:
     - 'cf/**'
     - 'cmd/**'
     - 'content/**'
+    - 'e2e/**'
     - 'layouts/**'
+    - 'resume/**'
     - 'static/**'
+    - 'themes/**'
+    - 'package*.json'
+    - 'vitest.config.js'
     - 'config.toml'
     - '**Dockerfile'
     - 'Makefile*'
@@ -51,8 +56,51 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  test-website:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout.
+        uses: actions/checkout@v4
+
+      - name: Checkout theme submodule.
+        run: git submodule update --init themes/hugo-ink
+
+      - name: Setup node.
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            e2e/package-lock.json
+
+      - name: Run unit tests (palette.js).
+        run: npm ci && npm test
+
+      # The base URL and hugo version must match e2e/site.ts and cmd/hugo/Dockerfile.
+      - name: Build website for e2e.
+        run: >-
+          docker run --rm -v "$PWD:/src" -w /src hugomods/hugo:exts-0.139.0
+          hugo --baseURL http://localhost:4171/ --destination public --quiet
+
+      - name: Run e2e tests (Playwright, system Chrome).
+        working-directory: e2e
+        run: npm ci && npx playwright test
+
+      - name: Upload e2e report.
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report
+          path: |
+            e2e/playwright-report
+            e2e/test-results
+          if-no-files-found: ignore
+          retention-days: 7
+
   deploy:
-    needs: [build-website]
+    needs: [build-website, test-website]
     uses: jmpa-io/pipelines/.github/workflows/40-deploy-to-aws.yml@main
     with:
       templates: website
@@ -72,7 +120,7 @@ jobs:
       AWS_RUNNER_ROLE_NAME: ${{ secrets.AWS_RUNNER_ROLE_NAME }}
 
   post-to-slack:
-    needs: [lint, build-website, deploy, upload-website]
+    needs: [lint, build-website, test-website, deploy, upload-website]
     if: always()
     uses: jmpa-io/pipelines/.github/workflows/99-post-to-slack.yml@main
     with:
