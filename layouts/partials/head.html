@@ -11,13 +11,13 @@
 		{{- if isset .Site.Params "subtitle" -}}
 		<p>{{ .Site.Params.Subtitle | markdownify }}</p>
 		{{- end -}}
-		<nav class="nav social">
+		<nav class="nav social" aria-label="Social links and display settings">
 			<ul class="flat">
 				{{- range $index, $key := .Site.Params.Social -}}
 					<li><a href="{{ $key.url }}" title="{{ $key.name }}"><i data-feather="{{ $key.icon }}"></i></a></li>
 				{{- end -}}
 		    <li class="jc-palette-wrap" id="jc-palette-wrap">
-		      <a href="#" class="jc-palette-trigger" id="jc-palette-trigger" aria-label="Colour theme" title="Colour theme">
+		      <a href="#" class="jc-palette-trigger" id="jc-palette-trigger" role="button" aria-haspopup="true" aria-controls="jc-palette-popup" aria-label="Colour theme" title="Colour theme">
 		        <svg width="13" height="13" viewBox="0 0 13 13" id="jc-palette-trigger-dot">
 		          <path d="M6.5,1.5 A5,5 0 0,1 6.5,11.5 Z" fill="var(--jc-accent)"/>
 		          <path d="M6.5,1.5 A5,5 0 0,0 6.5,11.5 Z" fill="var(--jc-btn)"/>
@@ -33,13 +33,13 @@
 		      </div>
 		    </li>
 		    {{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") -}}
-		    	<li><a href="#" class="scheme-toggle" id="scheme-toggle"><i data-feather="moon"></i></a></li>
+		    	<li><a href="#" class="scheme-toggle" id="scheme-toggle" role="button" aria-label="Toggle light or dark mode"><i data-feather="moon"></i></a></li>
 		    {{- end -}}
 			</ul>
 		</nav>
 	</div>
 
-	<nav class="nav">
+	<nav class="nav" aria-label="Main">
 		<ul class="flat">
 			{{ range .Site.Menus.main }}
 			<li>
