@@ -36,6 +36,19 @@ Two colours (Primary, Secondary) from the popup next to the header toggle drive 
 - Day/night follows `prefers-color-scheme` (live) until the sun/moon toggle is used; the explicit choice is stored in `localStorage['scheme']`.
 - Both are applied by `static/js/palette.js` from `<head>` so there is no flash. `palette.js` is the master copy, mirrored byte-for-byte into art.jmpa.io, jmpa.io, portfolio.jcleal.me and startpage.jcleal.me.
 
+## Tags
+
+Posts and workshop overviews show their tags as chips at the **top**, under the title/date and above the content
+(`layouts/partials/tag-chips.html`, used by `_default/single.html` and `partials/ws-layout.html`), each linking to `/tags/<tag>/`.
+**Browse all tags** from the **Tags** item in the header nav (`[[menu.main]]` in `config.toml`, -> `/tags/`), or via
+"Browse by tag" on the Workshops list.
+
+## GitHub links
+
+Every link to github.com shows the official GitHub mark (inline SVG, `currentColor`, 16px, `aria-hidden`, `data-icon="github"`):
+`layouts/partials/github-mark.html`. Markdown links to github.com get it automatically from the render-link hook
+(`layouts/_default/_markup/render-link.html`, which also opens them in a new tab); templates use the partial directly (footer).
+
 ## Testing
 
 Unit tests (`static/js/palette.js`, includes a WCAG contrast sweep, migration, invalid storage, scheme): `npm test`.
