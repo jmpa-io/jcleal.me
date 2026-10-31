@@ -12,7 +12,7 @@ export const test = base.extend({
     attempts.set(page, seen);
     await page.context().route('**/*', (route) => {
       const url = route.request().url();
-      // the site loads feather-icons from a CDN; stub it so the inline feather.replace() doesn't throw offline.
+      // feather is self-hosted now; stub it so the icon replacement never depends on rendering the bundle.
       if (url.includes('feather')) return route.fulfill({ contentType: 'text/javascript', body: 'window.feather={replace(){},icons:{moon:{toSvg:()=>"<svg/>"},sun:{toSvg:()=>"<svg/>"}}}' });
       if (/^https?:\/\/(localhost|127\.0\.0\.1)[:/]/.test(url)) return route.continue();
       seen.push(url);

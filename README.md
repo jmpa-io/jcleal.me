@@ -59,7 +59,11 @@ hugo --baseURL http://localhost:4171/ --destination public   # build the site (o
 cd e2e && npm ci && npx playwright test                      # run (SITE_DIR defaults to ../public)
 npm run test:update                                          # refresh the committed baselines in e2e/*-snapshots
 ```
-Or just `make e2e`.
+Or just `make e2e` (builds into `dist/e2e` with the matching base URL, then runs the suite). The unit and e2e suites run in CI before anything deploys.
+
+## Security
+
+The CloudFront distribution (`cf/website/template.yml`) sends a response-headers policy: `Content-Security-Policy` (`script-src 'self'`, no third-party origins), HSTS, `X-Frame-Options: DENY`, `X-Content-Type-Options`, `Referrer-Policy` and `Permissions-Policy`. That only works because the site has **no third-party requests and no inline scripts**: fonts and feather icons are self-hosted and the small init scripts live in `static/js/` (`e2e/hygiene.spec.ts` guards this). Keep it that way, or update the policy in the template alongside the change. Missing pages return a real 404 (`layouts/404.html`).
 
 ### Shared masters (this repo is the master)
 
