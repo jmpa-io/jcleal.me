@@ -142,8 +142,9 @@ serve: dist/public
 
 PHONY += generate-website generate-resume-pdf generate-workshop-pdfs serve
 
-e2e: ## Runs the Playwright screenshot + interaction tests against dist/public (run `make compile-website` first).
-	cd e2e && npm ci && SITE_DIR=../dist/public npx playwright test
+e2e: ## Builds the site for the Playwright suite (base URL + hugo version must match e2e/site.ts) and runs it.
+	docker run --rm -v "$(PWD):/src" -w /src hugomods/hugo:exts-0.139.0 hugo --baseURL http://localhost:4171/ --destination dist/e2e --quiet
+	cd e2e && npm ci && SITE_DIR=../dist/e2e npx playwright test
 
 PHONY += e2e
 
