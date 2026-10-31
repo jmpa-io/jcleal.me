@@ -24,6 +24,10 @@ E2E=(e2e/playwright.config.ts e2e/helpers/palette-helpers.ts e2e/server.mjs)
 rc=0
 for repo in "${!PALETTE[@]}"; do
   pairs=("static/js/palette.js:${PALETTE[$repo]}")
+  # startpage runs the master unit tests too (vitest + jsdom).
+  [ "$repo" = startpage.jcleal.me ] && pairs+=("static/js/palette.test.js:src/js/palette.test.js")
+  # the Win98 CRT masters live in jmpa.io and are mirrored to portfolio.
+  [ "$repo" = portfolio.jcleal.me ] && pairs+=("../jmpa.io/static/js/crt.js:public/crt.js" "../jmpa.io/static/css/crt.css:public/crt.css")
   for f in "${E2E[@]}"; do pairs+=("$f:$f"); done
   for pair in "${pairs[@]}"; do
     src="$here/${pair%%:*}"
