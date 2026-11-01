@@ -3,7 +3,7 @@
 #   e2e/sync-master.sh          copy + verify
 #   e2e/sync-master.sh check    verify only (non-zero exit on drift)
 # Masters: static/js/palette.js (palette.js location differs per repo, see PALETTE below),
-#          e2e/playwright.config.ts, e2e/helpers/palette-helpers.ts, e2e/server.mjs.
+#          e2e/playwright.config.ts, e2e/helpers/palette-helpers.ts, e2e/server.mjs, e2e/modal.spec.ts.
 # Per-repo (never mirrored): e2e/site.ts and the *.spec.ts files. The CRT files (public/crt.{js,css}) are owned by
 # portfolio.jcleal.me only (jmpa.io no longer has a CRT), so they are not mirrored.
 set -euo pipefail
@@ -25,7 +25,7 @@ palette_path() {
     startpage.jcleal.me) echo src/js/palette.js ;;
   esac
 }
-E2E=(e2e/playwright.config.ts e2e/helpers/palette-helpers.ts e2e/server.mjs)
+E2E=(e2e/playwright.config.ts e2e/helpers/palette-helpers.ts e2e/server.mjs e2e/modal.spec.ts)
 
 rc=0
 for repo in $REPOS; do

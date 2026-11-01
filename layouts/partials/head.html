@@ -6,7 +6,7 @@
 			</a>
 		</div>
 	{{ end }}
-	<h1 class="site-title"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
+	<h1 class="site-title"><a href="{{ .Site.BaseURL }}"><img class="brand-logo" src="/logo-64.png" alt="" width="32" height="32" />{{ .Site.Title }}</a></h1>
 	<div class="site-description">
 		{{- if isset .Site.Params "subtitle" -}}
 		<p>{{ .Site.Params.Subtitle | markdownify }}</p>
@@ -23,14 +23,7 @@
 		          <path d="M6.5,1.5 A5,5 0 0,0 6.5,11.5 Z" fill="var(--jc-btn)"/>
 		        </svg>
 		      </a>
-		      <div class="jc-palette-popup" id="jc-palette-popup">
-		        <div class="jc-palette-custom">
-		          <label>Primary <input type="color" id="jc-custom-primary" value="#c04828"></label>
-		          <label>Secondary <input type="color" id="jc-custom-secondary" value="#2f7fae"></label>
-		          <button type="button" id="jc-custom-reset">Reset</button>
-		          <span class="jc-custom-note" id="jc-custom-note" role="status"></span>
-		        </div>
-		      </div>
+		      <div class="jc-palette-popup" id="jc-palette-popup"></div>
 		    </li>
 		    {{- if or (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") -}}
 		    	<li><a href="#" class="scheme-toggle" id="scheme-toggle" role="button" aria-label="Toggle light or dark mode"><i data-feather="moon"></i></a></li>
