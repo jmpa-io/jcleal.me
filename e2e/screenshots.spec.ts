@@ -1,5 +1,6 @@
 import { test, expect } from './fixtures';
 import type { Page } from '@playwright/test';
+import { ensureScheme } from './helpers/palette-helpers';
 
 const fill = (page: Page, sel: string, value: string) =>
   page.locator(sel).evaluate((el: HTMLInputElement, v) => {
@@ -21,22 +22,25 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => document.fonts.ready);
 });
 
-test('home light', ({ page }) => shot(page, 'home-light', { fullPage: true }));
+test('home light', async ({ page }) => {
+  await ensureScheme(page, 'light');
+  await shot(page, 'home-light', { fullPage: true });
+});
 
 test('home dark', async ({ page }) => {
-  await page.locator('#scheme-toggle').click();
+  await ensureScheme(page, 'dark');
   await shot(page, 'home-dark', { fullPage: true });
 });
 
 for (const [name, [p, s]] of Object.entries(PAIRS)) {
   for (const scheme of ['light', 'dark']) {
     test(`${name} page (${scheme})`, async ({ page }) => {
-      if (scheme === 'dark') await page.locator('#scheme-toggle').click();
+      await ensureScheme(page, scheme as 'light' | 'dark');
       await page.evaluate(([p, s]) => (window as any).Palette.set({ primary: p, secondary: s }), [p, s]);
       await shot(page, `page-${name}-${scheme}`, { fullPage: true });
     });
     test(`${name} popup (${scheme})`, async ({ page }) => {
-      if (scheme === 'dark') await page.locator('#scheme-toggle').click();
+      await ensureScheme(page, scheme as 'light' | 'dark');
       await popup(page);
       await fill(page, '#jc-custom-primary', p);
       await fill(page, '#jc-custom-secondary', s);
