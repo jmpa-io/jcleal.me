@@ -19,6 +19,7 @@
       {{ end }}
     </aside>
     <div class="ws-main">
+      {{ partial "tag-chips.html" $ctx.Params.tags }}
       {{ if $pdfPath }}
       <div class="ws-pdf-bar">
         <span>Download the full workshop as a PDF - free.</span>
