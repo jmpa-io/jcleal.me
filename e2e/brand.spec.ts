@@ -24,14 +24,12 @@ test('hoodie favicon, apple-touch-icon, brand logo and share image resolve as im
   }
 });
 
-test('header logo loads under the CSP with no violations and does not overflow at 390px', async ({ page }) => {
+test('the header title has no logo image and the page does not overflow at 390px', async ({ page }) => {
   const problems: string[] = [];
   page.on('console', (m) => { if (/Content Security Policy|Refused to/i.test(m.text())) problems.push(m.text()); });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
-  const logo = page.locator('.brand-logo');
-  await expect(logo).toBeVisible();
-  expect(await logo.evaluate((i: HTMLImageElement) => i.complete && i.naturalWidth > 0)).toBe(true);
+  await expect(page.locator('.site-title img')).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(problems).toEqual([]);
 });

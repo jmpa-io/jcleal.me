@@ -237,14 +237,6 @@ html.dark .jc-palette-trigger:hover {
 .jc-palette-trigger:hover svg circle { opacity: 0.65; }
 
 /* palette picker */
-.brand-logo {
-  width: 32px;
-  height: 32px;
-  margin-right: 10px;
-  vertical-align: -5px;
-  border-radius: 6px;
-}
-.header .site-title a { display: inline-flex; align-items: center; }
 .jc-palette-wrap {
   position: relative;
   display: inline-flex;
@@ -265,6 +257,8 @@ html.dark .jc-palette-trigger:hover {
 
 /* date: flat column beside the title, monospace (Fira Code) instead of serif */
 .post-header .meta .date {
+  position: relative;
+  top: 5px;
   width: 64px;
   margin-right: 24px;
   text-align: center;
