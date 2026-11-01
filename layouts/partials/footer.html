@@ -1,8 +1,16 @@
 <div class="footer container wrapper">
-	<nav class="nav footer-inner">
-		<div class="footer-left">{{ dateFormat "2006" now }} | {{ with .Site.Copyright }}{{ . | safeHTML }} | {{ end }}A modified version of the <a href="https://github.com/knadh/hugo-ink">Ink <i data-feather="external-link"></i></a> theme on <a href="https://gohugo.io">Hugo <i data-feather="external-link"></i></a></div>
-		<div class="footer-right"><a href="https://github.com/jmpa-io/jcleal.me"><i data-feather="github"></i> Source code</a>{{ if or (hasPrefix .RelPermalink "/workshops") (hasPrefix .RelPermalink "/bash-101") (hasPrefix .RelPermalink "/docker-101") }} | <a href="https://jmpa.io">jmpa.io <i data-feather="external-link"></i></a>{{ end }}</div>
+	<nav class="footer-inner">
+		<div class="footer-left">
+			<span>&copy; {{ dateFormat "2006" now }}{{ with .Site.Copyright }} {{ . | safeHTML }}{{ else }} Jordan Cleal{{ end }}</span>
+			<span class="footer-sep">&middot;</span>
+			<span>Built with <a href="https://gohugo.io">Hugo</a> and a modified <a class="gh-link" href="https://github.com/knadh/hugo-ink" target="_blank" rel="noopener noreferrer">{{ partial "github-mark.html" }}<span>Ink</span></a> theme</span>
+		</div>
+		<div class="footer-right">
+			<a class="gh-link" href="https://github.com/jmpa-io/jcleal.me" target="_blank" rel="noopener noreferrer">{{ partial "github-mark.html" }}<span>Source code</span></a>
+			<span class="footer-sep">&middot;</span>
+			<a href="https://jmpa.io">jmpa.io</a>
+		</div>
 	</nav>
 </div>
 
-<script>feather.replace()</script>
+<script src="{{ .Site.BaseURL }}js/icons-init.js"></script>
