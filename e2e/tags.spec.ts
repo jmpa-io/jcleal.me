@@ -1,5 +1,5 @@
 import { test, expect } from './fixtures';
-import { contrastFailures, emulateScheme, settleStyles } from './helpers/palette-helpers';
+import { contrastFailures, pinScheme, settleStyles } from './helpers/palette-helpers';
 
 const POST = '/posts/my-caricatures/';
 
@@ -39,7 +39,7 @@ test.describe('tags on a post', () => {
 
   test('chips wrap inside the page and meet AA in both schemes', async ({ page }) => {
     for (const scheme of ['light', 'dark'] as const) {
-      await emulateScheme(page, scheme);
+      await pinScheme(page, scheme);
       await page.goto(POST);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
       const vw = page.viewportSize()!.width;
@@ -55,7 +55,7 @@ test.describe('tags on a post', () => {
 
   for (const scheme of ['light', 'dark'] as const) {
     test(`screenshot post ${scheme}`, async ({ page }) => {
-      await emulateScheme(page, scheme);
+      await pinScheme(page, scheme);
       await page.goto(POST);
       await page.evaluate(() => document.fonts.ready);
       await expect(page).toHaveScreenshot(`post-tags-${scheme}.png`);

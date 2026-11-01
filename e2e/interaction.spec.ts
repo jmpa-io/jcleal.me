@@ -1,11 +1,13 @@
 import { test, expect } from './fixtures';
-import { contrastFailures } from './helpers/palette-helpers';
+import { contrastFailures, ensureScheme } from './helpers/palette-helpers';
 import type { Page } from '@playwright/test';
 
 const PRIMARY = '#jc-custom-primary';
 const SECONDARY = '#jc-custom-secondary';
 const VARS = ['--pal-primary', '--pal-secondary', '--pal-link', '--pal-bg'];
+const BLUE = ['#2f6fd6', '#5aa0d8']; // jcleal.me's own default pair; it opens in the dark scheme.
 const PAIRS: [string, string][] = [
+  ['#2f6fd6', '#5aa0d8'],
   ['#c04828', '#2f7fae'],
   ['#008080', '#ff69b4'],
   ['#fffde0', '#ffffff'],
@@ -14,6 +16,8 @@ const PAIRS: [string, string][] = [
   ['#808080', '#808080'],
   ['#ff0000', '#0000ff'],
 ];
+
+const isDark = (page: Page) => page.evaluate(() => document.documentElement.classList.contains('dark'));
 
 const openPopup = async (page: Page) => {
   await page.locator('#jc-palette-trigger').click();
@@ -44,15 +48,15 @@ test.beforeEach(async ({ page }) => {
 test('no preset swatches remain', async ({ page }) => {
   await openPopup(page);
   await expect(page.locator('.jc-palette-btn')).toHaveCount(0);
-  await expect(page.locator(PRIMARY)).toHaveValue('#c04828');
-  await expect(page.locator(SECONDARY)).toHaveValue('#2f7fae');
+  await expect(page.locator(PRIMARY)).toHaveValue(BLUE[0]);
+  await expect(page.locator(SECONDARY)).toHaveValue(BLUE[1]);
   await expect(page.locator('#jc-custom-reset')).toBeVisible();
 });
 
 test('popup opens, closes on outside click and Escape, not on colour input use', async ({ page }) => {
   await openPopup(page);
   await setColour(page, PRIMARY, '#336699');
-  await page.locator('.jc-palette-custom label').first().click();
+  await page.locator('.pm-row label').first().click();
   await expect(page.locator('#jc-palette-popup')).toHaveClass(/open/);
   await page.locator('h3').first().click();
   await expect(page.locator('#jc-palette-popup')).not.toHaveClass(/open/);
@@ -64,7 +68,7 @@ test('popup opens, closes on outside click and Escape, not on colour input use',
 
 for (const scheme of ['light', 'dark']) {
   test(`colours drive the whole look: bg, text, headings, links, code, footer (${scheme})`, async ({ page }) => {
-    if (scheme === 'dark') await page.locator('#scheme-toggle').click();
+    await ensureScheme(page, scheme as 'light' | 'dark');
     await expect(page.locator('html')).toHaveClass(scheme === 'dark' ? /dark/ : /^(?!.*dark)/);
     const read = async () => ({
       bg: await prop(page, 'body', 'background-color'),
@@ -112,15 +116,16 @@ test('Reset restores defaults and clears storage', async ({ page }) => {
   await page.locator('#jc-custom-reset').click();
   await expect(page.locator('#jc-palette-popup')).toHaveClass(/open/);
   expect(await stored(page)).toBeNull();
-  await expect(page.locator(PRIMARY)).toHaveValue('#c04828');
-  await expect(page.locator(SECONDARY)).toHaveValue('#2f7fae');
-  expect((await inline(page))[0]).toBe('#c04828');
+  await expect(page.locator(PRIMARY)).toHaveValue(BLUE[0]);
+  await expect(page.locator(SECONDARY)).toHaveValue(BLUE[1]);
+  expect((await inline(page))[0]).toBe(BLUE[0]);
+  expect(await isDark(page)).toBe(true);
 });
 
 for (const scheme of ['light', 'dark']) {
   for (const [p, s] of PAIRS) {
     test(`every visible text node keeps WCAG AA with ${p}/${s} (${scheme})`, async ({ page }) => {
-      if (scheme === 'dark') await page.locator('#scheme-toggle').click();
+      await ensureScheme(page, scheme as 'light' | 'dark');
       await openPopup(page);
       await setCustom(page, p, s);
       const bad = await contrastFailures(page, 4.5);
@@ -132,6 +137,7 @@ for (const scheme of ['light', 'dark']) {
 
 test('"adjusted" note appears for out-of-range picks and disappears for in-range ones', async ({ page }) => {
   await openPopup(page);
+  await ensureScheme(page, 'light');
   await setCustom(page, '#fffde0', '#fffde0');
   await expect(page.locator('#jc-custom-note')).not.toBeEmpty();
   await setCustom(page, '#8a3a20', '#2a6590');
@@ -142,8 +148,8 @@ for (const bad of ['{"primary":"red;}"}', '{"primary":"#12345","secondary":"#aa2
   test(`corrupt stored value is ignored: ${bad}`, async ({ page }) => {
     await page.evaluate((v) => localStorage.setItem('palette-custom', v), bad);
     await page.reload();
-    expect((await inline(page))[0]).toBe('#c04828');
-    await expect(page.locator(PRIMARY)).toHaveValue('#c04828');
+    expect((await inline(page))[0]).toBe(BLUE[0]);
+    await expect(page.locator(PRIMARY)).toHaveValue(BLUE[0]);
   });
 }
 
@@ -161,15 +167,13 @@ test('overscroll fix and footer layout', async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-const isDark = (page: Page) => page.evaluate(() => document.documentElement.classList.contains('dark'));
-
 test.describe('day/night scheme', () => {
   for (const os of ['light', 'dark'] as const) {
-    test(`defaults to the OS scheme (${os}) with no stored choice`, async ({ page }) => {
+    test(`opens dark by default whatever the OS prefers (${os}) when nothing is stored`, async ({ page }) => {
       await page.emulateMedia({ colorScheme: os });
       await page.evaluate(() => localStorage.removeItem('scheme'));
       await page.reload();
-      expect(await isDark(page)).toBe(os === 'dark');
+      expect(await isDark(page)).toBe(true);
       expect(await page.evaluate(() => localStorage.getItem('scheme'))).toBeNull();
     });
   }
@@ -196,26 +200,24 @@ test.describe('day/night scheme', () => {
     }
   });
 
-  test('toggle persists under `scheme` across reload and beats the OS', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'light' });
-    await page.reload();
+  test('an explicit toggle persists under `scheme` across reload and beats the dark default', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'dark' });
     await page.locator('#scheme-toggle').click();
-    expect(await isDark(page)).toBe(true);
-    expect(await page.evaluate(() => localStorage.getItem('scheme'))).toBe('dark');
+    expect(await isDark(page)).toBe(false);
+    expect(await page.evaluate(() => localStorage.getItem('scheme'))).toBe('light');
     await page.reload();
-    expect(await isDark(page)).toBe(true);
+    expect(await isDark(page)).toBe(false);
   });
 
-  test('OS change live-updates only while there is no explicit choice', async ({ page }) => {
+  test('OS changes do not override the dark default or an explicit choice', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.evaluate(() => localStorage.removeItem('scheme'));
     await page.reload();
-    await page.emulateMedia({ colorScheme: 'dark' });
-    await expect.poll(() => isDark(page)).toBe(true);
+    expect(await isDark(page)).toBe(true);
     await page.locator('#scheme-toggle').click();
     await expect.poll(() => isDark(page)).toBe(false);
-    await page.emulateMedia({ colorScheme: 'light' });
     await page.emulateMedia({ colorScheme: 'dark' });
+    await page.emulateMedia({ colorScheme: 'light' });
     await page.waitForTimeout(200);
     expect(await isDark(page)).toBe(false);
   });
