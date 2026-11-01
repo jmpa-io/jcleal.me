@@ -6,7 +6,7 @@
 			</a>
 		</div>
 	{{ end }}
-	<h1 class="site-title"><a href="{{ .Site.BaseURL }}"><img class="brand-logo" src="/logo-64.png" alt="" width="32" height="32" />{{ .Site.Title }}</a></h1>
+	<h1 class="site-title"><a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a></h1>
 	<div class="site-description">
 		{{- if isset .Site.Params "subtitle" -}}
 		<p>{{ .Site.Params.Subtitle | markdownify }}</p>
@@ -19,8 +19,8 @@
 		    <li class="jc-palette-wrap" id="jc-palette-wrap">
 		      <a href="#" class="jc-palette-trigger" id="jc-palette-trigger" role="button" aria-haspopup="true" aria-controls="jc-palette-popup" aria-label="Colour theme" title="Colour theme">
 		        <svg width="13" height="13" viewBox="0 0 13 13" id="jc-palette-trigger-dot">
-		          <path d="M6.5,1.5 A5,5 0 0,1 6.5,11.5 Z" fill="var(--jc-accent)"/>
-		          <path d="M6.5,1.5 A5,5 0 0,0 6.5,11.5 Z" fill="var(--jc-btn)"/>
+		          <path d="M6.5,1.5 A5,5 0 0,1 6.5,11.5 Z" fill="var(--pal-secondary, #2f7fae)"/>
+		          <path d="M6.5,1.5 A5,5 0 0,0 6.5,11.5 Z" fill="var(--pal-primary, #c04828)"/>
 		        </svg>
 		      </a>
 		      <div class="jc-palette-popup" id="jc-palette-popup"></div>
