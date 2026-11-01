@@ -19,6 +19,7 @@ pygmentscodefencesguesssyntax = true
     mainSections = ["posts"]
     subtitle = "Senior Platform Engineer - CI/CD, observability, automation."
     avatar = "/my-face.jpg"
+    images = ["og-image.png"] # share image (Open Graph + Twitter card), resolved against baseURL
     mode = "dark"
     customCSS = "css/custom.css"
 
