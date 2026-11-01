@@ -98,6 +98,8 @@ test('modal fits a 390px viewport with no horizontal overflow', async ({ page })
   const box = (await page.locator('.pm').boundingBox())!;
   expect(box.x).toBeGreaterThanOrEqual(0);
   expect(box.x + box.width).toBeLessThanOrEqual(390);
+  expect(box.y).toBeGreaterThanOrEqual(0);
+  expect(box.y + 80).toBeLessThan(844); // the open modal starts on screen, not below the fold
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   expect(await page.locator('.pm').evaluate((e) => e.scrollWidth <= e.clientWidth)).toBe(true);
 });
