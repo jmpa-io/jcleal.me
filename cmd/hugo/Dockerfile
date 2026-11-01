@@ -1,4 +1,5 @@
-FROM klakegg/hugo:0.93.2-alpine
+# NOTE: keep in step with the hugo version used by the e2e suite (see README).
+FROM hugomods/hugo:exts-0.139.0
 
 # setup user.
 ARG UID=1000

@@ -18,8 +18,8 @@ pygmentscodefencesguesssyntax = true
 [params]
     mainSections = ["posts"]
     subtitle = "Senior Platform Engineer - CI/CD, observability, automation."
-    featherIconsCDN = true
     avatar = "/my-face.jpg"
+    images = ["og-image.png"] # share image (Open Graph + Twitter card), resolved against baseURL
     mode = "dark"
     customCSS = "css/custom.css"
 
@@ -48,6 +48,11 @@ weight = 4
 name = "Contact"
 url = "/contact"
 weight = 5
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 6
 
 [taxonomies]
   tag = "tags"

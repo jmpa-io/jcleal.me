@@ -1,0 +1,8 @@
+{{- /* Links to github.com get the official mark and open in a new tab; everything else renders as a plain link. */ -}}
+{{- $host := "" -}}
+{{- with urls.Parse .Destination }}{{ $host = .Host }}{{ end -}}
+{{- if or (eq $host "github.com") (eq $host "www.github.com") -}}
+<a class="gh-link" href="{{ .Destination | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }} target="_blank" rel="noopener noreferrer">{{ partial "github-mark.html" }}<span>{{ .Text | safeHTML }}</span></a>
+{{- else -}}
+<a href="{{ .Destination | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- end -}}

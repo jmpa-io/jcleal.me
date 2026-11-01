@@ -58,6 +58,40 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: !Sub Access to ${Bucket}.
 
+  ResponseHeadersPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Condition: CreateResources
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: !Sub "${Environment}-${AWS::StackName}-security-headers"
+        Comment: Security headers for the static site (no third-party scripts, fonts or images).
+        SecurityHeadersConfig:
+          ContentSecurityPolicy:
+            Override: true
+            # Inline style attributes are used by a few pages; scripts are all same-origin files.
+            ContentSecurityPolicy: >-
+              default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';
+              img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none';
+              base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+          ContentTypeOptions:
+            Override: true
+          FrameOptions:
+            FrameOption: DENY
+            Override: true
+          ReferrerPolicy:
+            ReferrerPolicy: strict-origin-when-cross-origin
+            Override: true
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 31536000
+            IncludeSubdomains: false
+            Preload: false
+            Override: true
+        CustomHeadersConfig:
+          Items:
+            - Header: Permissions-Policy
+              Value: camera=(), microphone=(), geolocation=(), payment=()
+              Override: true
+
   Distribution:
     Type: AWS::CloudFront::Distribution
     Condition: CreateResources
@@ -81,14 +115,20 @@ Resources:
           TargetOriginId: S3Origin
           ForwardedValues:
             QueryString: true
+          ResponseHeadersPolicyId: !Ref ResponseHeadersPolicy
           ViewerProtocolPolicy: redirect-to-https
+        # S3 answers 403 (not 404) for missing keys when the origin has no ListBucket permission.
         CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 404
+            ResponsePagePath: /404.html
           - ErrorCode: 404
-            ResponseCode: 200
-            ResponsePagePath: /index.html
+            ResponseCode: 404
+            ResponsePagePath: /404.html
         PriceClass: PriceClass_All
         ViewerCertificate:
           AcmCertificateArn: !Ref AcmCertificateArn
+          MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
         Logging:
           Bucket: !Sub "${LogBucket}.s3.amazonaws.com"
