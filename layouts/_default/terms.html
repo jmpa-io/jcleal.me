@@ -39,7 +39,7 @@
         </div>
         {{ range $workshopTags }}
         {{ $pct := (div (mul .Count 100) $maxCount) }}
-        <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/" class="tag-bar-row">
+        <a href="{{ printf "tags/%s/" (.Name | urlize) | relURL }}" class="tag-bar-row">
           <span class="tag-bar-label">{{ .Name }}</span>
           <span class="tag-bar-track">
             <span class="tag-bar-fill tag-bar-fill--workshop" style="width: {{ $pct }}%"></span>
@@ -58,7 +58,7 @@
         </div>
         {{ range $postTags }}
         {{ $pct := (div (mul .Count 100) $maxCount) }}
-        <a href="{{ $.Site.BaseURL }}tags/{{ .Name | urlize }}/" class="tag-bar-row">
+        <a href="{{ printf "tags/%s/" (.Name | urlize) | relURL }}" class="tag-bar-row">
           <span class="tag-bar-label">{{ .Name }}</span>
           <span class="tag-bar-track">
             <span class="tag-bar-fill tag-bar-fill--post" style="width: {{ $pct }}%"></span>

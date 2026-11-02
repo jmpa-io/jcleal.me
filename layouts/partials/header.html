@@ -22,23 +22,24 @@
 	{{- template "_internal/schema.html" . -}}
 	{{- template "_internal/opengraph.html" . -}}
 	{{- template "_internal/twitter_cards.html" . -}}
-	<link rel="stylesheet" type="text/css" media="screen" href="{{ .Site.BaseURL }}css/normalize.css" />
-	<link rel="stylesheet" type="text/css" media="screen" href="{{ .Site.BaseURL }}css/main.css" />
+	{{/* Site-relative asset URLs: the CSP is 'self'-only, so assets must load from whichever host serves the page, not the baseURL host. */}}
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ "css/normalize.css" | relURL }}" />
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ "css/main.css" | relURL }}" />
 	{{- if isset .Site.Params "customcss" }}
-		<link rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}{{ .Site.Params.customCSS }}" />
+		<link rel="stylesheet" type="text/css" href="{{ .Site.Params.customCSS | relURL }}" />
 	{{ end }}
 
-        <link id="dark-scheme" rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}css/dark.css" />
+        <link id="dark-scheme" rel="stylesheet" type="text/css" href="{{ "css/dark.css" | relURL }}" />
         {{- if isset .Site.Params "customdarkcss" }}
-                <link id="dark-scheme" rel="stylesheet" type="text/css" href="{{ .Site.BaseURL }}{{ .Site.Params.customDarkCSS }}" />
+                <link id="dark-scheme" rel="stylesheet" type="text/css" href="{{ .Site.Params.customDarkCSS | relURL }}" />
         {{- end }}
 
 	{{ if or (isset .Site.Params "social") (eq .Site.Params.mode "auto") (eq .Site.Params.mode "dark") -}}
-		<script src="{{ .Site.BaseURL }}js/feather.min.js"></script>
+		<script src="{{ "js/feather.min.js" | relURL }}"></script>
 	{{ end }}
 	{{- if isset .Site.Params "customjs" -}}
-		{{- range .Site.Params.customJS }}<script src="{{ $.Site.BaseURL }}{{ . }}"></script>{{- end }}
+		{{- range .Site.Params.customJS }}<script src="{{ . | relURL }}"></script>{{- end }}
 	{{- end }}
-	<script src="{{ .Site.BaseURL }}js/palette.js"></script>
-	<script src="{{ .Site.BaseURL }}js/palette-init.js"></script>
+	<script src="{{ "js/palette.js" | relURL }}"></script>
+	<script src="{{ "js/palette-init.js" | relURL }}"></script>
 </head>
