@@ -72,11 +72,8 @@ Resources:
             ContentSecurityPolicy: >-
               default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';
               img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none';
-              base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+              base-uri 'self'; form-action 'self'; frame-ancestors https://portfolio.jcleal.me
           ContentTypeOptions:
-            Override: true
-          FrameOptions:
-            FrameOption: DENY
             Override: true
           ReferrerPolicy:
             ReferrerPolicy: strict-origin-when-cross-origin
