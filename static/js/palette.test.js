@@ -435,7 +435,7 @@ describe('shared colour panel', () => {
 });
 
 describe('Palette.init({ defaultScheme })', () => {
-  const BLUE = { primary: '#2f6fd6', secondary: '#5aa0d8' };
+  const BLUE = { primary: '#2f6fd6', secondary: '#000000' };
 
   it('uses the pinned scheme when nothing is stored, even if the OS is light', async () => {
     const P = await loadPalette();
