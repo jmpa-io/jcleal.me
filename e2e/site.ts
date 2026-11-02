@@ -14,7 +14,7 @@ export const site: {
   name: 'jcleal.me',
   port: Number(process.env.E2E_PORT || 4171), // E2E_PORT runs a second checkout/worktree beside the first.
   siteDir: '../public',
-  defaults: ['#2f6fd6', '#5aa0d8'], // blue on dark: the site's own default (palette-init.js defaultScheme: 'dark').
+  defaults: ['#2f6fd6', '#000000'], // blue on dark: the site's own default (palette-init.js defaultScheme: 'dark').
   projects: [
     { name: 'desktop', use: { viewport: { width: 1280, height: 800 } } },
     { name: 'mobile', use: { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 } },
