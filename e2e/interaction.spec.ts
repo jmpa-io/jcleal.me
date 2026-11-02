@@ -5,9 +5,9 @@ import type { Page } from '@playwright/test';
 const PRIMARY = '#jc-custom-primary';
 const SECONDARY = '#jc-custom-secondary';
 const VARS = ['--pal-primary', '--pal-secondary', '--pal-link', '--pal-bg'];
-const BLUE = ['#2f6fd6', '#5aa0d8']; // jcleal.me's own default pair; it opens in the dark scheme.
+const BLUE = ['#2f6fd6', '#000000']; // jcleal.me's own default pair; it opens in the dark scheme.
 const PAIRS: [string, string][] = [
-  ['#2f6fd6', '#5aa0d8'],
+  ['#2f6fd6', '#000000'],
   ['#c04828', '#2f7fae'],
   ['#008080', '#ff69b4'],
   ['#fffde0', '#ffffff'],
