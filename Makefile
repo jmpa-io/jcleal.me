@@ -158,6 +158,12 @@ e2e: ## Builds the site for the Playwright suite (base URL + hugo version must m
 
 PHONY += e2e
 
+screenshots: ## Builds like e2e and writes full-page PNGs to e2e/screenshots/ (asserting the page is really styled).
+	docker run --rm -v "$(PWD):/src" -w /src hugomods/hugo:exts-0.139.0 hugo --baseURL http://localhost:4171/ --destination dist/e2e --quiet
+	cd e2e && npm ci && SITE_DIR=../dist/e2e npx playwright test render.spec.ts
+
+PHONY += screenshots
+
 e2e-sync: ## Mirrors the shared palette.js + e2e masters (kept here) into the other four repos and verifies them.
 	bash e2e/sync-master.sh
 
