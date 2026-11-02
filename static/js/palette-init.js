@@ -1,5 +1,5 @@
 Palette.init({
-  defaults: { primary: '#2f6fd6', secondary: '#5aa0d8' },
+  defaults: { primary: '#2f6fd6', secondary: '#000000' },
   defaultScheme: 'dark',
   triggerId: 'jc-palette-trigger',
   popupId: 'jc-palette-popup',
