@@ -1,11 +1,12 @@
 <!-- markdownlint-disable MD041 MD010 -->
+[![./README.yml](https://github.com/jmpa-io/jcleal.me/actions/workflows/./README.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/./README.yml)[![./cicd.yml](https://github.com/jmpa-io/jcleal.me/actions/workflows/./cicd.yml/badge.svg)](https://github.com/jmpa-io/jcleal.me/actions/workflows/./cicd.yml)
+
 <p align="center">
-    <img src="docs/logo.png">
+  <img src="docs/logo.png"/>
 </p>
 
-## `jcleal.me`
+# ``
 
-```diff
 + 🌐 My resume website.
 ```
 
