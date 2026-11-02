@@ -1,7 +1,7 @@
 import { test, expect } from './fixtures';
 
 // The CloudFront policy from cf/website/template.yml (img-src 'self' data:), enforced here so a blocked logo fails the test.
-const CSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+const CSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors https://portfolio.jcleal.me";
 const ASSETS = ['/favicon.ico', '/favicon-32x32.png', '/favicon-64x64.png', '/apple-touch-icon.png', '/logo-64.png', '/og-image.png'];
 
 test.beforeEach(async ({ page }) => {
