@@ -1,5 +1,5 @@
 # NOTE: keep in step with the hugo version used by the e2e suite (see README).
-FROM hugomods/hugo:exts-0.139.0
+FROM hugomods/hugo:exts-0.154.5
 
 # setup user.
 ARG UID=1000
