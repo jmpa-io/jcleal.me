@@ -3,4 +3,4 @@
 	url = https://github.com/knadh/hugo-ink
 [submodule ".claude/config"]
 	path = .claude/config
-	url = https://github.com/jmpa-io/claude-config
+	url = https://github.com/jmpa-io/claude
