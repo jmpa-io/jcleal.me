@@ -1,26 +1,20 @@
+# Jordan Cleal.
+
 <mr.jordan.cleal+resume@gmail.com>
 
 AUS [+61 434 557 224](tel:+61434557224)
 
-[jcleal.me](https://jcleal.me) | [LinkedIn](https://linkedin.com/in/jordan-cleal) | [GitHub](https://github.com/jcleal)
+[jcleal.me](https://jcleal.me) · [jmpa.io](https://jmpa.io) · [LinkedIn](https://linkedin.com/in/jordan-cleal) · [GitHub (profile)](https://github.com/jcleal) · [GitHub (org)](https://github.com/jmpa-io)
 
 ### Summary.
 
-A passionate Senior Platform / DevOps Engineer focused on building high quality, performant, and maintainable software - with a strong background in automation, CI/CD, and platform engineering.
+A Senior Platform / DevOps Engineer with 8+ years building automation, CI/CD, and platform tooling - from architecture through implementation, testing, and documentation.
 
-* Competent in the design, creation, and deployment of solutions to cloud platforms.
+* Finds manual, error-prone processes and replaces them with repeatable, measured systems - often through self-built bots and direct API integrations - consistently saving teams hours and reducing cost.
 
-* Passionate about automation, particularly creating bots, automating manual processes, and ingesting data from APIs.
+* Builds for maintainability: consolidates test suites, documents thoroughly, and runs workshops so teams can operate independently of me.
 
-* Enthusiastic about learning new technologies, tools, and practices.
-
-* Confident with task management, and operating in the Agile environment.
-
-* Enthusiastic about CI/CD practices and getting the most out of CI/CD.
-
-* Problem-solving oriented.
-
-* Known for writing code and documentation that is reliable, maintainable, and reusable.
+* Comfortable owning a platform end-to-end - presenting direction to senior stakeholders, then doing the hands-on implementation myself.
 
 ### Skills.
 
@@ -28,7 +22,7 @@ A passionate Senior Platform / DevOps Engineer focused on building high quality,
 
 **Frameworks & Tools**: git, docker, docker compose, awscli, sam (AWS SAM), make, Ansible, OpenTelemetry; dabbled in Proxmox, k3s.
 
-**Security & Platform Tools**: CyberArk (PSM), Tanium, Artifactory, Snyk, Vault.
+**Security & Platform Tools**: CyberArk (PSM), Tanium, Artifactory, Snyk, HashiCorp Vault.
 
 **Cloud Vendors**: AWS - CloudFormation, Route53, CloudFront, API Gateway, S3 (Storage + Hosting), EC2, SSM (Automations + Parameter Store), Lambda, CloudWatch, MSK, Kinesis Data Firehose, DynamoDB, AMP + AMG; dabbled with Kinesis, SNS + SQS, EKS, OpenSearch + Kibana, Glue + Athena + QuickSight.
 
@@ -46,17 +40,17 @@ A passionate Senior Platform / DevOps Engineer focused on building high quality,
 
 Melbourne | October 2025 - Present
 
-* Built an automated deployment pipeline from scratch for patching Chrome and Chromedriver across CyberArk PSM hosts via Tanium and Artifactory, replacing a fully manual process. Rolled out across every environment from DEV to PROD with a scheduled workflow so new versions are picked up automatically, saving engineers 10-12 hours per week. Extended the pattern across 5-6 repositories so other teams could adopt it for their own dependencies.
+* Built an automated deployment pipeline from scratch for patching browser and driver dependencies across privileged-access infrastructure, replacing a fully manual process. Rolled out across every environment from DEV to PROD with a scheduled workflow so new versions are picked up automatically, saving engineers 10-12 hours per week. Extended the pattern across 5-6 repositories so other teams could adopt it for their own dependencies.
 
-* Recorded a ~70-minute end-to-end walkthrough of the Chrome/Chromedriver pipeline - covering both the Tanium side and the full code breakdown - so any team member could pick it up independently. Presented the work at the team's All Hands.
+* Recorded a ~70-minute end-to-end walkthrough of the pipeline - covering both the deployment tooling and the full code breakdown - so any team member could pick it up independently. Presented the work at the team's All Hands.
 
-* Developed and managed Ansible playbooks for on-premises CyberArk deployments, defining infrastructure configuration as code and enabling consistent, repeatable deployments across environments - automating a previously manual process, saving 8-10 hours per developer to patch instances, and improving the overall security posture of CyberArk at CBA.
+* Developed and managed Ansible playbooks for on-premises privileged-access management deployments, defining infrastructure configuration as code and enabling consistent, repeatable deployments across environments - automating a previously manual process, saving 8-10 hours per developer to patch instances, and improving the overall security posture of the platform.
 
-* Designed and built GitHub Actions CI/CD pipelines across multiple repositories, contributing reusable patterns back to CBA's org-wide GitHub Actions community and raising improvements to shared platform repositories such as `aap.config` and `observability-fleet-config`.
+* Designed and built GitHub Actions CI/CD pipelines across multiple repositories, contributing reusable patterns back to the organisation's shared GitHub Actions community and raising improvements to shared platform repositories.
 
 * Introduced Make as a standard entrypoint across CI/CD pipelines, giving teams a consistent way to run each other's applications - adopted across ~20 repositories.
 
-* Wrote automated Python test scripts for the CyberArk platform, including API-level tests for onboarding and offboarding, and added ~20 tests to support a CyberArk upgrade, consolidating the team's test suite in the process.
+* Wrote automated Python test scripts for the privileged-access platform, including API-level tests for onboarding and offboarding, and added ~20 tests to support a platform upgrade, consolidating the team's test suite in the process.
 
 * Ran 2 workshops for ~20-30 engineers each, promoting best practices including Makefiles as repository entrypoints, Docker, OpenTelemetry, and local development practices - informally mentoring graduate engineers on the team in the process.
 
@@ -65,13 +59,13 @@ Melbourne | October 2025 - Present
 
 April 2024 - October 2025
 
-Took time away from full-time employment to travel Europe and live in Edinburgh, Scotland. During this time, continued building and maintaining a personal homelab using Ansible, Proxmox, and k3s, and learning Neovim and Python.
+* Took time away from full-time employment to travel Europe and live in Edinburgh, Scotland. During this time, continued building and maintaining a personal homelab using Ansible, Proxmox, and k3s, and learning Neovim and Python.
 
 #### Senior DevOps Engineer, CI/CD team @ [MYOB](https://myob.com.au).
 
 Melbourne | March 2023 - April 2024
 
-* Guided the CI/CD team (3 DevOps Engineers, 1 Protege), improving team skills and practices, leading to a more cohesive and efficient development processes and confidence in abilities from team members.
+* Guided the CI/CD team (3 DevOps Engineers, 1 Protege), improving team skills and practices, leading to a more cohesive and efficient development process and confidence in abilities from team members.
 
 * Assisted in the design, architecture, documentation, and creation of a new centrally managed CI/CD platform (previously the CI/CD team was running a distributed one).
 
@@ -85,7 +79,7 @@ Melbourne | March 2023 - April 2024
 
 * Proposed, and implemented, an alternative for how authentication to an AWS account would work for centrally managed Buildkite agents. This resulted in a simplification to how Buildkite agents authenticate, and what a customer (a team at MYOB) needs to do to run their pipelines with these new Buildkite agents securely.
 
-* Proposed, and implemented, an observability strategy for collecting and sending observable data to Sumo Logic, using Open Telemetry collectors, for both centrally managed & existing distributed Buildkite agents. From this, crucial metrics about what is happening on the Buildkite agents are now able to be observed easily by all members of the team.
+* Proposed, and implemented, an observability strategy for collecting and sending observable data to Sumo Logic, using OpenTelemetry collectors, for both centrally managed & existing distributed Buildkite agents. From this, crucial metrics about what is happening on the Buildkite agents are now able to be observed easily by all members of the team.
 
 * Created a document for the CI/CD team outlining what is expected from them, at a technical level. This directed them to what they could focus on, instead of being overwhelmed by all the technologies in our industry.
 
@@ -95,21 +89,21 @@ Melbourne | March 2023 - April 2024
 
 Melbourne | December 2021 - March 2023
 
-* Spearheaded the creation of an all-in-one document for a centralized observability platform backed by a single observability vendor: gathering requirements from ~20 teams across the business, evaluating vendor offerings, driving conversations with key stakeholders, and providing tools to help drive decisions. This document, along with the team, was a core component in the acceptance of the proposed multi-million dollar direction by the business.
+* Spearheaded the creation of an all-in-one document for a centralised observability platform backed by a single observability vendor: gathering requirements from ~20 teams across the business, evaluating vendor offerings, driving conversations with key stakeholders, and providing tools to help drive decisions. This document, along with the team, was a core component in the acceptance of the proposed multi-million dollar direction by the business.
 
-* Assisted in the design, architecture, documentation, and creation of a centralized observability platform for logs, metrics, and traces. This platform is built using Open Telemetry collectors hosted in AWS Fargate, uses AWS MSK for a queue between ingress and egress microservices, and sends the received observability data to Sumo Logic.
+* Assisted in the design, architecture, documentation, and creation of a centralised observability platform for logs, metrics, and traces. This platform is built using OpenTelemetry collectors hosted in AWS Fargate, uses AWS MSK for a queue between ingress and egress microservices, and sends the received observability data to Sumo Logic.
 
-* Implemented an internal monitoring system for the centralized observability platform, allowing the team to have visibility into the overall performance of the system, through dashboards and alerts in AWS AMP + AMG.
+* Implemented an internal monitoring system for the centralised observability platform, allowing the team to have visibility into the overall performance of the system, through dashboards and alerts in AWS AMP + AMG.
 
-* Optimized the CI/CD pipeline for the centralized observability platform, reducing time-to-production from ~90 minutes to ~40 minutes though a multitude of optimizations (dynamically generated pipeline, different tiers of agents aka. instance types, splittings jobs across multiple agents).
+* Optimised the CI/CD pipeline for the centralised observability platform, reducing time-to-production from ~90 minutes to ~40 minutes through a multitude of optimisations (dynamically generated pipeline, different tiers of agents aka. instance types, splittings jobs across multiple agents).
 
 * Assisted in the deprecation of Jaeger across the business, saving the business ~35k per month in AWS costs.
 
-* Created an internal Buildkite plugin for teams to scan and upload results from a SonarQube scan to an internally managed SonarQube instance, saving teams the time and effort in writing this functionality into the own repositories.
+* Created an internal Buildkite plugin for teams to scan and upload results from a SonarQube scan to an internally managed SonarQube instance, saving teams the time and effort in writing this functionality into their own repositories.
 
 * Assisted in the design and creation of a Buildkite plugin to upload documentation to an internal Backstage.io service, saving teams the time and effort in writing this functionality into their own repositories.
 
-* Created a tool to automatically add a warning annotation when certain conditions are not met when running a build on a Linux Buildkite Agent, resulting in an uptick of the number of adoptions of the internal Backstage.io service.
+* Created a tool to automatically add a warning annotation when certain conditions are not met when running a build on a Linux Buildkite Agent, resulting in an uptick in adoption of the internal Backstage.io service.
 
 * Ran multiple day-long sessions for various Junior DevOps engineers, focused on writing Bash scripts, Go testing, CI/CD + Buildkite in general, and building Slack Apps, resulting in two nominations for the passion award by attendees.
 
@@ -117,53 +111,29 @@ Melbourne | December 2021 - March 2023
 
 Melbourne | September 2019 - December 2021
 
-* Managed Sumo Logic, New Relic, Datadog at an organizational level.
+* Managed Sumo Logic, New Relic, Datadog at an organisational level.
 
 * Introduced various automations to uplift team practices, which contributed to a reduction in the overall number of orphaned pull requests & branches per GitHub repository, a decrease in the number of failing builds in Buildkite, reduced lead times, automated departures for people leaving the business, and a reduction in the overall cost of the teams AWS accounts.
 
-* Contributed to the uplift of the centralized logging platform to allow for ingestion of PCI data, resulting in the decommission of Splunk, saving over USD $200K for the business.
+* Contributed to the uplift of the centralised logging platform to allow for ingestion of PCI data, resulting in the decommission of Splunk, saving over USD $200K for the business.
 
-* Designed and implemented a custom Slack app to streamline the existing incident management process, resulting in quicker response times for the incident management team, and a centralized way for teams to see incidents across the business.
+* Designed and implemented a custom Slack app to streamline the existing incident management process, resulting in quicker response times for the incident management team, and a centralised way for teams to see incidents across the business.
 
 * Led the user management of New Relic, reducing overall full user count from 350+ full users to > 200 full users, resulting in the business not being overcharged for users outside the contractual paid seats.
 
-* Uplifted the centralized logging platform to support the Sumo Logic Credits Model, resulting in a reduction of the overall credits used, and allowing teams to utilize the vendor more for the same cost.
+* Uplifted the centralised logging platform to support the Sumo Logic Credits Model, resulting in a reduction of the overall credits used, and allowing teams to utilise the vendor more for the same cost.
 
-* Uplifted the CI/CD practices of the team by introducing a centralized Docker image repository, decreasing overall deploy times.
+* Uplifted the CI/CD practices of the team by introducing a centralised Docker image repository, decreasing overall deploy times.
 
 * Assisted in the ISO 27001 audit for three controls around log backups, which contributed to the business achieving certification.
 
-* Contributed to the design and creation of an alternative logging platform POC built using Loki, Grafana, and AWS EKS. The platform was not productionized, but was focused on providing a logging platform that had no costs tied to ingestion for the business.
+* Contributed to the design and creation of an alternative logging platform POC built using Loki, Grafana, and AWS EKS. The platform was not productionised, but was focused on providing a logging platform that had no costs tied to ingestion for the business.
 
 * Travelled to other offices in the business (Sydney, Auckland) to assist presenting workshops focused around logging and tracing to teams, promoting best practices and growing adoption of internal platforms and services.
 
-* Mentored multiple proteges over many months though the businesses internal protege program. Attended multiple quorum sessions to provide feedback to proteges.
+* Mentored multiple proteges over many months through the business's internal protege program. Attended multiple quorum sessions to provide feedback to proteges.
 
-* Added retention limitations and optimizations to the AWS S3 backups for the centralized logging platform, saving cost and reducing overall storage size.
-
-#### Associate DevOps Engineer, CI/CD team @ [MYOB](myob.com.au).
-
-Melbourne | October 2017 - September 2019
-
-* Managed GitHub, Buildkite, and AWS at an organizational level.
-
-* Assisted in the creation, documentation, and release of a managed CI/CD solution to over 200 AWS account, reducing the number of CI/CD platforms across the business to a single platform, Buildkite. In addition, helped grow adoption of this solution by pairing, coaching, and training teams directly through pairing and running workshops, increasing overall adoption.
-
-* Created SDKs, written in Go, over the GitHub, Buildkite, VictorOps, and other internal REST / GraphQL APIs. These were used to create CLI tools for teams to easily retrieve data from these vendors.
-
-* Worked with various developers across the business to uplift their CI/CD practices. Some examples include incorporating Docker in their repositories, replacing their existing CI/CD solution with our managed CI/CD solution, and driving adoption of various internal tools in the process.
-
-* Created a custom Windows Buildkite Agent for teams looking for a managed CI/CD solution where the Linux based Buildkite Agents wouldn't work. This resulted in teams having a consistent approach for either Linux & Windows CI/CD workloads, reducing the complexity for Windows based teams to on-board to our managed CI/CD solution.
-
-* Lead the user management of Buildkite & GitHub, reducing overall number of paid users to only those who needed it, resulting in the business not being overcharged for users outside the contractual paid seats for these vendors.
-
-#### Graduate Developer, Multiple teams @ [MYOB](myob.com.au).
-
- Melbourne | January 2017 - October 2017
-
-* Rotated into multiple teams across the business to learn about core concepts like Agile practices, programming at an enterprise level, DevOps, CI/CD, and automation in-general.
-
-* Promoted early from the graduate program, being the first to be promoted for the 2017 graduate program intake.
+* Added retention limitations and optimisations to the AWS S3 backups for the centralised logging platform, saving cost and reducing overall storage size.
 
 ### Education.
 
@@ -172,11 +142,6 @@ Melbourne | October 2017 - September 2019
 Waurn Ponds Campus | March 2013 - October 2016
 
 (Majors in Games Design & Development and Software Development)
-
-* Received the _Deakin University Information Technology Project Award_ for receiving the highest mark overall in the final capstone unit for the quarter. Acted as project lead in an external project for Barwon Health.
-
-* Hand selected to travel overseas to Indonesia as part of Deakin University to observe and critique the cultural difference in player expectations and decision-making in game design, when compared to the current standards in Australia.
-
 
 ### References.
 
