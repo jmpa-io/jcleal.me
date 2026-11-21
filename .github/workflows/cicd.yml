@@ -28,7 +28,7 @@ permissions:
 
 jobs:
   lint:
-    uses: jmpa-io/pipelines/.github/workflows/10-lint.yml@0877ff2d3aa9a4add377ad679135ab5a5c3e2b8a # main (adds account_id)
+    uses: jmpa-io/pipelines/.github/workflows/10-lint.yml@045560be43440234c5129a4374976a9a44333103 # main (adds account_id)
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
@@ -104,7 +104,7 @@ jobs:
   deploy:
     if: github.ref == 'refs/heads/main'
     needs: [build-website, test-website]
-    uses: jmpa-io/pipelines/.github/workflows/40-deploy-to-aws.yml@0877ff2d3aa9a4add377ad679135ab5a5c3e2b8a # main (adds account_id)
+    uses: jmpa-io/pipelines/.github/workflows/40-deploy-to-aws.yml@045560be43440234c5129a4374976a9a44333103 # main (adds account_id)
     with:
       templates: website
       account_id: '213851291874' # the dev AWS account.
@@ -115,7 +115,7 @@ jobs:
 
   upload-website:
     needs: [deploy]
-    uses: jmpa-io/pipelines/.github/workflows/50-upload-artifacts-to-s3.yml@0877ff2d3aa9a4add377ad679135ab5a5c3e2b8a # main (adds account_id)
+    uses: jmpa-io/pipelines/.github/workflows/50-upload-artifacts-to-s3.yml@045560be43440234c5129a4374976a9a44333103 # main (adds account_id)
     with:
       artifact: jcleal.me
       account_id: '213851291874' # the dev AWS account.
@@ -163,7 +163,7 @@ jobs:
   deploy-prod:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [approve-prod]
-    uses: jmpa-io/pipelines/.github/workflows/40-deploy-to-aws.yml@0877ff2d3aa9a4add377ad679135ab5a5c3e2b8a # v1.1.0
+    uses: jmpa-io/pipelines/.github/workflows/40-deploy-to-aws.yml@a4ac3dcdff69ac080fe8eea835f92a2b1fabac1c # v1.1.0
     with:
       templates: website
       environment: prod
@@ -175,7 +175,7 @@ jobs:
   publish-prod:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [deploy-prod]
-    uses: jmpa-io/pipelines/.github/workflows/50-upload-artifacts-to-s3.yml@0877ff2d3aa9a4add377ad679135ab5a5c3e2b8a # main (adds account_id)
+    uses: jmpa-io/pipelines/.github/workflows/50-upload-artifacts-to-s3.yml@045560be43440234c5129a4374976a9a44333103 # main (adds account_id)
     with:
       artifact: jcleal.me
       environment: prod
@@ -198,7 +198,7 @@ jobs:
   post-to-slack:
     needs: [lint, build-website, test-website, deploy, upload-website, smoke-test, approve-prod, deploy-prod, publish-prod, smoke-test-prod]
     if: always()
-    uses: jmpa-io/pipelines/.github/workflows/99-post-to-slack.yml@0877ff2d3aa9a4add377ad679135ab5a5c3e2b8a # main (adds account_id)
+    uses: jmpa-io/pipelines/.github/workflows/99-post-to-slack.yml@045560be43440234c5129a4374976a9a44333103 # main (adds account_id)
     with:
       needs: ${{ toJSON(needs) }}
     secrets:
